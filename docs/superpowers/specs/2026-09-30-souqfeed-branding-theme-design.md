@@ -7,7 +7,7 @@
 
 ## Problem
 
-The product brief specifies a visual *personality* (Section 18: professional,
+The product brief specifies a visual _personality_ (Section 18: professional,
 dense, premium, financial-market-like) but not a brand identity or concrete
 design tokens. The user supplied two UI mockups that answer both — this spec
 records what they establish as decisions, so implementation doesn't
@@ -23,8 +23,8 @@ re-derive or drift from them later.
   culture) better than a generic name would.
 - **Logo:** a green faceted-hexagon mark paired with the wordmark "SouqFeed,"
   set top-left in every page's header, per both mockups.
-- **Positioning line:** *"Stop searching hundreds of WhatsApp messages.
-  Search the Dubai IT market instead."* (already present in the product
+- **Positioning line:** _"Stop searching hundreds of WhatsApp messages.
+  Search the Dubai IT market instead."_ (already present in the product
   brief; the mockups' hero copy — "Real-time offers. Verified suppliers.
   Better sourcing." — is a secondary, shorter variant for hero placement.)
 - **Voice:** terse, factual, market-data language — "Live," "Updated 3m ago,"
@@ -62,17 +62,17 @@ the rendered screenshots, not sampled pixel values. Treat them as a strong
 starting palette to refine with exact values during the actual Tailwind/CSS
 implementation pass, not as measured ground truth.
 
-| Token | Estimate | Used for |
-|---|---|---|
-| `--color-bg` | `#F7F6F3` (warm off-white) | Page background |
-| `--color-surface` | `#FFFFFF` | Cards, panels |
-| `--color-text-primary` | `#16181A` (near-black charcoal) | Body text, headings |
-| `--color-text-muted` | `#6B7280` (mid grey) | Secondary text, specs, labels |
-| `--color-border` | `#E5E3DE` (light grey) | 1px hairline borders — minimal shadow use |
-| `--color-brand-primary` | `#0F6B45` (deep green) | Logo, primary buttons, verified check, active nav underline |
-| `--color-live-accent` | `#16A34A` (brighter emerald) | LIVE status dot, positive-stat trend arrows |
-| `--color-info` | blue-grey (exact value TBD at implementation) | LIVE / PRICE UPDATED badges — distinct from the green NEW badge |
-| `--color-negative` | `#DC2626` (red/orange) | Price-down trend arrows |
+| Token                   | Estimate                                      | Used for                                                        |
+| ----------------------- | --------------------------------------------- | --------------------------------------------------------------- |
+| `--color-bg`            | `#F7F6F3` (warm off-white)                    | Page background                                                 |
+| `--color-surface`       | `#FFFFFF`                                     | Cards, panels                                                   |
+| `--color-text-primary`  | `#16181A` (near-black charcoal)               | Body text, headings                                             |
+| `--color-text-muted`    | `#6B7280` (mid grey)                          | Secondary text, specs, labels                                   |
+| `--color-border`        | `#E5E3DE` (light grey)                        | 1px hairline borders — minimal shadow use                       |
+| `--color-brand-primary` | `#0F6B45` (deep green)                        | Logo, primary buttons, verified check, active nav underline     |
+| `--color-live-accent`   | `#16A34A` (brighter emerald)                  | LIVE status dot, positive-stat trend arrows                     |
+| `--color-info`          | blue-grey (exact value TBD at implementation) | LIVE / PRICE UPDATED badges — distinct from the green NEW badge |
+| `--color-negative`      | `#DC2626` (red/orange)                        | Price-down trend arrows                                         |
 
 - **Typography:** Inter or Geist, per the product brief. Tabular/monospace
   numerals for price, SKU, quantity, and timestamp columns — visible in the
@@ -104,7 +104,7 @@ implementation pass, not as measured ground truth.
 ## Consequences
 
 - `docs/branding.md` and `docs/theme.md` carry this content forward as living
-  references; this spec is the historical record of *why* each choice was
+  references; this spec is the historical record of _why_ each choice was
   made, in case a later session needs to know whether a value is a firm
   decision or a placeholder.
 - Because the mockups show post-MVP features, anyone building from

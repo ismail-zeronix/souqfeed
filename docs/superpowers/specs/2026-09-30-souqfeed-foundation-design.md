@@ -101,8 +101,8 @@ to implement rules the brief already states elsewhere, not new scope:
    the brief's own immutability rule.
 
 Full field-level schema lives in `docs/data-model.md` (kept current as the
-schema evolves; this spec captures the *decision*, that doc captures the
-*current state*).
+schema evolves; this spec captures the _decision_, that doc captures the
+_current state_).
 
 ## Module / Folder Structure
 

@@ -70,17 +70,17 @@ progress in [`current.md`](current.md).
 
 ## Documentation
 
-| Topic | Doc |
-|---|---|
-| Architecture | [`docs/architecture.md`](docs/architecture.md) |
-| Data model | [`docs/data-model.md`](docs/data-model.md) |
+| Topic                        | Doc                                                      |
+| ---------------------------- | -------------------------------------------------------- |
+| Architecture                 | [`docs/architecture.md`](docs/architecture.md)           |
+| Data model                   | [`docs/data-model.md`](docs/data-model.md)               |
 | Broadcast parsing & matching | [`docs/broadcast-parsing.md`](docs/broadcast-parsing.md) |
-| Search | [`docs/search.md`](docs/search.md) |
-| Branding | [`docs/branding.md`](docs/branding.md) |
-| Theme / design tokens | [`docs/theme.md`](docs/theme.md) |
-| Deployment | [`docs/deployment.md`](docs/deployment.md) |
-| Design decision history | `docs/superpowers/specs/` |
-| Implementation plans | `docs/superpowers/plans/` |
+| Search                       | [`docs/search.md`](docs/search.md)                       |
+| Branding                     | [`docs/branding.md`](docs/branding.md)                   |
+| Theme / design tokens        | [`docs/theme.md`](docs/theme.md)                         |
+| Deployment                   | [`docs/deployment.md`](docs/deployment.md)               |
+| Design decision history      | `docs/superpowers/specs/`                                |
+| Implementation plans         | `docs/superpowers/plans/`                                |
 
 ## Future roadmap
 

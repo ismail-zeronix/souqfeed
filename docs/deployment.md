@@ -43,12 +43,12 @@ No Kubernetes; Docker Compose is sufficient at this scale.
 
 ## Environment variables (grows as modules are added)
 
-| Variable | Purpose |
-|---|---|
-| `DATABASE_URL` | Postgres connection string |
-| `REDIS_URL` | Redis connection string (shared by BullMQ and pub/sub) |
-| `BETTER_AUTH_SECRET` | Session signing secret |
-| `BETTER_AUTH_URL` | Public app URL, for auth callbacks |
+| Variable              | Purpose                                                          |
+| --------------------- | ---------------------------------------------------------------- |
+| `DATABASE_URL`        | Postgres connection string                                       |
+| `REDIS_URL`           | Redis connection string (shared by BullMQ and pub/sub)           |
+| `BETTER_AUTH_SECRET`  | Session signing secret                                           |
+| `BETTER_AUTH_URL`     | Public app URL, for auth callbacks                               |
 | `NEXT_PUBLIC_APP_URL` | Public app URL, for client-side links (e.g. WhatsApp deep links) |
 
 All environment variables are validated at startup with Zod

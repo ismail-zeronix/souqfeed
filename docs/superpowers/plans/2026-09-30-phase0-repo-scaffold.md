@@ -72,6 +72,7 @@ ESLint + Prettier, shadcn/ui, Vitest, Zod, pino, Docker Compose
 ### Task 1: Scaffold Next.js into the existing repo without disturbing docs
 
 **Files:**
+
 - Create (via `create-next-app`, then merged into repo root): `package.json`,
   `tsconfig.json`, `next.config.ts`, `postcss.config.mjs`, `.gitignore`,
   `eslint.config.mjs`, `src/app/layout.tsx`, `src/app/page.tsx`,
@@ -79,6 +80,7 @@ ESLint + Prettier, shadcn/ui, Vitest, Zod, pino, Docker Compose
 - Modify: `.gitignore` (add `.env`, keep `.env.example` tracked — see Task 4)
 
 **Interfaces:**
+
 - Produces: a working `pnpm dev` / `pnpm build` / `pnpm lint` toolchain every
   later task builds on.
 
@@ -178,10 +180,12 @@ git commit -m "chore: scaffold Next.js app (TypeScript, Tailwind, pnpm)"
 ### Task 2: Prettier, wired to not fight ESLint
 
 **Files:**
+
 - Create: `.prettierrc.json`, `.prettierignore`
 - Modify: `package.json` (add `format`/`format:check` scripts, devDependencies), `eslint.config.mjs` (disable formatting-related rules via `eslint-config-prettier`)
 
 **Interfaces:**
+
 - Consumes: `eslint.config.mjs` from Task 1.
 - Produces: `pnpm format` / `pnpm format:check` scripts later tasks and CI can rely on.
 
@@ -194,6 +198,7 @@ pnpm add -D prettier prettier-plugin-tailwindcss eslint-config-prettier
 - [ ] **Step 2: Add Prettier config**
 
 `.prettierrc.json`:
+
 ```json
 {
   "semi": true,
@@ -204,6 +209,7 @@ pnpm add -D prettier prettier-plugin-tailwindcss eslint-config-prettier
 ```
 
 `.prettierignore`:
+
 ```
 .next/
 node_modules/
@@ -218,10 +224,7 @@ config as the last entry in the exported array, e.g.:
 ```js
 import prettierConfig from "eslint-config-prettier";
 // ...existing config...
-export default [
-  ...existingConfig,
-  prettierConfig,
-];
+export default [...existingConfig, prettierConfig];
 ```
 
 (Match this to whatever export shape `create-next-app` generated — the
@@ -231,6 +234,7 @@ rule-disabling wins.)
 - [ ] **Step 4: Add scripts and verify**
 
 `package.json` scripts:
+
 ```json
 "format": "prettier --write .",
 "format:check": "prettier --check ."
@@ -261,10 +265,12 @@ git commit -m "chore: add Prettier with Tailwind class sorting"
 ### Task 3: shadcn/ui initialization
 
 **Files:**
+
 - Create: `components.json`, `src/lib/utils.ts`, `src/components/ui/button.tsx`
 - Modify: `src/app/page.tsx` (render one `Button` to prove the pipeline works)
 
 **Interfaces:**
+
 - Produces: `cn()` helper at `src/lib/utils.ts`, consumed by every future
   shadcn component; `components/ui/` as the location for all future shadcn
   primitives (per `docs/architecture.md`'s `components/ui/` convention).
@@ -312,10 +318,12 @@ git commit -m "chore: initialize shadcn/ui, add Button primitive"
 ### Task 4: Vitest + environment validation (TDD)
 
 **Files:**
+
 - Create: `vitest.config.ts`, `src/lib/validation/env.ts`, `src/lib/validation/env.test.ts`, `.env.example`
 - Modify: `package.json` (add `test` script, devDependencies), `.gitignore` (ensure `.env` is ignored; `.env.example` stays tracked)
 
 **Interfaces:**
+
 - Produces: `parseEnv(source?: NodeJS.ProcessEnv): Env` and
   `getEnv(): Env` from `src/lib/validation/env.ts` — every later phase reads
   configuration through `getEnv()`, never `process.env` directly.
@@ -330,6 +338,7 @@ pnpm add -D vitest vite-tsconfig-paths
 - [ ] **Step 2: Configure Vitest**
 
 `vitest.config.ts`:
+
 ```ts
 import { defineConfig } from "vitest/config";
 import tsconfigPaths from "vite-tsconfig-paths";
@@ -343,6 +352,7 @@ export default defineConfig({
 ```
 
 `package.json` script:
+
 ```json
 "test": "vitest run"
 ```
@@ -350,6 +360,7 @@ export default defineConfig({
 - [ ] **Step 3: Write the failing test**
 
 `src/lib/validation/env.test.ts`:
+
 ```ts
 import { describe, expect, it } from "vitest";
 import { parseEnv } from "./env";
@@ -443,6 +454,7 @@ Expected: PASS — all three tests green.
 - [ ] **Step 7: Add `.env.example` and confirm `.env` is gitignored**
 
 `.env.example`:
+
 ```
 DATABASE_URL=postgresql://souqfeed:souqfeed@localhost:5432/souqfeed
 REDIS_URL=redis://localhost:6379
@@ -461,6 +473,7 @@ grep -qxF '.env' .gitignore || echo '.env' >> .gitignore
 ```
 
 Copy it for local use (not committed):
+
 ```bash
 cp .env.example .env
 ```
@@ -484,10 +497,12 @@ git commit -m "feat: add Vitest and fail-fast environment validation"
 ### Task 5: Structured logging (TDD)
 
 **Files:**
+
 - Create: `src/lib/logging/logger.ts`, `src/lib/logging/logger.test.ts`
 - Modify: `package.json` (devDependencies)
 
 **Interfaces:**
+
 - Consumes: nothing from Task 4 — deliberately decoupled from `env.ts` (see
   rationale below) to avoid import-order coupling between infrastructure
   modules.
@@ -506,6 +521,7 @@ pnpm add -D pino-pretty
 - [ ] **Step 2: Write the failing test**
 
 `src/lib/logging/logger.test.ts`:
+
 ```ts
 import { describe, expect, it } from "vitest";
 import { createLogger } from "./logger";
@@ -573,9 +589,11 @@ git commit -m "feat: add structured logging with pino"
 ### Task 6: Docker Compose for local Postgres + Redis
 
 **Files:**
+
 - Create: `docker-compose.yml`
 
 **Interfaces:**
+
 - Produces: a `postgres` service reachable at the `DATABASE_URL` in
   `.env.example` and a `redis` service reachable at `REDIS_URL` — Phase 1's
   Drizzle client and every later phase's BullMQ setup connect to these.
@@ -665,6 +683,7 @@ git commit -m "chore: add Docker Compose for local Postgres and Redis"
 ### Task 7: Full-loop verification and status update
 
 **Files:**
+
 - Modify: `current.md`
 
 No new product code — this task proves every piece from Tasks 1–6 works

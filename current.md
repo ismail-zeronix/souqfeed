@@ -8,7 +8,7 @@
   confirmed as **SouqFeed** (`docs/superpowers/specs/2026-09-30-souqfeed-branding-theme-design.md`).
 - Full documentation set materialized: `CLAUDE.md`, `README.md`,
   `project_plan.md`, this file, and `docs/{architecture,data-model,
-  broadcast-parsing,search,deployment,branding,theme}.md`.
+broadcast-parsing,search,deployment,branding,theme}.md`.
 - Git repository initialized.
 
 ## In Progress

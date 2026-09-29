@@ -17,11 +17,11 @@ boundaries are enforced by folder/import convention, not by network calls.
 
 ## Data stores
 
-| Store | Role |
-|---|---|
-| PostgreSQL (Drizzle ORM) | System of record for everything. |
-| Postgres FTS + `pg_trgm` | Search — no Elasticsearch/OpenSearch. |
-| Redis | (1) BullMQ job queue. (2) Pub/sub relay for realtime events. |
+| Store                    | Role                                                         |
+| ------------------------ | ------------------------------------------------------------ |
+| PostgreSQL (Drizzle ORM) | System of record for everything.                             |
+| Postgres FTS + `pg_trgm` | Search — no Elasticsearch/OpenSearch.                        |
+| Redis                    | (1) BullMQ job queue. (2) Pub/sub relay for realtime events. |
 
 Redis's pub/sub role exists specifically so the live feed works correctly
 across more than one `web` instance: the worker publishes an event once,
@@ -55,6 +55,7 @@ See `docs/broadcast-parsing.md` for the parser/matcher internals and
 ## Deployment topology
 
 **Local development:**
+
 ```
 docker compose up -d      # postgres, redis
 pnpm dev                  # web (Next.js)
@@ -62,6 +63,7 @@ pnpm worker               # worker (BullMQ)
 ```
 
 **Production (VPS):**
+
 ```
 Cloudflare (optional)
      ↓

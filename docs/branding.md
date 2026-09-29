@@ -11,10 +11,10 @@
   WhatsApp-broadcast IT wholesale trade).
 - **Logo:** a green faceted-hexagon mark + wordmark, top-left lockup on
   every page.
-- **Positioning line:** *"Stop searching hundreds of WhatsApp messages.
-  Search the Dubai IT market instead."*
+- **Positioning line:** _"Stop searching hundreds of WhatsApp messages.
+  Search the Dubai IT market instead."_
 - **Hero copy (shorter variant, for above-the-fold placement):**
-  *"Real-time offers. Verified suppliers. Better sourcing."*
+  _"Real-time offers. Verified suppliers. Better sourcing."_
 
 ## Voice
 
@@ -32,6 +32,7 @@ A financial-market-terminal-inspired B2B tool: dense, fast, premium,
 data-first.
 
 **Explicit non-goals** (do not build toward any of these):
+
 - Cartoonish
 - Consumer-ecommerce styling
 - Overly colorful

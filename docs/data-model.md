@@ -24,6 +24,7 @@ migration tooling; `role` is the one custom field added to `users`.
 ## Suppliers
 
 **`suppliers`**
+
 ```
 id                uuid pk
 userId            uuid fk -> users.id, unique   -- one login per supplier
@@ -43,6 +44,7 @@ active            boolean default true
 createdAt         timestamp
 updatedAt         timestamp
 ```
+
 Indexes: unique(`slug`), index(`verified`), index(`active`).
 
 **`supplier_brands`** — join table, `supplierId, brandId`, composite PK.
@@ -53,6 +55,7 @@ Indexes: unique(`slug`), index(`verified`), index(`active`).
 **`brands`**: `id, name (unique), slug (unique), logoUrl (nullable), createdAt, updatedAt`
 
 **`categories`** (self-referencing hierarchy):
+
 ```
 id          uuid pk
 name        text not null
@@ -61,11 +64,13 @@ parentId    uuid fk -> categories.id, nullable
 createdAt   timestamp
 updatedAt   timestamp
 ```
+
 Index: index(`parentId`).
 
 ## Canonical Products
 
 **`products`**
+
 ```
 id                 uuid pk
 brandId            uuid fk -> brands.id, not null
@@ -80,21 +85,25 @@ active             boolean default true
 createdAt          timestamp
 updatedAt          timestamp
 ```
+
 Indexes: index(`brandId`), index(`categoryId`), index(`partNumber`) where not
 null, GIN trigram index on `title` and `normalizedTitle` for fuzzy search.
 
-**`product_aliases`** *(addition — see foundation spec §2)*
+**`product_aliases`** _(addition — see foundation spec §2)_
+
 ```
 id          uuid pk
 productId   uuid fk -> products.id, not null
 alias       text not null   -- e.g. "U7", "Ultra 7", "Core Ultra 7"
 createdAt   timestamp
 ```
+
 Indexes: index(`productId`), index(`alias`).
 
 ## Broadcasts
 
 **`broadcasts`**
+
 ```
 id           uuid pk
 supplierId   uuid fk -> suppliers.id, not null
@@ -105,11 +114,13 @@ publishedAt  timestamp nullable
 createdAt    timestamp
 updatedAt    timestamp
 ```
+
 Only `MANUAL` is implemented in MVP; the other `source` values exist in the
 enum so ingestion channels can be added later without a schema migration.
 Indexes: index(`supplierId`), index(`createdAt`), index(`status`).
 
 **`broadcast_items`**
+
 ```
 id                  uuid pk
 broadcastId         uuid fk -> broadcasts.id, not null
@@ -140,6 +151,7 @@ reviewStatus        enum(AUTO_APPROVED, NEEDS_REVIEW, APPROVED, REJECTED)
 createdAt           timestamp
 updatedAt           timestamp
 ```
+
 Indexes: index(`broadcastId`), index(`matchedProductId`), index(`reviewStatus`).
 
 Never fabricate a detected/matched value: a field that wasn't confidently
@@ -148,6 +160,7 @@ extracted stays `null`, per Rule 10.
 ## Offers
 
 **`offers`**
+
 ```
 id                       uuid pk
 supplierId               uuid fk -> suppliers.id, not null
@@ -167,12 +180,14 @@ active                   boolean default true
 createdAt                timestamp
 updatedAt                timestamp
 ```
+
 Indexes: index(`supplierId`), index(`productId`), index(`publishedAt`),
 index(`active`). Unique partial index on (`supplierId`, `productId`) where
 `active = true` — a supplier re-broadcasting a product updates its existing
 offer rather than creating a duplicate.
 
-**`offer_observations`** *(addition — see foundation spec §2)*
+**`offer_observations`** _(addition — see foundation spec §2)_
+
 ```
 id                   uuid pk
 offerId              uuid fk -> offers.id, not null
@@ -183,6 +198,7 @@ availabilityStatus   enum(AVAILABLE, LIMITED, ASK, UNKNOWN, SOLD_OUT)
 observedAt           timestamp default now
 broadcastItemId      uuid fk -> broadcast_items.id, not null
 ```
+
 Indexes: index(`offerId`), index(`observedAt`). Append-only — one row per
 re-broadcast of an existing offer. This is the price/quantity history table;
 `offers` itself only holds the current snapshot.
@@ -192,16 +208,17 @@ re-broadcast of an existing offer. This is the price/quantity history table;
 Computed at query/render time from `lastVerifiedAt` — thresholds are
 configuration, not schema:
 
-| Age | Label |
-|---|---|
-| < 6 hours | LIVE |
-| < 24 hours | RECENT |
-| 1–3 days | STALE |
-| > 3 days | VERY_STALE |
+| Age        | Label      |
+| ---------- | ---------- |
+| < 6 hours  | LIVE       |
+| < 24 hours | RECENT     |
+| 1–3 days   | STALE      |
+| > 3 days   | VERY_STALE |
 
 ## Analytics
 
 **`analytics_events`**
+
 ```
 id           uuid pk
 eventType    text                  -- e.g. "offer.viewed", "supplier.whatsapp_clicked"
@@ -212,4 +229,5 @@ query        text nullable
 metadata     jsonb nullable
 createdAt    timestamp
 ```
+
 Indexes: index(`eventType`), index(`createdAt`), index(`supplierId`).

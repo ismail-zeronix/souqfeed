@@ -44,13 +44,13 @@ active scope.
 
 ## Field extraction examples
 
-| Input | Extracted as |
-|---|---|
-| `16/512` | RAM: 16GB, Storage: 512GB |
-| `U7` / `Ultra 7` / `Core Ultra 7` | same CPU family, resolved via `product_aliases` |
-| `100PCS` / `100 PCS` / `QTY100` / `X100` | quantity: 100 |
-| `@1850` / `AED1850` / `1850 AED` / `DHS 1850` | price: 1850, currency: AED |
-| `ASK` / `CALL` / `BEST PRICE` / `PM` | priceType: ASK |
+| Input                                         | Extracted as                                    |
+| --------------------------------------------- | ----------------------------------------------- |
+| `16/512`                                      | RAM: 16GB, Storage: 512GB                       |
+| `U7` / `Ultra 7` / `Core Ultra 7`             | same CPU family, resolved via `product_aliases` |
+| `100PCS` / `100 PCS` / `QTY100` / `X100`      | quantity: 100                                   |
+| `@1850` / `AED1850` / `1850 AED` / `DHS 1850` | price: 1850, currency: AED                      |
+| `ASK` / `CALL` / `BEST PRICE` / `PM`          | priceType: ASK                                  |
 
 ## Product matching priority
 
@@ -63,7 +63,7 @@ AI similarity:
 4. Model alias (via `product_aliases`)
 5. Brand + family + specifications
 6. Fuzzy token matching (`pg_trgm`)
-7. AI / semantic similarity *(not built in MVP)*
+7. AI / semantic similarity _(not built in MVP)_
 
 Every match result includes the reasoning, never just a bare confidence
 number:
