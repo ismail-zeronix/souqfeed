@@ -20,9 +20,10 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
     wired together via `eslint-config-prettier`.
   - shadcn/ui initialized (`components.json`, `cn()` helper, Button
     primitive) — no `docs/theme.md` colors applied yet, that's a later UI pass.
-  - Vitest configured; fail-fast Zod environment validation
-    (`src/lib/validation/env.ts`: `parseEnv`/`getEnv`/`Env`) built TDD,
-    5/5 tests passing.
+  - Vitest configured; a fail-fast Zod environment validation module exists
+    (`src/lib/validation/env.ts`: `parseEnv`/`getEnv`/`Env`), built TDD,
+    6 passing tests — but nothing calls `getEnv()` at boot yet, since no
+    code consumes configuration until Phase 1's database client and auth.
   - Structured logging with pino (`src/lib/logging/logger.ts`:
     `createLogger`/`logger`), deliberately decoupled from the env module.
   - `docker-compose.yml` for local Postgres 16 + Redis 7, both verified

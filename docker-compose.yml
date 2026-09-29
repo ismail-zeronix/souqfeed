@@ -11,10 +11,15 @@ services:
     volumes:
       - souqfeed_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U souqfeed"]
+      # -h forces a real TCP check on 5432; pg_isready with no host connects
+      # over the local socket, which the initdb bootstrap server also
+      # answers on during first-run cold start, reporting healthy before
+      # the real server is accepting connections.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U souqfeed -d souqfeed"]
       interval: 5s
       timeout: 5s
       retries: 5
+      start_period: 10s
 
   redis:
     image: redis:7-alpine

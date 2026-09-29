@@ -13,13 +13,19 @@ ORM, Better Auth, Redis + BullMQ, Server-Sent Events, Docker Compose, pnpm.
 ## Commands
 
 ```
-pnpm dev            # web app
-pnpm worker         # background worker (BullMQ)
-pnpm db:migrate     # apply Drizzle migrations
-pnpm db:seed        # seed dev data
-pnpm test
+pnpm dev              # web app
+pnpm build            # production build
+pnpm lint             # ESLint
+pnpm format           # Prettier --write
+pnpm format:check     # Prettier --check
+pnpm test             # Vitest
 docker compose up -d  # postgres + redis, for local dev
 ```
+
+Not yet implemented (Phase 1+): `pnpm worker` (BullMQ worker entrypoint),
+`pnpm db:migrate` (Drizzle migrations), `pnpm db:seed` (seed data). Add the
+scripts to `package.json` in the phase that creates their targets — don't
+add the commands here before they exist.
 
 ## Non-negotiable rules
 

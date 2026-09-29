@@ -27,4 +27,25 @@ describe("parseEnv", () => {
       parseEnv({ ...validEnv, BETTER_AUTH_SECRET: "short" }),
     ).toThrow(/BETTER_AUTH_SECRET/);
   });
+
+  it("throws when DATABASE_URL is not a postgres connection string", () => {
+    expect(() =>
+      parseEnv({ ...validEnv, DATABASE_URL: "https://example.com" }),
+    ).toThrow(/DATABASE_URL/);
+  });
+
+  it("throws when REDIS_URL is not a redis connection string", () => {
+    expect(() =>
+      parseEnv({ ...validEnv, REDIS_URL: "postgresql://localhost:5432/db" }),
+    ).toThrow(/REDIS_URL/);
+  });
+
+  it("throws when BETTER_AUTH_SECRET is still the .env.example placeholder", () => {
+    expect(() =>
+      parseEnv({
+        ...validEnv,
+        BETTER_AUTH_SECRET: "replace-with-a-random-32-byte-secret",
+      }),
+    ).toThrow(/BETTER_AUTH_SECRET/);
+  });
 });

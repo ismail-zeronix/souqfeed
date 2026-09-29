@@ -59,7 +59,7 @@ See `docs/broadcast-parsing.md` for the parser/matcher internals and
 ```
 docker compose up -d      # postgres, redis
 pnpm dev                  # web (Next.js)
-pnpm worker               # worker (BullMQ)
+pnpm worker               # worker (BullMQ) -- Phase 1+, not yet implemented
 ```
 
 **Production (VPS):**

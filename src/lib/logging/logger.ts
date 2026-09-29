@@ -1,6 +1,24 @@
 import pino, { type Logger } from "pino";
 
-type LogLevel = "fatal" | "error" | "warn" | "info" | "debug" | "trace";
+const LOG_LEVELS = [
+  "fatal",
+  "error",
+  "warn",
+  "info",
+  "debug",
+  "trace",
+] as const;
+type LogLevel = (typeof LOG_LEVELS)[number];
+
+// Untrusted input (env vars, config) goes through here before it ever
+// reaches pino: an unrecognized or empty level otherwise throws at
+// construction time, which is a boot-time crash from a one-keystroke typo.
+export function parseLogLevel(value: string | undefined): LogLevel {
+  if (value && (LOG_LEVELS as readonly string[]).includes(value)) {
+    return value as LogLevel;
+  }
+  return "info";
+}
 
 export function createLogger(level: LogLevel = "info"): Logger {
   return pino({
@@ -12,6 +30,4 @@ export function createLogger(level: LogLevel = "info"): Logger {
   });
 }
 
-export const logger = createLogger(
-  (process.env.LOG_LEVEL as LogLevel | undefined) ?? "info",
-);
+export const logger = createLogger(parseLogLevel(process.env.LOG_LEVEL));

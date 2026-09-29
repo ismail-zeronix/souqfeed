@@ -1,9 +1,26 @@
 import { z } from "zod";
 
+const PLACEHOLDER_SECRET = "replace-with-a-random-32-byte-secret";
+
 const envSchema = z.object({
-  DATABASE_URL: z.string().url(),
-  REDIS_URL: z.string().url(),
-  BETTER_AUTH_SECRET: z.string().min(16),
+  DATABASE_URL: z
+    .string()
+    .url()
+    .refine((v) => v.startsWith("postgres"), {
+      message: "must be a postgres:// or postgresql:// connection string",
+    }),
+  REDIS_URL: z
+    .string()
+    .url()
+    .refine((v) => v.startsWith("redis"), {
+      message: "must be a redis:// connection string",
+    }),
+  BETTER_AUTH_SECRET: z
+    .string()
+    .min(32)
+    .refine((v) => v !== PLACEHOLDER_SECRET, {
+      message: "must not be the placeholder value from .env.example",
+    }),
   BETTER_AUTH_URL: z.string().url(),
   NEXT_PUBLIC_APP_URL: z.string().url(),
   LOG_LEVEL: z

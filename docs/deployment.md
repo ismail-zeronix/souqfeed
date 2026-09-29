@@ -7,7 +7,7 @@
 ```bash
 docker compose up -d   # postgres, redis
 pnpm dev                # web (Next.js), http://localhost:3000
-pnpm worker              # worker (BullMQ), separate terminal
+pnpm worker              # worker (BullMQ), separate terminal -- Phase 1+, not yet implemented
 ```
 
 `docker-compose.yml` (created in Phase 0) provides only `postgres` and
