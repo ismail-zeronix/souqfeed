@@ -54,3 +54,5 @@ docker compose up -d  # postgres + redis, for local dev
 
 No project-specific Claude Code Skills exist under `.claude/skills/` — module
 context lives in the docs above instead (see the foundation spec for why).
+
+@AGENTS.md
