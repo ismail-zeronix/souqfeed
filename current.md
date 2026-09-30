@@ -40,12 +40,12 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
 
 ## Next
 
-- Merge Phase 0 once the final review is clean.
-- Phase 1: full Drizzle schema for every core table in
-  `docs/data-model.md`, Better Auth wiring with `ADMIN`/`SUPPLIER` role
-  guards, a seed script creating one admin user, and a minimal/unstyled
-  login page proving the auth flow end-to-end. Write that plan with
-  `writing-plans` once Phase 0 is merged.
+- Phase 0.5: UI foundation — theme tokens, shared components, and the Live
+  Market homepage + Supplier profile page against static mock data, per
+  `docs/superpowers/specs/2026-09-30-souqfeed-ui-foundation-design.md` and
+  `docs/superpowers/plans/2026-09-30-souqfeed-ui-foundation.md`.
+- Phase 1 (DB schema + Better Auth) follows once Phase 0.5 is verified —
+  plan already written at `docs/superpowers/plans/2026-09-30-phase1-database-auth.md`.
 
 ## Decisions
 

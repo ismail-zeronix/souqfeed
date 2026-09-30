@@ -49,6 +49,7 @@ Finish and verify each phase before starting the next.
 | Phase | Scope                                                                                                     |
 | ----- | --------------------------------------------------------------------------------------------------------- |
 | 0     | Repo scaffold (Next.js/TS/Tailwind/shadcn, pnpm, Docker Compose, env validation) + this documentation set |
+| 0.5   | UI foundation: theme tokens, shared components, Live Market homepage + Supplier profile page against static mock data (`docs/superpowers/specs/2026-09-30-souqfeed-ui-foundation-design.md`) |
 | 1     | Database schema (full) + Better Auth + role guards + seed admin + minimal login                           |
 | 2     | Supplier profiles (CRUD, public `/suppliers/[slug]` page)                                                 |
 | 3     | Brands + Categories + Products (admin CRUD, canonical product model)                                      |
