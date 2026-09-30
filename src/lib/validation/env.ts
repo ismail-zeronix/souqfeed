@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 const PLACEHOLDER_SECRET = "replace-with-a-random-32-byte-secret";
+const PLACEHOLDER_ADMIN_PASSWORD = "changeme-admin-1234";
 
 const envSchema = z.object({
   DATABASE_URL: z
@@ -27,7 +28,12 @@ const envSchema = z.object({
     .enum(["fatal", "error", "warn", "info", "debug", "trace"])
     .default("info"),
   ADMIN_EMAIL: z.string().email().default("admin@souqfeed.local"),
-  ADMIN_PASSWORD: z.string().min(8).default("changeme-admin-1234"),
+  ADMIN_PASSWORD: z
+    .string()
+    .min(8)
+    .refine((v) => v !== PLACEHOLDER_ADMIN_PASSWORD, {
+      message: "must not be the placeholder value from .env.example",
+    }),
 });
 
 export type Env = z.infer<typeof envSchema>;

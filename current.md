@@ -99,6 +99,11 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   from-scratch verification: a plain `pnpm install` fails non-interactively
   (`ERR_PNPM_IGNORED_BUILDS`) until esbuild's postinstall (needed by
   vitest/drizzle-kit/tsx to fetch their native binary) is approved.
+- Public self-signup via email/password is intentionally left open in
+  Phase 1 — any signup gets SUPPLIER role with `/dashboard` access. No
+  admin-approval gate exists yet. Phase 2 (Supplier Profiles) is expected
+  to add real verification workflow against the existing
+  `suppliers.verified` column before this matters in practice.
 
 ## Known Issues
 

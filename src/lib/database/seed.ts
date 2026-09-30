@@ -14,7 +14,15 @@ async function seed() {
     .limit(1);
 
   if (existing.length > 0) {
-    console.log(`Admin already exists: ${env.ADMIN_EMAIL}`);
+    if (existing[0].role !== "ADMIN") {
+      await db
+        .update(user)
+        .set({ role: "ADMIN" })
+        .where(eq(user.email, env.ADMIN_EMAIL));
+      console.log(`Repaired admin role: ${env.ADMIN_EMAIL}`);
+    } else {
+      console.log(`Admin already exists: ${env.ADMIN_EMAIL}`);
+    }
     return;
   }
 

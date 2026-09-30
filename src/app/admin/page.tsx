@@ -4,8 +4,11 @@ import { authorizeRole } from "@/modules/auth/guards";
 
 export default async function AdminPage() {
   const session = await getCurrentSession();
-  if (!session || !authorizeRole(session.user.role, "ADMIN")) {
+  if (!session) {
     redirect("/login");
+  }
+  if (!authorizeRole(session.user.role, "ADMIN")) {
+    redirect(session.user.role === "ADMIN" ? "/admin" : "/dashboard");
   }
   return (
     <main>
