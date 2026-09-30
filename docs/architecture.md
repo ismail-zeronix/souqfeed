@@ -100,3 +100,18 @@ and the worker call into `modules/*/service.ts` — neither reimplements
 business logic. `lib/` holds cross-cutting infrastructure (the Drizzle
 client, the Better Auth config, the BullMQ queue definitions, shared Zod
 helpers, structured logging) that every module depends on but no module owns.
+
+## Data-access fallback pattern (Phase 1+)
+
+Once a module's real `queries.ts` exists, UI-facing reads follow one rule,
+in order: query the database first; if the relevant table exists but is
+empty (not yet seeded), seed it from that module's fixture data and query
+again; only fall back to in-memory mock data if the database itself is
+unreachable. This keeps local/dev environments showing real, persisted
+data as soon as Postgres is up, while still degrading gracefully instead
+of crashing if the connection fails.
+
+This means the `src/modules/*/mock-data.ts` files added in Phase 0.5
+(`docs/superpowers/specs/2026-09-30-souqfeed-ui-foundation-design.md`)
+are not deleted once a module's real `queries.ts` lands — they become that
+module's seed source, reused by both `pnpm db:seed` and this fallback path.

@@ -67,6 +67,14 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
 - Vitest resolves `@/*` path aliases via Vite's native `resolve.tsconfigPaths`
   rather than the `vite-tsconfig-paths` plugin (redundant as of this Vite
   version).
+- Phase 0.5 (UI foundation) added ahead of Phase 1 — builds the Live Market
+  homepage and Supplier profile UI against static mock data first; see
+  `docs/superpowers/specs/2026-09-30-souqfeed-ui-foundation-design.md`.
+- Data-access fallback pattern for every module's future `queries.ts`:
+  query the DB first, seed it from that module's mock-data fixtures if
+  empty, fall back to in-memory mock data only if the DB is unreachable —
+  see `docs/architecture.md`. Phase 0.5 itself stays mock-only; this
+  pattern applies once each module's real `queries.ts` is built.
 
 ## Known Issues
 
