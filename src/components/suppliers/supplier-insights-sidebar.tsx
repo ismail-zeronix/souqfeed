@@ -40,17 +40,22 @@ export function SupplierInsightsSidebar({
 
       <SidebarWidget title="Market Trust Signals">
         <div className="flex flex-col gap-3 text-sm">
-          <div className="flex items-start gap-2">
-            <BadgeCheck className="text-primary size-4 shrink-0" aria-hidden />
-            <div>
-              <div className="text-foreground font-medium">
-                Verified Supplier
-              </div>
-              <div className="text-muted-foreground text-xs">
-                Identity, business & location verified
+          {supplier.verified && (
+            <div className="flex items-start gap-2">
+              <BadgeCheck
+                className="text-primary size-4 shrink-0"
+                aria-hidden
+              />
+              <div>
+                <div className="text-foreground font-medium">
+                  Verified Supplier
+                </div>
+                <div className="text-muted-foreground text-xs">
+                  Identity, business & location verified
+                </div>
               </div>
             </div>
-          </div>
+          )}
           <div className="flex items-start gap-2">
             <ThumbsUp className="text-primary size-4 shrink-0" aria-hidden />
             <div>

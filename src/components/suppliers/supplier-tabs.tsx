@@ -17,7 +17,9 @@ export function SupplierTabs({
         <TabsTrigger value="brands">Brands & Categories</TabsTrigger>
         <TabsTrigger value="contact">Contact</TabsTrigger>
       </TabsList>
-      <TabsContent value="live-offers">{liveOffersContent}</TabsContent>
+      <TabsContent value="live-offers" className="pt-4">
+        {liveOffersContent}
+      </TabsContent>
       <TabsContent value="history">
         <p className="text-muted-foreground py-8 text-center text-sm">
           Broadcast history is not available yet.

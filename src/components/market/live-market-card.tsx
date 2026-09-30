@@ -6,7 +6,7 @@ import {
   MarketBadge,
   type MarketBadgeVariant,
 } from "@/components/market/market-badge";
-import type { OfferListItem } from "@/modules/offers/types";
+import type { AvailabilityStatus, OfferListItem } from "@/modules/offers/types";
 
 export function formatRelativeTime(iso: string): string {
   const diffMs = Date.now() - new Date(iso).getTime();
@@ -21,6 +21,12 @@ export function formatPrice(offer: OfferListItem): {
   primary: string;
   secondary: string | null;
 } {
+  if (offer.priceType === "HIDDEN") {
+    return { primary: "Hidden", secondary: "Price not disclosed" };
+  }
+  if (offer.priceType === "UNKNOWN") {
+    return { primary: "—", secondary: "Price unavailable" };
+  }
   if (offer.priceType === "ASK" || offer.price === null) {
     return { primary: "ASK", secondary: "Best price on request" };
   }
@@ -37,6 +43,28 @@ export function formatPrice(offer: OfferListItem): {
   return { primary, secondary: null };
 }
 
+export function formatAvailability(status: AvailabilityStatus): {
+  label: string;
+  colorClass: string;
+} {
+  switch (status) {
+    case "AVAILABLE":
+      return { label: "In Stock", colorClass: "text-live" };
+    case "LIMITED":
+      return { label: "Limited Stock", colorClass: "text-live" };
+    case "SOLD_OUT":
+      return { label: "Sold Out", colorClass: "text-destructive" };
+    case "ASK":
+      return { label: "Ask Availability", colorClass: "text-muted-foreground" };
+    case "UNKNOWN":
+    default:
+      return {
+        label: "Availability Unknown",
+        colorClass: "text-muted-foreground",
+      };
+  }
+}
+
 export interface LiveMarketCardProps {
   offer: OfferListItem;
   actionLabel?: "View Supplier" | "View Product";
@@ -47,6 +75,7 @@ export function LiveMarketCard({
   actionLabel = "View Supplier",
 }: LiveMarketCardProps) {
   const price = formatPrice(offer);
+  const availability = formatAvailability(offer.availabilityStatus);
   const isPriceDown =
     offer.previousPrice !== null &&
     offer.price !== null &&
@@ -113,7 +142,9 @@ export function LiveMarketCard({
               {offer.quantity ?? "—"}
               {offer.quantity ? " units" : ""}
             </div>
-            <div className="text-live text-xs">In Stock</div>
+            <div className={`text-xs ${availability.colorClass}`}>
+              {availability.label}
+            </div>
           </div>
           <div>
             <div className="text-muted-foreground text-xs">

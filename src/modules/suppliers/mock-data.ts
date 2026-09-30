@@ -75,6 +75,16 @@ const AL_HADI: SupplierProfile = {
   ],
 };
 
+interface SupplierStubContact {
+  description: string;
+  whatsappNumber: string;
+  phone: string;
+  email: string;
+  address: string;
+  googleMapsUrl: string;
+  tags: string[];
+}
+
 function supplierStub(
   id: string,
   slug: string,
@@ -83,6 +93,7 @@ function supplierStub(
   locationName: string,
   activeOfferCount: number,
   positiveScorePercent: number,
+  contact: SupplierStubContact,
 ): SupplierProfile {
   return {
     ...AL_HADI,
@@ -93,6 +104,7 @@ function supplierStub(
     locationName,
     activeOfferCount,
     positiveScorePercent,
+    ...contact,
   };
 }
 
@@ -106,6 +118,17 @@ const MOCK_SUPPLIERS: SupplierProfile[] = [
     "Bur Dubai",
     410,
     97,
+    {
+      description:
+        "Skyline General Trading is a wholesale distributor of laptops and business PCs in Bur Dubai, serving resellers across the UAE with fast turnaround and volume pricing.",
+      whatsappNumber: "+971505552001",
+      phone: "+97142230011",
+      email: "sales@skylinetrading.ae",
+      address: "Bur Dubai, Dubai, UAE",
+      googleMapsUrl:
+        "https://maps.google.com/?q=Skyline+General+Trading+Bur+Dubai",
+      tags: ["Laptops", "Business Series", "Bulk Orders"],
+    },
   ),
   supplierStub(
     "supplier-microlink",
@@ -115,6 +138,17 @@ const MOCK_SUPPLIERS: SupplierProfile[] = [
     "Bur Dubai",
     892,
     99,
+    {
+      description:
+        "Microlink Technology LLC specializes in storage, surveillance, and networking hardware, supplying integrators and CCTV installers across Dubai with genuine WD, Seagate, and Aruba stock.",
+      whatsappNumber: "+971505552002",
+      phone: "+97142230022",
+      email: "sales@microlinktech.ae",
+      address: "Bur Dubai, Dubai, UAE",
+      googleMapsUrl:
+        "https://maps.google.com/?q=Microlink+Technology+Bur+Dubai",
+      tags: ["Storage", "Surveillance", "Networking"],
+    },
   ),
   supplierStub(
     "supplier-network-zone",
@@ -124,6 +158,16 @@ const MOCK_SUPPLIERS: SupplierProfile[] = [
     "Al Fahidi",
     225,
     98,
+    {
+      description:
+        "Network Zone FZE is an Al Fahidi-based networking specialist supplying access points, switches, and enterprise Wi-Fi gear to IT contractors and system integrators.",
+      whatsappNumber: "+971505552003",
+      phone: "+97142230033",
+      email: "sales@networkzone.ae",
+      address: "Al Fahidi, Dubai, UAE",
+      googleMapsUrl: "https://maps.google.com/?q=Network+Zone+FZE+Al+Fahidi",
+      tags: ["Networking", "Access Points", "Enterprise Wi-Fi"],
+    },
   ),
   supplierStub(
     "supplier-techno-source",
@@ -133,6 +177,16 @@ const MOCK_SUPPLIERS: SupplierProfile[] = [
     "Bur Dubai",
     310,
     96,
+    {
+      description:
+        "Techno Source LLC supplies desktops and workstations to corporate buyers across Dubai, with same-day quotes and bulk-order pricing on Dell and HP business lines.",
+      whatsappNumber: "+971505552004",
+      phone: "+97142230044",
+      email: "sales@technosourcellc.ae",
+      address: "Bur Dubai, Dubai, UAE",
+      googleMapsUrl: "https://maps.google.com/?q=Techno+Source+LLC+Bur+Dubai",
+      tags: ["Desktops", "Workstations", "Corporate Supply"],
+    },
   ),
   supplierStub(
     "supplier-seven-seas",
@@ -142,6 +196,16 @@ const MOCK_SUPPLIERS: SupplierProfile[] = [
     "Deira",
     187,
     99,
+    {
+      description:
+        "Seven Seas Computers is a Deira-based Apple reseller supplying MacBooks and iOS accessories to retailers and corporate buyers across the Dubai IT wholesale market.",
+      whatsappNumber: "+971505552005",
+      phone: "+97142230055",
+      email: "sales@sevenseascomputers.ae",
+      address: "Deira, Dubai, UAE",
+      googleMapsUrl: "https://maps.google.com/?q=Seven+Seas+Computers+Deira",
+      tags: ["Apple", "MacBooks", "Retail Supply"],
+    },
   ),
 ];
 

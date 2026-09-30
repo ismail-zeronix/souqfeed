@@ -20,4 +20,16 @@ describe("getMockSuppliers", () => {
       expect(supplier.activeOfferCount).toBeGreaterThan(0);
     }
   });
+
+  it("gives every supplier its own contact details, never a clone's", () => {
+    const profiles = getMockSuppliers().map((summary) =>
+      getMockSupplierBySlug(summary.slug)!,
+    );
+    const emails = profiles.map((p) => p.email);
+    const whatsappNumbers = profiles.map((p) => p.whatsappNumber);
+    const descriptions = profiles.map((p) => p.description);
+    expect(new Set(emails).size).toBe(profiles.length);
+    expect(new Set(whatsappNumbers).size).toBe(profiles.length);
+    expect(new Set(descriptions).size).toBe(profiles.length);
+  });
 });

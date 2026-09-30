@@ -27,22 +27,25 @@ export default async function SupplierProfilePage({
       <SupplierHeader supplier={supplier} />
       <SupplierStatRow supplier={supplier} />
       <div className="mx-auto w-full max-w-[1440px] px-6 pb-10">
-        <SupplierTabs
-          liveOffersContent={
-            <div className="flex flex-col gap-6 pt-4 lg:flex-row">
-              <SupplierOffersSection
-                supplierName={supplier.companyName}
-                offers={offers}
-              />
-              <div className="w-full shrink-0 lg:w-80">
-                <SupplierInsightsSidebar supplier={supplier} />
-                <div className="mt-4">
-                  <SupplierContactPanel supplier={supplier} />
-                </div>
-              </div>
+        <div className="flex flex-col gap-6 lg:flex-row">
+          <div className="min-w-0 flex-1">
+            <SupplierTabs
+              liveOffersContent={
+                <SupplierOffersSection
+                  supplierName={supplier.companyName}
+                  offers={offers}
+                />
+              }
+            />
+          </div>
+          {/* Persists across every tab (including "Contact", which points here) — not nested inside a single tab panel. */}
+          <div className="w-full shrink-0 lg:w-80">
+            <SupplierInsightsSidebar supplier={supplier} />
+            <div className="mt-4">
+              <SupplierContactPanel supplier={supplier} />
             </div>
-          }
-        />
+          </div>
+        </div>
       </div>
     </>
   );

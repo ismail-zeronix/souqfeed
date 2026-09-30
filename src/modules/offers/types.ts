@@ -36,6 +36,24 @@ export interface OfferFilterCriteria {
   searchQuery: string;
 }
 
+export interface CategoryPriceMovement {
+  categoryId: string;
+  categoryName: string;
+  changePercent: number; // placeholder — no backing schema field yet (price-trend intelligence is deferred, per project_plan.md)
+}
+
+export interface TrendingSearchTerm {
+  term: string;
+  searchCount: number; // placeholder — no backing schema field yet (trending-search tracking is deferred)
+}
+
+export interface WtbRequestSnippet {
+  id: string;
+  title: string;
+  location: string;
+  postedLabel: string; // placeholder — no backing schema field yet (WTB is a deferred feature)
+}
+
 export interface MarketStats {
   // placeholder — no backing aggregation query yet; Phase 12 (analytics) computes these for real
   activeSuppliersToday: number;

@@ -1,4 +1,10 @@
-import type { MarketStats, OfferListItem } from "./types";
+import type {
+  CategoryPriceMovement,
+  MarketStats,
+  OfferListItem,
+  TrendingSearchTerm,
+  WtbRequestSnippet,
+} from "./types";
 
 function minutesAgo(minutes: number): string {
   return new Date(Date.now() - minutes * 60 * 1000).toISOString();
@@ -198,4 +204,63 @@ export function getMockOffers(): OfferListItem[] {
 
 export function getMockMarketStats(): MarketStats {
   return MOCK_MARKET_STATS;
+}
+
+const MOCK_PRICE_MOVEMENTS: CategoryPriceMovement[] = [
+  { categoryId: "cat-laptops", categoryName: "Laptops", changePercent: 24 },
+  { categoryId: "cat-storage", categoryName: "Storage", changePercent: 18 },
+  {
+    categoryId: "cat-networking",
+    categoryName: "Networking",
+    changePercent: 32,
+  },
+  { categoryId: "cat-desktops", categoryName: "Desktops", changePercent: 12 },
+  { categoryId: "cat-monitors", categoryName: "Monitors", changePercent: 9 },
+];
+
+const MOCK_TRENDING_SEARCHES: TrendingSearchTerm[] = [
+  { term: "iPhone 15", searchCount: 248 },
+  { term: "RTX 4090", searchCount: 197 },
+  { term: "Lenovo ThinkPad", searchCount: 186 },
+  { term: "HP 250 G10", searchCount: 162 },
+  { term: "WD 8TB", searchCount: 148 },
+];
+
+const MOCK_WTB_REQUESTS: WtbRequestSnippet[] = [
+  {
+    id: "wtb-1",
+    title: "WTB iPhone 15 Pro Max 256GB",
+    location: "Dubai",
+    postedLabel: "5m ago",
+  },
+  {
+    id: "wtb-2",
+    title: "WTB RTX 4080 / 4090",
+    location: "Urgent",
+    postedLabel: "12m ago",
+  },
+  {
+    id: "wtb-3",
+    title: "WTB Cisco Switches",
+    location: "Dubai",
+    postedLabel: "28m ago",
+  },
+  {
+    id: "wtb-4",
+    title: "WTB Dell Laptops (i7)",
+    location: "Corporate",
+    postedLabel: "41m ago",
+  },
+];
+
+export function getMockPriceMovements(): CategoryPriceMovement[] {
+  return MOCK_PRICE_MOVEMENTS;
+}
+
+export function getMockTrendingSearches(): TrendingSearchTerm[] {
+  return MOCK_TRENDING_SEARCHES;
+}
+
+export function getMockWtbRequests(): WtbRequestSnippet[] {
+  return MOCK_WTB_REQUESTS;
 }
