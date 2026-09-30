@@ -26,6 +26,8 @@ const envSchema = z.object({
   LOG_LEVEL: z
     .enum(["fatal", "error", "warn", "info", "debug", "trace"])
     .default("info"),
+  ADMIN_EMAIL: z.string().email().default("admin@souqfeed.local"),
+  ADMIN_PASSWORD: z.string().min(8).default("changeme-admin-1234"),
 });
 
 export type Env = z.infer<typeof envSchema>;

@@ -48,4 +48,16 @@ describe("parseEnv", () => {
       }),
     ).toThrow(/BETTER_AUTH_SECRET/);
   });
+
+  it("defaults ADMIN_EMAIL and ADMIN_PASSWORD when not set", () => {
+    const env = parseEnv(validEnv);
+    expect(env.ADMIN_EMAIL).toBe("admin@souqfeed.local");
+    expect(env.ADMIN_PASSWORD).toBe("changeme-admin-1234");
+  });
+
+  it("throws when ADMIN_PASSWORD is too short", () => {
+    expect(() => parseEnv({ ...validEnv, ADMIN_PASSWORD: "short" })).toThrow(
+      /ADMIN_PASSWORD/,
+    );
+  });
 });
