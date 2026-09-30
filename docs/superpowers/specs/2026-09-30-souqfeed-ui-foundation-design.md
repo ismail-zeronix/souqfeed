@@ -177,16 +177,16 @@ Applied onto the existing shadcn CSS-variable slots in
 `src/app/globals.css` (Tailwind v4, `@theme inline` block) rather than
 inventing a parallel token set:
 
-| shadcn slot | New value | Source |
-|---|---|---|
-| `--background` | `#F7F6F3` | `--color-bg` |
-| `--foreground` | `#16181A` | `--color-text-primary` |
-| `--card`, `--popover` | `#FFFFFF` | `--color-surface` |
-| `--primary` | `#0F6B45` | `--color-brand-primary` |
-| `--primary-foreground` | `#FFFFFF` | — |
-| `--muted-foreground` | `#6B7280` | `--color-text-muted` |
-| `--border`, `--input` | `#E5E3DE` | `--color-border` |
-| `--destructive` | `#DC2626` | `--color-negative` |
+| shadcn slot            | New value | Source                  |
+| ---------------------- | --------- | ----------------------- |
+| `--background`         | `#F7F6F3` | `--color-bg`            |
+| `--foreground`         | `#16181A` | `--color-text-primary`  |
+| `--card`, `--popover`  | `#FFFFFF` | `--color-surface`       |
+| `--primary`            | `#0F6B45` | `--color-brand-primary` |
+| `--primary-foreground` | `#FFFFFF` | —                       |
+| `--muted-foreground`   | `#6B7280` | `--color-text-muted`    |
+| `--border`, `--input`  | `#E5E3DE` | `--color-border`        |
+| `--destructive`        | `#DC2626` | `--color-negative`      |
 
 Two tokens `docs/theme.md` defines but shadcn has no slot for get added
 directly to the `@theme inline`/`:root` blocks:

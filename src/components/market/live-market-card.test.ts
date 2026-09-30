@@ -39,27 +39,44 @@ describe("formatPrice", () => {
   });
 
   it("renders a fixed price with the currency and thousands separators", () => {
-    const offer = makeOffer({ priceType: "FIXED", price: 3850, currency: "AED" });
+    const offer = makeOffer({
+      priceType: "FIXED",
+      price: 3850,
+      currency: "AED",
+    });
     expect(formatPrice(offer).primary).toBe("AED 3,850");
   });
 
   it("shows the previous price when it is higher (a price drop)", () => {
-    const offer = makeOffer({ priceType: "FIXED", price: 540, previousPrice: 570 });
+    const offer = makeOffer({
+      priceType: "FIXED",
+      price: 540,
+      previousPrice: 570,
+    });
     expect(formatPrice(offer).secondary).toBe("Was 570");
   });
 
   it("shows a bulk-price hint for high-quantity fixed offers with no prior price", () => {
-    const offer = makeOffer({ priceType: "FIXED", price: 3850, quantity: 120, previousPrice: null });
+    const offer = makeOffer({
+      priceType: "FIXED",
+      price: 3850,
+      quantity: 120,
+      previousPrice: null,
+    });
     expect(formatPrice(offer).secondary).toBe("Bulk price available");
   });
 });
 
 describe("formatRelativeTime", () => {
   it("formats minutes for anything under an hour", () => {
-    expect(formatRelativeTime(new Date(Date.now() - 2 * 60_000).toISOString())).toBe("2m ago");
+    expect(
+      formatRelativeTime(new Date(Date.now() - 2 * 60_000).toISOString()),
+    ).toBe("2m ago");
   });
 
   it("formats hours for anything under a day", () => {
-    expect(formatRelativeTime(new Date(Date.now() - 3 * 3_600_000).toISOString())).toBe("3h ago");
+    expect(
+      formatRelativeTime(new Date(Date.now() - 3 * 3_600_000).toISOString()),
+    ).toBe("3h ago");
   });
 });

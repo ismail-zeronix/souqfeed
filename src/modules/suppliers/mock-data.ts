@@ -20,7 +20,14 @@ const AL_HADI: SupplierProfile = {
   email: "sales@alhadi-computers.ae",
   address: "Bur Dubai, Dubai, UAE",
   googleMapsUrl: "https://maps.google.com/?q=Al+Hadi+Computers+Bur+Dubai",
-  tags: ["Laptops", "Desktops", "Components", "Networking", "Accessories", "Software"],
+  tags: [
+    "Laptops",
+    "Desktops",
+    "Components",
+    "Networking",
+    "Accessories",
+    "Software",
+  ],
   lastBroadcastAt: hoursAgo(2),
   memberSinceYear: 2016,
   avgResponseTimeLabel: "< 2 hours",
@@ -36,9 +43,21 @@ const AL_HADI: SupplierProfile = {
     { categoryId: "cat-laptops", categoryName: "Laptops", sharePercent: 42 },
     { categoryId: "cat-desktops", categoryName: "Desktops", sharePercent: 18 },
     { categoryId: "cat-storage", categoryName: "Storage", sharePercent: 14 },
-    { categoryId: "cat-networking", categoryName: "Networking", sharePercent: 12 },
-    { categoryId: "cat-components", categoryName: "Components", sharePercent: 8 },
-    { categoryId: "cat-accessories", categoryName: "Accessories", sharePercent: 6 },
+    {
+      categoryId: "cat-networking",
+      categoryName: "Networking",
+      sharePercent: 12,
+    },
+    {
+      categoryId: "cat-components",
+      categoryName: "Components",
+      sharePercent: 8,
+    },
+    {
+      categoryId: "cat-accessories",
+      categoryName: "Accessories",
+      sharePercent: 6,
+    },
   ],
   broadcastActivity: [
     { label: "Mar 10", count: 18 },
@@ -65,28 +84,96 @@ function supplierStub(
   activeOfferCount: number,
   positiveScorePercent: number,
 ): SupplierProfile {
-  return { ...AL_HADI, id, slug, companyName, logoInitial, locationName, activeOfferCount, positiveScorePercent };
+  return {
+    ...AL_HADI,
+    id,
+    slug,
+    companyName,
+    logoInitial,
+    locationName,
+    activeOfferCount,
+    positiveScorePercent,
+  };
 }
 
 const MOCK_SUPPLIERS: SupplierProfile[] = [
   AL_HADI,
-  supplierStub("supplier-skyline", "skyline-general-trading", "Skyline General Trading", "S", "Bur Dubai", 410, 97),
-  supplierStub("supplier-microlink", "microlink-technology", "Microlink Technology LLC", "M", "Bur Dubai", 892, 99),
-  supplierStub("supplier-network-zone", "network-zone", "Network Zone FZE", "N", "Al Fahidi", 225, 98),
-  supplierStub("supplier-techno-source", "techno-source", "Techno Source LLC", "T", "Bur Dubai", 310, 96),
-  supplierStub("supplier-seven-seas", "seven-seas-computers", "Seven Seas Computers", "S", "Deira", 187, 99),
+  supplierStub(
+    "supplier-skyline",
+    "skyline-general-trading",
+    "Skyline General Trading",
+    "S",
+    "Bur Dubai",
+    410,
+    97,
+  ),
+  supplierStub(
+    "supplier-microlink",
+    "microlink-technology",
+    "Microlink Technology LLC",
+    "M",
+    "Bur Dubai",
+    892,
+    99,
+  ),
+  supplierStub(
+    "supplier-network-zone",
+    "network-zone",
+    "Network Zone FZE",
+    "N",
+    "Al Fahidi",
+    225,
+    98,
+  ),
+  supplierStub(
+    "supplier-techno-source",
+    "techno-source",
+    "Techno Source LLC",
+    "T",
+    "Bur Dubai",
+    310,
+    96,
+  ),
+  supplierStub(
+    "supplier-seven-seas",
+    "seven-seas-computers",
+    "Seven Seas Computers",
+    "S",
+    "Deira",
+    187,
+    99,
+  ),
 ];
 
 function toSummary(profile: SupplierProfile): SupplierSummary {
-  const { id, slug, companyName, logoInitial, verified, locationName, activeOfferCount, positiveScorePercent } =
-    profile;
-  return { id, slug, companyName, logoInitial, verified, locationName, activeOfferCount, positiveScorePercent };
+  const {
+    id,
+    slug,
+    companyName,
+    logoInitial,
+    verified,
+    locationName,
+    activeOfferCount,
+    positiveScorePercent,
+  } = profile;
+  return {
+    id,
+    slug,
+    companyName,
+    logoInitial,
+    verified,
+    locationName,
+    activeOfferCount,
+    positiveScorePercent,
+  };
 }
 
 export function getMockSuppliers(): SupplierSummary[] {
   return MOCK_SUPPLIERS.map(toSummary);
 }
 
-export function getMockSupplierBySlug(slug: string): SupplierProfile | undefined {
+export function getMockSupplierBySlug(
+  slug: string,
+): SupplierProfile | undefined {
   return MOCK_SUPPLIERS.find((supplier) => supplier.slug === slug);
 }

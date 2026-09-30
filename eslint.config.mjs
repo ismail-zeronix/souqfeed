@@ -13,6 +13,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Other git worktrees (e.g. .worktrees/<branch>/) are separate working
+    // trees with their own lint runs — never lint into them from here.
+    ".worktrees/**",
   ]),
   // Must stay last: disables formatting-related rules Prettier owns.
   prettierConfig,

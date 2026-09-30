@@ -18,7 +18,7 @@ export function SupplierLogoTile({
   return (
     <div
       className={cn(
-        "flex shrink-0 items-center justify-center rounded-md border border-border bg-muted font-semibold text-primary",
+        "border-border bg-muted text-primary flex shrink-0 items-center justify-center rounded-md border font-semibold",
         SIZE_CLASSES[size],
         className,
       )}

@@ -37,12 +37,14 @@
 ### Task 1: Phase setup — docs, theme tokens, shadcn primitives
 
 **Files:**
+
 - Modify: `project_plan.md` (phase table)
 - Modify: `current.md` ("Next" section)
 - Modify: `src/app/globals.css` (theme tokens, font-sans fix)
 - Verify/commit (already generated, untracked): `src/components/ui/{badge,tabs,select,checkbox,input,sheet,separator,label}.tsx`
 
 **Interfaces:**
+
 - Produces: `--color-live` / `--live` and `--color-info` / `--info` CSS custom properties, usable as Tailwind utilities `bg-live`, `text-live`, `bg-info`, `text-info` everywhere from Task 5 onward.
 
 - [ ] **Step 1: Insert the Phase 0.5 row into `project_plan.md`'s phase table**
@@ -73,39 +75,43 @@ Replace the "Next" section's first bullet (currently "Merge Phase 0 once the fin
 In the `@theme inline` block, fix the self-referential font mapping and add the two new color tokens:
 
 ```css
-  --font-sans: var(--font-geist-sans);
+--font-sans: var(--font-geist-sans);
 ```
+
 (replaces the existing `--font-sans: var(--font-sans);` line)
 
 Add these two lines to the same `@theme inline` block, near the other `--color-*` entries:
+
 ```css
-  --color-live: var(--live);
-  --color-info: var(--info);
+--color-live: var(--live);
+--color-info: var(--info);
 ```
 
 In the `:root` block, replace the shadcn default neutral values with SouqFeed's brand tokens:
+
 ```css
-  --background: #f7f6f3;
-  --foreground: #16181a;
-  --card: #ffffff;
-  --card-foreground: #16181a;
-  --popover: #ffffff;
-  --popover-foreground: #16181a;
-  --primary: #0f6b45;
-  --primary-foreground: #ffffff;
-  --secondary: #f1f0ec;
-  --secondary-foreground: #16181a;
-  --muted: #f1f0ec;
-  --muted-foreground: #6b7280;
-  --accent: #e6f2ec;
-  --accent-foreground: #0f6b45;
-  --destructive: #dc2626;
-  --border: #e5e3de;
-  --input: #e5e3de;
-  --ring: #0f6b45;
-  --live: #16a34a;
-  --info: #2a5c8a;
+--background: #f7f6f3;
+--foreground: #16181a;
+--card: #ffffff;
+--card-foreground: #16181a;
+--popover: #ffffff;
+--popover-foreground: #16181a;
+--primary: #0f6b45;
+--primary-foreground: #ffffff;
+--secondary: #f1f0ec;
+--secondary-foreground: #16181a;
+--muted: #f1f0ec;
+--muted-foreground: #6b7280;
+--accent: #e6f2ec;
+--accent-foreground: #0f6b45;
+--destructive: #dc2626;
+--border: #e5e3de;
+--input: #e5e3de;
+--ring: #0f6b45;
+--live: #16a34a;
+--info: #2a5c8a;
 ```
+
 Leave `--chart-*`, `--sidebar-*`, and `--radius` as-is — nothing in this phase uses them. Leave the `.dark` block untouched (dark mode is out of scope).
 
 - [ ] **Step 4: Verify the shadcn primitives already in the working tree**
@@ -130,6 +136,7 @@ git commit -m "chore: add Phase 0.5 to roadmap, apply SouqFeed theme tokens, add
 ### Task 2: `categories` and `brands` modules
 
 **Files:**
+
 - Create: `src/modules/categories/types.ts`
 - Create: `src/modules/categories/mock-data.ts`
 - Create: `src/modules/categories/mock-data.test.ts`
@@ -138,11 +145,13 @@ git commit -m "chore: add Phase 0.5 to roadmap, apply SouqFeed theme tokens, add
 - Create: `src/modules/brands/mock-data.test.ts`
 
 **Interfaces:**
+
 - Produces: `Category { id, name, slug, offerCount }`, `getMockCategories(): Category[]`; `Brand { id, name, slug }`, `getMockBrands(): Brand[]`. Task 3 (offers) references these `id` values as `categoryId`/`brandId` foreign keys in its own mock fixtures — the ids must match exactly.
 
 - [ ] **Step 1: Write the failing tests**
 
 `src/modules/categories/mock-data.test.ts`:
+
 ```ts
 import { describe, expect, it } from "vitest";
 import { getMockCategories } from "./mock-data";
@@ -164,6 +173,7 @@ describe("getMockCategories", () => {
 ```
 
 `src/modules/brands/mock-data.test.ts`:
+
 ```ts
 import { describe, expect, it } from "vitest";
 import { getMockBrands } from "./mock-data";
@@ -186,6 +196,7 @@ Expected: FAIL — `mock-data.ts` does not exist in either module yet.
 - [ ] **Step 3: Implement `categories`**
 
 `src/modules/categories/types.ts`:
+
 ```ts
 export interface Category {
   id: string;
@@ -196,6 +207,7 @@ export interface Category {
 ```
 
 `src/modules/categories/mock-data.ts`:
+
 ```ts
 import type { Category } from "./types";
 
@@ -203,10 +215,25 @@ const MOCK_CATEGORIES: Category[] = [
   { id: "cat-laptops", name: "Laptops", slug: "laptops", offerCount: 142 },
   { id: "cat-desktops", name: "Desktops", slug: "desktops", offerCount: 64 },
   { id: "cat-storage", name: "Storage", slug: "storage", offerCount: 86 },
-  { id: "cat-networking", name: "Networking", slug: "networking", offerCount: 73 },
-  { id: "cat-components", name: "Components", slug: "components", offerCount: 95 },
+  {
+    id: "cat-networking",
+    name: "Networking",
+    slug: "networking",
+    offerCount: 73,
+  },
+  {
+    id: "cat-components",
+    name: "Components",
+    slug: "components",
+    offerCount: 95,
+  },
   { id: "cat-monitors", name: "Monitors", slug: "monitors", offerCount: 58 },
-  { id: "cat-accessories", name: "Accessories", slug: "accessories", offerCount: 124 },
+  {
+    id: "cat-accessories",
+    name: "Accessories",
+    slug: "accessories",
+    offerCount: 124,
+  },
   { id: "cat-software", name: "Software", slug: "software", offerCount: 18 },
 ];
 
@@ -218,6 +245,7 @@ export function getMockCategories(): Category[] {
 - [ ] **Step 4: Implement `brands`**
 
 `src/modules/brands/types.ts`:
+
 ```ts
 export interface Brand {
   id: string;
@@ -227,6 +255,7 @@ export interface Brand {
 ```
 
 `src/modules/brands/mock-data.ts`:
+
 ```ts
 import type { Brand } from "./types";
 
@@ -262,18 +291,21 @@ git commit -m "feat: add categories and brands mock data modules"
 ### Task 3: `offers` module — types, mock data, `filterOffers`/`sortOffers`
 
 **Files:**
+
 - Create: `src/modules/offers/types.ts`
 - Create: `src/modules/offers/mock-data.ts`
 - Create: `src/modules/offers/filter-offers.ts`
 - Create: `src/modules/offers/filter-offers.test.ts`
 
 **Interfaces:**
+
 - Consumes: `Category`/`Brand` `id` values from Task 2 (`cat-laptops`, `brand-lenovo`, etc.).
 - Produces: `OfferListItem`, `OfferFilterCriteria`, `MarketStats` types; `EMPTY_OFFER_FILTERS`, `filterOffers(offers, criteria)`, `sortOffers(offers, sort)`, `getMockOffers()`, `getMockMarketStats()`. Every later task that renders an offer (Task 7's card, Task 9's feed, Task 13's supplier offers section) imports `OfferListItem` and these functions from here.
 
 - [ ] **Step 1: Write the failing tests**
 
 `src/modules/offers/filter-offers.test.ts`:
+
 ```ts
 import { describe, expect, it } from "vitest";
 import { EMPTY_OFFER_FILTERS, filterOffers, sortOffers } from "./filter-offers";
@@ -318,7 +350,10 @@ describe("filterOffers", () => {
       makeOffer({ id: "a", brandId: "brand-lenovo" }),
       makeOffer({ id: "b", brandId: "brand-hp" }),
     ];
-    const result = filterOffers(offers, { ...EMPTY_OFFER_FILTERS, brandIds: ["brand-lenovo"] });
+    const result = filterOffers(offers, {
+      ...EMPTY_OFFER_FILTERS,
+      brandIds: ["brand-lenovo"],
+    });
     expect(result.map((o) => o.id)).toEqual(["a"]);
   });
 
@@ -327,7 +362,10 @@ describe("filterOffers", () => {
       makeOffer({ id: "a", categoryId: "cat-laptops" }),
       makeOffer({ id: "b", categoryId: "cat-storage" }),
     ];
-    const result = filterOffers(offers, { ...EMPTY_OFFER_FILTERS, categoryIds: ["cat-storage"] });
+    const result = filterOffers(offers, {
+      ...EMPTY_OFFER_FILTERS,
+      categoryIds: ["cat-storage"],
+    });
     expect(result.map((o) => o.id)).toEqual(["b"]);
   });
 
@@ -336,7 +374,10 @@ describe("filterOffers", () => {
       makeOffer({ id: "a", locationName: "Bur Dubai" }),
       makeOffer({ id: "b", locationName: "Deira" }),
     ];
-    const result = filterOffers(offers, { ...EMPTY_OFFER_FILTERS, locationNames: ["Deira"] });
+    const result = filterOffers(offers, {
+      ...EMPTY_OFFER_FILTERS,
+      locationNames: ["Deira"],
+    });
     expect(result.map((o) => o.id)).toEqual(["b"]);
   });
 
@@ -345,23 +386,47 @@ describe("filterOffers", () => {
       makeOffer({ id: "a", availabilityStatus: "AVAILABLE" }),
       makeOffer({ id: "b", availabilityStatus: "SOLD_OUT" }),
     ];
-    const result = filterOffers(offers, { ...EMPTY_OFFER_FILTERS, inStockOnly: true });
+    const result = filterOffers(offers, {
+      ...EMPTY_OFFER_FILTERS,
+      inStockOnly: true,
+    });
     expect(result.map((o) => o.id)).toEqual(["a"]);
   });
 
   it("matches searchQuery against title, brand, and spec line, case-insensitively", () => {
     const offers = [
-      makeOffer({ id: "a", title: "ThinkPad E14 Gen 7", brandName: "Lenovo", specLine: ["16GB RAM"] }),
-      makeOffer({ id: "b", title: "OptiPlex 7020", brandName: "Dell", specLine: ["8GB RAM"] }),
+      makeOffer({
+        id: "a",
+        title: "ThinkPad E14 Gen 7",
+        brandName: "Lenovo",
+        specLine: ["16GB RAM"],
+      }),
+      makeOffer({
+        id: "b",
+        title: "OptiPlex 7020",
+        brandName: "Dell",
+        specLine: ["8GB RAM"],
+      }),
     ];
-    const result = filterOffers(offers, { ...EMPTY_OFFER_FILTERS, searchQuery: "thinkpad" });
+    const result = filterOffers(offers, {
+      ...EMPTY_OFFER_FILTERS,
+      searchQuery: "thinkpad",
+    });
     expect(result.map((o) => o.id)).toEqual(["a"]);
   });
 
   it("combines multiple criteria with AND semantics", () => {
     const offers = [
-      makeOffer({ id: "a", brandId: "brand-lenovo", categoryId: "cat-laptops" }),
-      makeOffer({ id: "b", brandId: "brand-lenovo", categoryId: "cat-storage" }),
+      makeOffer({
+        id: "a",
+        brandId: "brand-lenovo",
+        categoryId: "cat-laptops",
+      }),
+      makeOffer({
+        id: "b",
+        brandId: "brand-lenovo",
+        categoryId: "cat-storage",
+      }),
     ];
     const result = filterOffers(offers, {
       ...EMPTY_OFFER_FILTERS,
@@ -373,42 +438,50 @@ describe("filterOffers", () => {
 
   it("returns an empty array when nothing matches", () => {
     const offers = [makeOffer({ id: "a", brandId: "brand-lenovo" })];
-    const result = filterOffers(offers, { ...EMPTY_OFFER_FILTERS, brandIds: ["brand-hp"] });
+    const result = filterOffers(offers, {
+      ...EMPTY_OFFER_FILTERS,
+      brandIds: ["brand-hp"],
+    });
     expect(result).toEqual([]);
   });
 });
 
 describe("sortOffers", () => {
   it("sorts by most recent first", () => {
-    const older = makeOffer({ id: "old", postedAt: new Date(Date.now() - 100000).toISOString() });
+    const older = makeOffer({
+      id: "old",
+      postedAt: new Date(Date.now() - 100000).toISOString(),
+    });
     const newer = makeOffer({ id: "new", postedAt: new Date().toISOString() });
-    expect(sortOffers([older, newer], "recent").map((o) => o.id)).toEqual(["new", "old"]);
+    expect(sortOffers([older, newer], "recent").map((o) => o.id)).toEqual([
+      "new",
+      "old",
+    ]);
   });
 
   it("sorts by price ascending, treating a null (ASK) price as highest", () => {
     const cheap = makeOffer({ id: "cheap", price: 100 });
     const askPrice = makeOffer({ id: "ask", price: null, priceType: "ASK" });
     const mid = makeOffer({ id: "mid", price: 500 });
-    expect(sortOffers([mid, askPrice, cheap], "price-asc").map((o) => o.id)).toEqual([
-      "cheap",
-      "mid",
-      "ask",
-    ]);
+    expect(
+      sortOffers([mid, askPrice, cheap], "price-asc").map((o) => o.id),
+    ).toEqual(["cheap", "mid", "ask"]);
   });
 
   it("sorts by price descending, treating a null (ASK) price as lowest", () => {
     const cheap = makeOffer({ id: "cheap", price: 100 });
     const askPrice = makeOffer({ id: "ask", price: null, priceType: "ASK" });
     const mid = makeOffer({ id: "mid", price: 500 });
-    expect(sortOffers([cheap, askPrice, mid], "price-desc").map((o) => o.id)).toEqual([
-      "mid",
-      "cheap",
-      "ask",
-    ]);
+    expect(
+      sortOffers([cheap, askPrice, mid], "price-desc").map((o) => o.id),
+    ).toEqual(["mid", "cheap", "ask"]);
   });
 
   it("does not mutate the input array", () => {
-    const offers = [makeOffer({ id: "a", price: 500 }), makeOffer({ id: "b", price: 100 })];
+    const offers = [
+      makeOffer({ id: "a", price: 500 }),
+      makeOffer({ id: "b", price: 100 }),
+    ];
     const original = [...offers];
     sortOffers(offers, "price-asc");
     expect(offers).toEqual(original);
@@ -424,9 +497,11 @@ Expected: FAIL — `filter-offers.ts` and `types.ts` don't exist yet.
 - [ ] **Step 3: Write `types.ts`**
 
 `src/modules/offers/types.ts`:
+
 ```ts
 export type PriceType = "FIXED" | "ASK" | "HIDDEN" | "UNKNOWN";
-export type AvailabilityStatus = "AVAILABLE" | "LIMITED" | "ASK" | "UNKNOWN" | "SOLD_OUT";
+export type AvailabilityStatus =
+  "AVAILABLE" | "LIMITED" | "ASK" | "UNKNOWN" | "SOLD_OUT";
 export type OfferBadge = "NEW" | "LIVE" | "PRICE_UPDATED" | null;
 
 export interface OfferListItem {
@@ -478,6 +553,7 @@ export interface MarketStats {
 - [ ] **Step 4: Write `filter-offers.ts`**
 
 `src/modules/offers/filter-offers.ts`:
+
 ```ts
 import type { OfferFilterCriteria, OfferListItem } from "./types";
 
@@ -496,10 +572,16 @@ export function filterOffers(
   const query = criteria.searchQuery.trim().toLowerCase();
 
   return offers.filter((offer) => {
-    if (criteria.brandIds.length > 0 && !criteria.brandIds.includes(offer.brandId)) {
+    if (
+      criteria.brandIds.length > 0 &&
+      !criteria.brandIds.includes(offer.brandId)
+    ) {
       return false;
     }
-    if (criteria.categoryIds.length > 0 && !criteria.categoryIds.includes(offer.categoryId)) {
+    if (
+      criteria.categoryIds.length > 0 &&
+      !criteria.categoryIds.includes(offer.categoryId)
+    ) {
       return false;
     }
     if (
@@ -512,7 +594,8 @@ export function filterOffers(
       return false;
     }
     if (query.length > 0) {
-      const haystack = `${offer.title} ${offer.brandName} ${offer.specLine.join(" ")}`.toLowerCase();
+      const haystack =
+        `${offer.title} ${offer.brandName} ${offer.specLine.join(" ")}`.toLowerCase();
       if (!haystack.includes(query)) {
         return false;
       }
@@ -523,17 +606,23 @@ export function filterOffers(
 
 export type SortOption = "recent" | "price-asc" | "price-desc";
 
-export function sortOffers(offers: OfferListItem[], sort: SortOption): OfferListItem[] {
+export function sortOffers(
+  offers: OfferListItem[],
+  sort: SortOption,
+): OfferListItem[] {
   const copy = [...offers];
   switch (sort) {
     case "price-asc":
       return copy.sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity));
     case "price-desc":
-      return copy.sort((a, b) => (b.price ?? -Infinity) - (a.price ?? -Infinity));
+      return copy.sort(
+        (a, b) => (b.price ?? -Infinity) - (a.price ?? -Infinity),
+      );
     case "recent":
     default:
       return copy.sort(
-        (a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime(),
+        (a, b) =>
+          new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime(),
       );
   }
 }
@@ -547,6 +636,7 @@ Expected: PASS (11 tests).
 - [ ] **Step 6: Write `mock-data.ts`**
 
 `src/modules/offers/mock-data.ts`:
+
 ```ts
 import type { MarketStats, OfferListItem } from "./types";
 
@@ -568,7 +658,13 @@ const MOCK_OFFERS: OfferListItem[] = [
     categoryName: "Laptops",
     locationName: "Bur Dubai",
     title: "Lenovo ThinkPad E14 Gen 7",
-    specLine: ["Intel Core Ultra 7 155H", "16GB RAM", "512GB SSD", '14" FHD', "Win 11 Pro"],
+    specLine: [
+      "Intel Core Ultra 7 155H",
+      "16GB RAM",
+      "512GB SSD",
+      '14" FHD',
+      "Win 11 Pro",
+    ],
     quantity: 120,
     price: 3850,
     currency: "AED",
@@ -592,7 +688,13 @@ const MOCK_OFFERS: OfferListItem[] = [
     categoryName: "Laptops",
     locationName: "Bur Dubai",
     title: "HP 250 G10",
-    specLine: ["Intel Core i5-1335U", "8GB RAM", "512GB SSD", '15.6" FHD', "DOS"],
+    specLine: [
+      "Intel Core i5-1335U",
+      "8GB RAM",
+      "512GB SSD",
+      '15.6" FHD',
+      "DOS",
+    ],
     quantity: 70,
     price: null,
     currency: "AED",
@@ -640,7 +742,13 @@ const MOCK_OFFERS: OfferListItem[] = [
     categoryName: "Networking",
     locationName: "Al Fahidi",
     title: "Aruba Instant On AP25 (R9B28A)",
-    specLine: ["Wi-Fi 6", "Dual Band", "2x2:2 MIMO", "PoE", "Indoor Access Point"],
+    specLine: [
+      "Wi-Fi 6",
+      "Dual Band",
+      "2x2:2 MIMO",
+      "PoE",
+      "Indoor Access Point",
+    ],
     quantity: 20,
     price: null,
     currency: "AED",
@@ -664,7 +772,13 @@ const MOCK_OFFERS: OfferListItem[] = [
     categoryName: "Desktops",
     locationName: "Bur Dubai",
     title: "Dell OptiPlex 7020 SFF",
-    specLine: ["Intel Core i7-14700", "16GB RAM", "512GB SSD", "Intel UHD", "Win 11 Pro"],
+    specLine: [
+      "Intel Core i7-14700",
+      "16GB RAM",
+      "512GB SSD",
+      "Intel UHD",
+      "Win 11 Pro",
+    ],
     quantity: 40,
     price: 2950,
     currency: "AED",
@@ -688,7 +802,13 @@ const MOCK_OFFERS: OfferListItem[] = [
     categoryName: "Laptops",
     locationName: "Deira",
     title: 'Apple MacBook Air 13" M3',
-    specLine: ["Apple M3", "16GB RAM", "512GB SSD", '13.6" Liquid Retina', "macOS"],
+    specLine: [
+      "Apple M3",
+      "16GB RAM",
+      "512GB SSD",
+      '13.6" Liquid Retina',
+      "macOS",
+    ],
     quantity: 15,
     price: 4650,
     currency: "AED",
@@ -738,17 +858,20 @@ git commit -m "feat: add offers module with filterOffers/sortOffers and mock dat
 ### Task 4: `suppliers` module — types, mock data, `getMockSupplierBySlug`
 
 **Files:**
+
 - Create: `src/modules/suppliers/types.ts`
 - Create: `src/modules/suppliers/mock-data.ts`
 - Create: `src/modules/suppliers/mock-data.test.ts`
 
 **Interfaces:**
+
 - Consumes: nothing from earlier tasks (supplier slugs here must match the `supplierSlug` values already used in Task 3's `MOCK_OFFERS`: `al-hadi-computers`, `skyline-general-trading`, `microlink-technology`, `network-zone`, `techno-source`, `seven-seas-computers`).
 - Produces: `SupplierSummary`, `SupplierProfile`, `TopBrandShare`, `CategoryMixSlice`, `BroadcastActivityDay` types; `getMockSuppliers(): SupplierSummary[]`, `getMockSupplierBySlug(slug): SupplierProfile | undefined`. Task 7 (card), Task 9 (market pulse), and Tasks 11–13 (supplier profile) all import from here.
 
 - [ ] **Step 1: Write the failing tests**
 
 `src/modules/suppliers/mock-data.test.ts`:
+
 ```ts
 import { describe, expect, it } from "vitest";
 import { getMockSupplierBySlug, getMockSuppliers } from "./mock-data";
@@ -783,6 +906,7 @@ Expected: FAIL — module doesn't exist yet.
 - [ ] **Step 3: Write `types.ts`**
 
 `src/modules/suppliers/types.ts`:
+
 ```ts
 export interface SupplierSummary {
   id: string;
@@ -833,6 +957,7 @@ export interface SupplierProfile extends SupplierSummary {
 - [ ] **Step 4: Write `mock-data.ts`**
 
 `src/modules/suppliers/mock-data.ts`:
+
 ```ts
 import type { SupplierProfile, SupplierSummary } from "./types";
 
@@ -856,7 +981,14 @@ const AL_HADI: SupplierProfile = {
   email: "sales@alhadi-computers.ae",
   address: "Bur Dubai, Dubai, UAE",
   googleMapsUrl: "https://maps.google.com/?q=Al+Hadi+Computers+Bur+Dubai",
-  tags: ["Laptops", "Desktops", "Components", "Networking", "Accessories", "Software"],
+  tags: [
+    "Laptops",
+    "Desktops",
+    "Components",
+    "Networking",
+    "Accessories",
+    "Software",
+  ],
   lastBroadcastAt: hoursAgo(2),
   memberSinceYear: 2016,
   avgResponseTimeLabel: "< 2 hours",
@@ -872,9 +1004,21 @@ const AL_HADI: SupplierProfile = {
     { categoryId: "cat-laptops", categoryName: "Laptops", sharePercent: 42 },
     { categoryId: "cat-desktops", categoryName: "Desktops", sharePercent: 18 },
     { categoryId: "cat-storage", categoryName: "Storage", sharePercent: 14 },
-    { categoryId: "cat-networking", categoryName: "Networking", sharePercent: 12 },
-    { categoryId: "cat-components", categoryName: "Components", sharePercent: 8 },
-    { categoryId: "cat-accessories", categoryName: "Accessories", sharePercent: 6 },
+    {
+      categoryId: "cat-networking",
+      categoryName: "Networking",
+      sharePercent: 12,
+    },
+    {
+      categoryId: "cat-components",
+      categoryName: "Components",
+      sharePercent: 8,
+    },
+    {
+      categoryId: "cat-accessories",
+      categoryName: "Accessories",
+      sharePercent: 6,
+    },
   ],
   broadcastActivity: [
     { label: "Mar 10", count: 18 },
@@ -901,29 +1045,97 @@ function supplierStub(
   activeOfferCount: number,
   positiveScorePercent: number,
 ): SupplierProfile {
-  return { ...AL_HADI, id, slug, companyName, logoInitial, locationName, activeOfferCount, positiveScorePercent };
+  return {
+    ...AL_HADI,
+    id,
+    slug,
+    companyName,
+    logoInitial,
+    locationName,
+    activeOfferCount,
+    positiveScorePercent,
+  };
 }
 
 const MOCK_SUPPLIERS: SupplierProfile[] = [
   AL_HADI,
-  supplierStub("supplier-skyline", "skyline-general-trading", "Skyline General Trading", "S", "Bur Dubai", 410, 97),
-  supplierStub("supplier-microlink", "microlink-technology", "Microlink Technology LLC", "M", "Bur Dubai", 892, 99),
-  supplierStub("supplier-network-zone", "network-zone", "Network Zone FZE", "N", "Al Fahidi", 225, 98),
-  supplierStub("supplier-techno-source", "techno-source", "Techno Source LLC", "T", "Bur Dubai", 310, 96),
-  supplierStub("supplier-seven-seas", "seven-seas-computers", "Seven Seas Computers", "S", "Deira", 187, 99),
+  supplierStub(
+    "supplier-skyline",
+    "skyline-general-trading",
+    "Skyline General Trading",
+    "S",
+    "Bur Dubai",
+    410,
+    97,
+  ),
+  supplierStub(
+    "supplier-microlink",
+    "microlink-technology",
+    "Microlink Technology LLC",
+    "M",
+    "Bur Dubai",
+    892,
+    99,
+  ),
+  supplierStub(
+    "supplier-network-zone",
+    "network-zone",
+    "Network Zone FZE",
+    "N",
+    "Al Fahidi",
+    225,
+    98,
+  ),
+  supplierStub(
+    "supplier-techno-source",
+    "techno-source",
+    "Techno Source LLC",
+    "T",
+    "Bur Dubai",
+    310,
+    96,
+  ),
+  supplierStub(
+    "supplier-seven-seas",
+    "seven-seas-computers",
+    "Seven Seas Computers",
+    "S",
+    "Deira",
+    187,
+    99,
+  ),
 ];
 
 function toSummary(profile: SupplierProfile): SupplierSummary {
-  const { id, slug, companyName, logoInitial, verified, locationName, activeOfferCount, positiveScorePercent } =
-    profile;
-  return { id, slug, companyName, logoInitial, verified, locationName, activeOfferCount, positiveScorePercent };
+  const {
+    id,
+    slug,
+    companyName,
+    logoInitial,
+    verified,
+    locationName,
+    activeOfferCount,
+    positiveScorePercent,
+  } = profile;
+  return {
+    id,
+    slug,
+    companyName,
+    logoInitial,
+    verified,
+    locationName,
+    activeOfferCount,
+    positiveScorePercent,
+  };
 }
 
 export function getMockSuppliers(): SupplierSummary[] {
   return MOCK_SUPPLIERS.map(toSummary);
 }
 
-export function getMockSupplierBySlug(slug: string): SupplierProfile | undefined {
+export function getMockSupplierBySlug(
+  slug: string,
+): SupplierProfile | undefined {
   return MOCK_SUPPLIERS.find((supplier) => supplier.slug === slug);
 }
 ```
@@ -947,11 +1159,13 @@ git commit -m "feat: add suppliers module with mock data and slug lookup"
 ### Task 5: Shared `ui/` primitives — `StatTile`, `SupplierLogoTile`, `SidebarWidget`
 
 **Files:**
+
 - Create: `src/components/ui/stat-tile.tsx`
 - Create: `src/components/ui/supplier-logo-tile.tsx`
 - Create: `src/components/ui/sidebar-widget.tsx`
 
 **Interfaces:**
+
 - Produces: `StatTile({ icon, value, label, trendPercent?, className? })`, `SupplierLogoTile({ initial, size?, className? })`, `SidebarWidget({ title, showViewAll?, liveIndicator?, children, className? })`. Consumed by every component task from Task 7 onward.
 
 No test framework applies to pure presentation — verified by type-check here, and visually in Task 14.
@@ -971,16 +1185,29 @@ export interface StatTileProps {
   className?: string;
 }
 
-export function StatTile({ icon: Icon, value, label, trendPercent, className }: StatTileProps) {
+export function StatTile({
+  icon: Icon,
+  value,
+  label,
+  trendPercent,
+  className,
+}: StatTileProps) {
   const hasTrend = typeof trendPercent === "number";
   const isUp = hasTrend && trendPercent >= 0;
 
   return (
-    <div className={cn("flex items-center gap-3 rounded-md border border-border bg-card px-4 py-3", className)}>
-      <Icon className="size-5 text-muted-foreground" aria-hidden />
+    <div
+      className={cn(
+        "border-border bg-card flex items-center gap-3 rounded-md border px-4 py-3",
+        className,
+      )}
+    >
+      <Icon className="text-muted-foreground size-5" aria-hidden />
       <div className="flex min-w-0 flex-col">
         <div className="flex items-baseline gap-2">
-          <span className="text-lg font-semibold tabular-nums text-foreground">{value}</span>
+          <span className="text-foreground text-lg font-semibold tabular-nums">
+            {value}
+          </span>
           {hasTrend && (
             <span
               className={cn(
@@ -988,12 +1215,16 @@ export function StatTile({ icon: Icon, value, label, trendPercent, className }: 
                 isUp ? "text-live" : "text-destructive",
               )}
             >
-              {isUp ? <ArrowUp className="size-3" aria-hidden /> : <ArrowDown className="size-3" aria-hidden />}
+              {isUp ? (
+                <ArrowUp className="size-3" aria-hidden />
+              ) : (
+                <ArrowDown className="size-3" aria-hidden />
+              )}
               {Math.abs(trendPercent)}%
             </span>
           )}
         </div>
-        <span className="truncate text-xs text-muted-foreground">{label}</span>
+        <span className="text-muted-foreground truncate text-xs">{label}</span>
       </div>
     </div>
   );
@@ -1023,7 +1254,7 @@ export function SupplierLogoTile({
   return (
     <div
       className={cn(
-        "flex shrink-0 items-center justify-center rounded-md border border-border bg-muted font-semibold text-primary",
+        "border-border bg-muted text-primary flex shrink-0 items-center justify-center rounded-md border font-semibold",
         SIZE_CLASSES[size],
         className,
       )}
@@ -1055,18 +1286,24 @@ export function SidebarWidget({
   className?: string;
 }) {
   return (
-    <div className={cn("rounded-md border border-border bg-card p-4", className)}>
+    <div
+      className={cn("border-border bg-card rounded-md border p-4", className)}
+    >
       <div className="mb-3 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+          <h3 className="text-foreground text-sm font-semibold">{title}</h3>
           {liveIndicator && (
-            <span className="flex items-center gap-1 text-xs font-medium text-live">
-              <span className="size-1.5 rounded-full bg-live" aria-hidden />
+            <span className="text-live flex items-center gap-1 text-xs font-medium">
+              <span className="bg-live size-1.5 rounded-full" aria-hidden />
               Live
             </span>
           )}
         </div>
-        {showViewAll && <span className="text-xs font-medium text-muted-foreground">View all</span>}
+        {showViewAll && (
+          <span className="text-muted-foreground text-xs font-medium">
+            View all
+          </span>
+        )}
       </div>
       <div className="flex flex-col gap-2">{children}</div>
     </div>
@@ -1091,10 +1328,12 @@ git commit -m "feat: add StatTile, SupplierLogoTile, and SidebarWidget primitive
 ### Task 6: Site header + layout wiring
 
 **Files:**
+
 - Create: `src/components/layout/site-header.tsx`
 - Modify: `src/app/layout.tsx`
 
 **Interfaces:**
+
 - Produces: `<SiteHeader />`, no props. Task 10 and Task 13's pages render inside the `<main>` this task adds to `layout.tsx`.
 
 - [ ] **Step 1: Write `site-header.tsx`**
@@ -1114,10 +1353,13 @@ const NAV_ITEMS: { label: string; href: string | null }[] = [
 
 export function SiteHeader() {
   return (
-    <header className="border-b border-border bg-card">
+    <header className="border-border bg-card border-b">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-6 px-6">
-        <Link href="/" className="flex shrink-0 items-center gap-2 font-semibold text-foreground">
-          <span className="flex size-7 items-center justify-center rounded bg-primary text-sm font-bold text-primary-foreground">
+        <Link
+          href="/"
+          className="text-foreground flex shrink-0 items-center gap-2 font-semibold"
+        >
+          <span className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded text-sm font-bold">
             S
           </span>
           SouqFeed
@@ -1126,11 +1368,19 @@ export function SiteHeader() {
         <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
           {NAV_ITEMS.map((item) =>
             item.href ? (
-              <Link key={item.label} href={item.href} className="border-b-2 border-primary py-4 text-foreground">
+              <Link
+                key={item.label}
+                href={item.href}
+                className="border-primary text-foreground border-b-2 py-4"
+              >
                 {item.label}
               </Link>
             ) : (
-              <span key={item.label} className="cursor-default py-4 text-muted-foreground" aria-disabled>
+              <span
+                key={item.label}
+                className="text-muted-foreground cursor-default py-4"
+                aria-disabled
+              >
                 {item.label}
               </span>
             ),
@@ -1138,8 +1388,8 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-3">
-          <Bell className="size-5 text-muted-foreground" aria-hidden />
-          <Globe className="size-5 text-muted-foreground" aria-hidden />
+          <Bell className="text-muted-foreground size-5" aria-hidden />
+          <Globe className="text-muted-foreground size-5" aria-hidden />
           <Button>Sign In</Button>
         </div>
       </div>
@@ -1153,6 +1403,7 @@ Note: the nav collapses to just the logo, icons, and Sign In on small screens (`
 - [ ] **Step 2: Wire it into `layout.tsx` and set real metadata**
 
 Replace the full contents of `src/app/layout.tsx`:
+
 ```tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -1176,8 +1427,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col bg-background text-foreground">
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="bg-background text-foreground flex min-h-full flex-col">
         <SiteHeader />
         <main className="flex flex-1 flex-col">{children}</main>
       </body>
@@ -1212,17 +1466,20 @@ offer-state semantics, not a generic UI primitive. Same intent as the spec,
 different name/location.
 
 **Files:**
+
 - Create: `src/components/market/market-badge.tsx`
 - Create: `src/components/market/live-market-card.tsx`
 - Create: `src/components/market/live-market-card.test.ts` (pure `formatPrice`/`formatRelativeTime` logic only)
 
 **Interfaces:**
+
 - Consumes: `OfferListItem` (Task 3), `SupplierLogoTile` (Task 5), shadcn `Badge`/`Button` (Task 1).
 - Produces: `<MarketBadge variant="NEW" | "LIVE" | "PRICE_UPDATED" />`; `<LiveMarketCard offer={OfferListItem} actionLabel?: "View Supplier" | "View Product" />` — the single card used by both Task 9 (homepage feed) and Task 13 (supplier offers section).
 
 - [ ] **Step 1: Write the failing test for the pure price/time formatting logic**
 
 `src/components/market/live-market-card.test.ts`:
+
 ```ts
 import { describe, expect, it } from "vitest";
 import { formatPrice, formatRelativeTime } from "./live-market-card";
@@ -1265,28 +1522,45 @@ describe("formatPrice", () => {
   });
 
   it("renders a fixed price with the currency and thousands separators", () => {
-    const offer = makeOffer({ priceType: "FIXED", price: 3850, currency: "AED" });
+    const offer = makeOffer({
+      priceType: "FIXED",
+      price: 3850,
+      currency: "AED",
+    });
     expect(formatPrice(offer).primary).toBe("AED 3,850");
   });
 
   it("shows the previous price when it is higher (a price drop)", () => {
-    const offer = makeOffer({ priceType: "FIXED", price: 540, previousPrice: 570 });
+    const offer = makeOffer({
+      priceType: "FIXED",
+      price: 540,
+      previousPrice: 570,
+    });
     expect(formatPrice(offer).secondary).toBe("Was 570");
   });
 
   it("shows a bulk-price hint for high-quantity fixed offers with no prior price", () => {
-    const offer = makeOffer({ priceType: "FIXED", price: 3850, quantity: 120, previousPrice: null });
+    const offer = makeOffer({
+      priceType: "FIXED",
+      price: 3850,
+      quantity: 120,
+      previousPrice: null,
+    });
     expect(formatPrice(offer).secondary).toBe("Bulk price available");
   });
 });
 
 describe("formatRelativeTime", () => {
   it("formats minutes for anything under an hour", () => {
-    expect(formatRelativeTime(new Date(Date.now() - 2 * 60_000).toISOString())).toBe("2m ago");
+    expect(
+      formatRelativeTime(new Date(Date.now() - 2 * 60_000).toISOString()),
+    ).toBe("2m ago");
   });
 
   it("formats hours for anything under a day", () => {
-    expect(formatRelativeTime(new Date(Date.now() - 3 * 3_600_000).toISOString())).toBe("3h ago");
+    expect(
+      formatRelativeTime(new Date(Date.now() - 3 * 3_600_000).toISOString()),
+    ).toBe("3h ago");
   });
 });
 ```
@@ -1316,9 +1590,21 @@ const VARIANT_LABELS: Record<MarketBadgeVariant, string> = {
   PRICE_UPDATED: "PRICE UPDATED",
 };
 
-export function MarketBadge({ variant, className }: { variant: MarketBadgeVariant; className?: string }) {
+export function MarketBadge({
+  variant,
+  className,
+}: {
+  variant: MarketBadgeVariant;
+  className?: string;
+}) {
   return (
-    <Badge className={cn(VARIANT_CLASSES[variant], "rounded px-2 font-semibold tracking-wide", className)}>
+    <Badge
+      className={cn(
+        VARIANT_CLASSES[variant],
+        "rounded px-2 font-semibold tracking-wide",
+        className,
+      )}
+    >
       {VARIANT_LABELS[variant]}
     </Badge>
   );
@@ -1332,7 +1618,10 @@ import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SupplierLogoTile } from "@/components/ui/supplier-logo-tile";
-import { MarketBadge, type MarketBadgeVariant } from "@/components/market/market-badge";
+import {
+  MarketBadge,
+  type MarketBadgeVariant,
+} from "@/components/market/market-badge";
 import type { OfferListItem } from "@/modules/offers/types";
 
 export function formatRelativeTime(iso: string): string {
@@ -1344,13 +1633,19 @@ export function formatRelativeTime(iso: string): string {
   return `${Math.round(hours / 24)}d ago`;
 }
 
-export function formatPrice(offer: OfferListItem): { primary: string; secondary: string | null } {
+export function formatPrice(offer: OfferListItem): {
+  primary: string;
+  secondary: string | null;
+} {
   if (offer.priceType === "ASK" || offer.price === null) {
     return { primary: "ASK", secondary: "Best price on request" };
   }
   const primary = `${offer.currency} ${offer.price.toLocaleString()}`;
   if (offer.previousPrice !== null && offer.previousPrice > offer.price) {
-    return { primary, secondary: `Was ${offer.previousPrice.toLocaleString()}` };
+    return {
+      primary,
+      secondary: `Was ${offer.previousPrice.toLocaleString()}`,
+    };
   }
   if (offer.quantity !== null && offer.quantity >= 100) {
     return { primary, secondary: "Bulk price available" };
@@ -1363,68 +1658,104 @@ export interface LiveMarketCardProps {
   actionLabel?: "View Supplier" | "View Product";
 }
 
-export function LiveMarketCard({ offer, actionLabel = "View Supplier" }: LiveMarketCardProps) {
+export function LiveMarketCard({
+  offer,
+  actionLabel = "View Supplier",
+}: LiveMarketCardProps) {
   const price = formatPrice(offer);
-  const isPriceDown = offer.previousPrice !== null && offer.price !== null && offer.previousPrice > offer.price;
+  const isPriceDown =
+    offer.previousPrice !== null &&
+    offer.price !== null &&
+    offer.previousPrice > offer.price;
   const whatsappHref = `https://wa.me/${offer.whatsappNumber.replace(/\D/g, "")}`;
 
   return (
-    <div className="flex min-w-0 flex-col gap-3 rounded-md border border-border bg-card p-4">
+    <div className="border-border bg-card flex min-w-0 flex-col gap-3 rounded-md border p-4">
       <div className="flex items-center justify-between">
-        {offer.badge ? <MarketBadge variant={offer.badge as MarketBadgeVariant} /> : <span />}
-        <span className="shrink-0 text-xs text-muted-foreground">{formatRelativeTime(offer.postedAt)}</span>
+        {offer.badge ? (
+          <MarketBadge variant={offer.badge as MarketBadgeVariant} />
+        ) : (
+          <span />
+        )}
+        <span className="text-muted-foreground shrink-0 text-xs">
+          {formatRelativeTime(offer.postedAt)}
+        </span>
       </div>
 
       <div className="flex items-start gap-3">
         <SupplierLogoTile initial={offer.supplierName.charAt(0)} size="md" />
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-1 text-sm font-medium text-foreground">
+          <div className="text-foreground flex flex-wrap items-center gap-1 text-sm font-medium">
             <span className="truncate">{offer.supplierName}</span>
             {offer.supplierVerified && (
-              <span className="text-primary" title="Verified Supplier" aria-label="Verified Supplier">
+              <span
+                className="text-primary"
+                title="Verified Supplier"
+                aria-label="Verified Supplier"
+              >
                 ✓
               </span>
             )}
           </div>
-          <div className="text-xs text-muted-foreground">
-            {offer.locationName} · {offer.supplierPositiveScorePercent}% Positive
+          <div className="text-muted-foreground text-xs">
+            {offer.locationName} · {offer.supplierPositiveScorePercent}%
+            Positive
           </div>
-          <h3 className="mt-1 truncate text-base font-semibold text-foreground">{offer.title}</h3>
-          <p className="truncate text-xs text-muted-foreground">{offer.specLine.join(" · ")}</p>
+          <h3 className="text-foreground mt-1 truncate text-base font-semibold">
+            {offer.title}
+          </h3>
+          <p className="text-muted-foreground truncate text-xs">
+            {offer.specLine.join(" · ")}
+          </p>
           <div className="mt-2 flex flex-wrap gap-1.5">
-            <span className="rounded border border-border px-2 py-0.5 text-[11px] text-muted-foreground">
+            <span className="border-border text-muted-foreground rounded border px-2 py-0.5 text-[11px]">
               {offer.categoryName}
             </span>
-            <span className="rounded border border-border px-2 py-0.5 text-[11px] text-muted-foreground">
+            <span className="border-border text-muted-foreground rounded border px-2 py-0.5 text-[11px]">
               {offer.brandName}
             </span>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-wrap items-end justify-between gap-4 border-t border-border pt-3">
+      <div className="border-border flex flex-wrap items-end justify-between gap-4 border-t pt-3">
         <div className="flex gap-6 text-sm">
           <div>
-            <div className="text-xs text-muted-foreground">Quantity</div>
-            <div className="font-semibold tabular-nums text-foreground">
+            <div className="text-muted-foreground text-xs">Quantity</div>
+            <div className="text-foreground font-semibold tabular-nums">
               {offer.quantity ?? "—"}
               {offer.quantity ? " units" : ""}
             </div>
-            <div className="text-xs text-live">In Stock</div>
+            <div className="text-live text-xs">In Stock</div>
           </div>
           <div>
-            <div className="text-xs text-muted-foreground">Price ({offer.currency})</div>
-            <div className={`font-semibold tabular-nums ${isPriceDown ? "text-destructive" : "text-foreground"}`}>
+            <div className="text-muted-foreground text-xs">
+              Price ({offer.currency})
+            </div>
+            <div
+              className={`font-semibold tabular-nums ${isPriceDown ? "text-destructive" : "text-foreground"}`}
+            >
               {price.primary}
             </div>
-            {price.secondary && <div className="text-xs text-muted-foreground">{price.secondary}</div>}
+            {price.secondary && (
+              <div className="text-muted-foreground text-xs">
+                {price.secondary}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" render={<Link href={`/suppliers/${offer.supplierSlug}`} />}>
+          <Button
+            variant="outline"
+            size="sm"
+            render={<Link href={`/suppliers/${offer.supplierSlug}`} />}
+          >
             {actionLabel}
           </Button>
-          <Button size="sm" render={<a href={whatsappHref} target="_blank" rel="noreferrer" />}>
+          <Button
+            size="sm"
+            render={<a href={whatsappHref} target="_blank" rel="noreferrer" />}
+          >
             <MessageCircle className="mr-1 size-4" aria-hidden />
             WhatsApp
           </Button>
@@ -1457,10 +1788,12 @@ git commit -m "feat: add MarketBadge and the shared LiveMarketCard"
 ### Task 8: `MarketHero` and `FiltersSidebar`
 
 **Files:**
+
 - Create: `src/components/market/market-hero.tsx`
 - Create: `src/components/market/filters-sidebar.tsx`
 
 **Interfaces:**
+
 - Consumes: `Category`/`Brand` (Task 2), `MarketStats`/`OfferFilterCriteria` (Task 3), `StatTile` (Task 5), shadcn `Input`/`Select`/`Checkbox`/`Label`/`Sheet`/`Button` (Task 1).
 - Produces: `<MarketHero stats categories searchQuery onSearchQueryChange categoryId onCategoryChange />`; `<FiltersSidebar brands categories locationNames criteria onCriteriaChange />`. Task 10 (homepage) wires both to the same `criteria` state.
 
@@ -1472,7 +1805,13 @@ git commit -m "feat: add MarketBadge and the shared LiveMarketCard"
 import { FileText, Package, Search, TrendingUp, Users } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { StatTile } from "@/components/ui/stat-tile";
 import type { Category } from "@/modules/categories/types";
 import type { MarketStats } from "@/modules/offers/types";
@@ -1495,18 +1834,23 @@ export function MarketHero({
   onCategoryChange,
 }: MarketHeroProps) {
   return (
-    <section className="border-b border-border bg-primary/5">
+    <section className="border-border bg-primary/5 border-b">
       <div className="mx-auto max-w-[1440px] px-6 py-10">
-        <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-          Live supplier offers from <span className="text-primary">Bur Dubai</span>
+        <p className="text-muted-foreground text-xs font-semibold tracking-widest uppercase">
+          Live supplier offers from{" "}
+          <span className="text-primary">Bur Dubai</span>
         </p>
-        <h1 className="mt-2 text-4xl font-bold text-foreground">Dubai IT Wholesale Market</h1>
-        <p className="mt-1 text-lg text-muted-foreground">Real-time offers. Verified suppliers. Better sourcing.</p>
+        <h1 className="text-foreground mt-2 text-4xl font-bold">
+          Dubai IT Wholesale Market
+        </h1>
+        <p className="text-muted-foreground mt-1 text-lg">
+          Real-time offers. Verified suppliers. Better sourcing.
+        </p>
 
         <div className="mt-6 flex flex-col gap-2 sm:flex-row">
           <div className="relative flex-1">
             <Search
-              className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+              className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
               aria-hidden
             />
             <Input
@@ -1518,7 +1862,9 @@ export function MarketHero({
           </div>
           <Select
             value={categoryId ?? "all"}
-            onValueChange={(value) => onCategoryChange(value === "all" ? null : String(value))}
+            onValueChange={(value) =>
+              onCategoryChange(value === "all" ? null : String(value))
+            }
           >
             <SelectTrigger className="h-11 sm:w-48">
               <SelectValue placeholder="All Categories" />
@@ -1538,10 +1884,30 @@ export function MarketHero({
         </div>
 
         <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <StatTile icon={Users} value={stats.activeSuppliersToday.toLocaleString()} label="Active Suppliers Today" trendPercent={stats.activeSuppliersTrendPercent} />
-          <StatTile icon={FileText} value={stats.offersPostedToday.toLocaleString()} label="Offers Posted Today" trendPercent={stats.offersPostedTrendPercent} />
-          <StatTile icon={TrendingUp} value={stats.priceUpdatesToday.toLocaleString()} label="Price Updates" trendPercent={stats.priceUpdatesTrendPercent} />
-          <StatTile icon={Package} value={stats.newProductsToday.toLocaleString()} label="New Products" trendPercent={stats.newProductsTrendPercent} />
+          <StatTile
+            icon={Users}
+            value={stats.activeSuppliersToday.toLocaleString()}
+            label="Active Suppliers Today"
+            trendPercent={stats.activeSuppliersTrendPercent}
+          />
+          <StatTile
+            icon={FileText}
+            value={stats.offersPostedToday.toLocaleString()}
+            label="Offers Posted Today"
+            trendPercent={stats.offersPostedTrendPercent}
+          />
+          <StatTile
+            icon={TrendingUp}
+            value={stats.priceUpdatesToday.toLocaleString()}
+            label="Price Updates"
+            trendPercent={stats.priceUpdatesTrendPercent}
+          />
+          <StatTile
+            icon={Package}
+            value={stats.newProductsToday.toLocaleString()}
+            label="New Products"
+            trendPercent={stats.newProductsTrendPercent}
+          />
         </div>
       </div>
     </section>
@@ -1560,7 +1926,13 @@ import { SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import type { Brand } from "@/modules/brands/types";
 import type { Category } from "@/modules/categories/types";
 import type { OfferFilterCriteria } from "@/modules/offers/types";
@@ -1574,17 +1946,25 @@ export interface FiltersSidebarProps {
 }
 
 function toggleValue(values: string[], value: string): string[] {
-  return values.includes(value) ? values.filter((v) => v !== value) : [...values, value];
+  return values.includes(value)
+    ? values.filter((v) => v !== value)
+    : [...values, value];
 }
 
-function FilterControls({ brands, categories, locationNames, criteria, onCriteriaChange }: FiltersSidebarProps) {
+function FilterControls({
+  brands,
+  categories,
+  locationNames,
+  criteria,
+  onCriteriaChange,
+}: FiltersSidebarProps) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-foreground">Filters</h2>
+        <h2 className="text-foreground text-sm font-semibold">Filters</h2>
         <button
           type="button"
-          className="text-xs font-medium text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground text-xs font-medium"
           onClick={() =>
             onCriteriaChange({
               brandIds: [],
@@ -1600,13 +1980,18 @@ function FilterControls({ brands, categories, locationNames, criteria, onCriteri
       </div>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-xs font-semibold text-muted-foreground uppercase">Brand</legend>
+        <legend className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
+          Brand
+        </legend>
         {brands.map((brand) => (
           <Label key={brand.id} className="font-normal">
             <Checkbox
               checked={criteria.brandIds.includes(brand.id)}
               onCheckedChange={() =>
-                onCriteriaChange({ ...criteria, brandIds: toggleValue(criteria.brandIds, brand.id) })
+                onCriteriaChange({
+                  ...criteria,
+                  brandIds: toggleValue(criteria.brandIds, brand.id),
+                })
               }
             />
             {brand.name}
@@ -1615,31 +2000,43 @@ function FilterControls({ brands, categories, locationNames, criteria, onCriteri
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-xs font-semibold text-muted-foreground uppercase">Category</legend>
+        <legend className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
+          Category
+        </legend>
         {categories.map((category) => (
           <Label key={category.id} className="justify-between font-normal">
             <span className="flex items-center gap-2">
               <Checkbox
                 checked={criteria.categoryIds.includes(category.id)}
                 onCheckedChange={() =>
-                  onCriteriaChange({ ...criteria, categoryIds: toggleValue(criteria.categoryIds, category.id) })
+                  onCriteriaChange({
+                    ...criteria,
+                    categoryIds: toggleValue(criteria.categoryIds, category.id),
+                  })
                 }
               />
               {category.name}
             </span>
-            <span className="tabular-nums text-xs text-muted-foreground">{category.offerCount}</span>
+            <span className="text-muted-foreground text-xs tabular-nums">
+              {category.offerCount}
+            </span>
           </Label>
         ))}
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-xs font-semibold text-muted-foreground uppercase">Location</legend>
+        <legend className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
+          Location
+        </legend>
         {locationNames.map((location) => (
           <Label key={location} className="font-normal">
             <Checkbox
               checked={criteria.locationNames.includes(location)}
               onCheckedChange={() =>
-                onCriteriaChange({ ...criteria, locationNames: toggleValue(criteria.locationNames, location) })
+                onCriteriaChange({
+                  ...criteria,
+                  locationNames: toggleValue(criteria.locationNames, location),
+                })
               }
             />
             {location}
@@ -1648,11 +2045,15 @@ function FilterControls({ brands, categories, locationNames, criteria, onCriteri
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-xs font-semibold text-muted-foreground uppercase">Availability</legend>
+        <legend className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
+          Availability
+        </legend>
         <Label className="font-normal">
           <Checkbox
             checked={criteria.inStockOnly}
-            onCheckedChange={(checked) => onCriteriaChange({ ...criteria, inStockOnly: checked })}
+            onCheckedChange={(checked) =>
+              onCriteriaChange({ ...criteria, inStockOnly: checked })
+            }
           />
           In Stock only
         </Label>
@@ -1712,10 +2113,12 @@ git commit -m "feat: add MarketHero and FiltersSidebar (with mobile Sheet)"
 ### Task 9: `LiveMarketFeed` and `MarketPulseSidebar`
 
 **Files:**
+
 - Create: `src/components/market/live-market-feed.tsx`
 - Create: `src/components/market/market-pulse-sidebar.tsx`
 
 **Interfaces:**
+
 - Consumes: `filterOffers`/`sortOffers` (Task 3), `LiveMarketCard` (Task 7), `SidebarWidget`/`SupplierLogoTile` (Task 5), shadcn `Select`/`Tabs`/`Button` (Task 1).
 - Produces: `<LiveMarketFeed offers criteria />`; `<MarketPulseSidebar trendingCategories topSuppliers />`. Task 10 wires both into the homepage.
 
@@ -1727,10 +2130,23 @@ git commit -m "feat: add MarketHero and FiltersSidebar (with mobile Sheet)"
 import { LayoutGrid, List } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { LiveMarketCard } from "@/components/market/live-market-card";
-import { filterOffers, sortOffers, type SortOption } from "@/modules/offers/filter-offers";
-import type { OfferFilterCriteria, OfferListItem } from "@/modules/offers/types";
+import {
+  filterOffers,
+  sortOffers,
+  type SortOption,
+} from "@/modules/offers/filter-offers";
+import type {
+  OfferFilterCriteria,
+  OfferListItem,
+} from "@/modules/offers/types";
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "recent", label: "Most Recent" },
@@ -1738,22 +2154,34 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "price-desc", label: "Price: High to Low" },
 ];
 
-export function LiveMarketFeed({ offers, criteria }: { offers: OfferListItem[]; criteria: OfferFilterCriteria }) {
+export function LiveMarketFeed({
+  offers,
+  criteria,
+}: {
+  offers: OfferListItem[];
+  criteria: OfferFilterCriteria;
+}) {
   const [sort, setSort] = useState<SortOption>("recent");
   const [view, setView] = useState<"list" | "grid">("list");
 
-  const visibleOffers = useMemo(() => sortOffers(filterOffers(offers, criteria), sort), [offers, criteria, sort]);
+  const visibleOffers = useMemo(
+    () => sortOffers(filterOffers(offers, criteria), sort),
+    [offers, criteria, sort],
+  );
 
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
-          <span className="size-2 rounded-full bg-live" aria-hidden />
+        <h2 className="text-foreground flex items-center gap-2 text-sm font-semibold">
+          <span className="bg-live size-2 rounded-full" aria-hidden />
           LIVE MARKET
         </h2>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">Sort by:</span>
-          <Select value={sort} onValueChange={(value) => setSort(value as SortOption)}>
+          <span className="text-muted-foreground text-xs">Sort by:</span>
+          <Select
+            value={sort}
+            onValueChange={(value) => setSort(value as SortOption)}
+          >
             <SelectTrigger size="sm">
               <SelectValue />
             </SelectTrigger>
@@ -1785,11 +2213,17 @@ export function LiveMarketFeed({ offers, criteria }: { offers: OfferListItem[]; 
       </div>
 
       {visibleOffers.length === 0 ? (
-        <div className="rounded-md border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
+        <div className="border-border text-muted-foreground rounded-md border border-dashed p-12 text-center text-sm">
           No offers match the selected filters.
         </div>
       ) : (
-        <div className={view === "grid" ? "grid grid-cols-1 gap-4 md:grid-cols-2" : "flex flex-col gap-4"}>
+        <div
+          className={
+            view === "grid"
+              ? "grid grid-cols-1 gap-4 md:grid-cols-2"
+              : "flex flex-col gap-4"
+          }
+        >
           {visibleOffers.map((offer) => (
             <LiveMarketCard key={offer.id} offer={offer} />
           ))}
@@ -1816,7 +2250,11 @@ import type { SupplierSummary } from "@/modules/suppliers/types";
 const MOCK_PRICE_MOVEMENTS = [
   { categoryId: "cat-laptops", categoryName: "Laptops", changePercent: 24 },
   { categoryId: "cat-storage", categoryName: "Storage", changePercent: 18 },
-  { categoryId: "cat-networking", categoryName: "Networking", changePercent: 32 },
+  {
+    categoryId: "cat-networking",
+    categoryName: "Networking",
+    changePercent: 32,
+  },
   { categoryId: "cat-desktops", categoryName: "Desktops", changePercent: 12 },
   { categoryId: "cat-monitors", categoryName: "Monitors", changePercent: 9 },
 ];
@@ -1832,10 +2270,30 @@ const MOCK_TRENDING_SEARCHES = [
 
 // placeholder — no backing schema field yet (WTB is a deferred feature)
 const MOCK_WTB_REQUESTS = [
-  { id: "wtb-1", title: "WTB iPhone 15 Pro Max 256GB", location: "Dubai", postedLabel: "5m ago" },
-  { id: "wtb-2", title: "WTB RTX 4080 / 4090", location: "Urgent", postedLabel: "12m ago" },
-  { id: "wtb-3", title: "WTB Cisco Switches", location: "Dubai", postedLabel: "28m ago" },
-  { id: "wtb-4", title: "WTB Dell Laptops (i7)", location: "Corporate", postedLabel: "41m ago" },
+  {
+    id: "wtb-1",
+    title: "WTB iPhone 15 Pro Max 256GB",
+    location: "Dubai",
+    postedLabel: "5m ago",
+  },
+  {
+    id: "wtb-2",
+    title: "WTB RTX 4080 / 4090",
+    location: "Urgent",
+    postedLabel: "12m ago",
+  },
+  {
+    id: "wtb-3",
+    title: "WTB Cisco Switches",
+    location: "Dubai",
+    postedLabel: "28m ago",
+  },
+  {
+    id: "wtb-4",
+    title: "WTB Dell Laptops (i7)",
+    location: "Corporate",
+    postedLabel: "41m ago",
+  },
 ];
 
 export function MarketPulseSidebar({
@@ -1859,17 +2317,27 @@ export function MarketPulseSidebar({
           </TabsList>
           <TabsContent value="categories" className="flex flex-col gap-2">
             {trendingCategories.map((category) => (
-              <div key={category.id} className="flex items-center justify-between text-sm">
+              <div
+                key={category.id}
+                className="flex items-center justify-between text-sm"
+              >
                 <span className="text-foreground">{category.name}</span>
-                <span className="tabular-nums text-muted-foreground">{category.offerCount}</span>
+                <span className="text-muted-foreground tabular-nums">
+                  {category.offerCount}
+                </span>
               </div>
             ))}
           </TabsContent>
           <TabsContent value="prices" className="flex flex-col gap-2">
             {MOCK_PRICE_MOVEMENTS.map((movement) => (
-              <div key={movement.categoryId} className="flex items-center justify-between text-sm">
+              <div
+                key={movement.categoryId}
+                className="flex items-center justify-between text-sm"
+              >
                 <span className="text-foreground">{movement.categoryName}</span>
-                <span className={`tabular-nums ${movement.changePercent >= 0 ? "text-live" : "text-destructive"}`}>
+                <span
+                  className={`tabular-nums ${movement.changePercent >= 0 ? "text-live" : "text-destructive"}`}
+                >
                   {movement.changePercent >= 0 ? "+" : ""}
                   {movement.changePercent}%
                 </span>
@@ -1881,13 +2349,16 @@ export function MarketPulseSidebar({
 
       <SidebarWidget title="Trending Today" showViewAll>
         {MOCK_TRENDING_SEARCHES.map((entry, index) => (
-          <div key={entry.term} className="flex items-center justify-between text-sm">
+          <div
+            key={entry.term}
+            className="flex items-center justify-between text-sm"
+          >
             <span className="text-foreground">
-              <span className="mr-2 text-muted-foreground">{index + 1}</span>
+              <span className="text-muted-foreground mr-2">{index + 1}</span>
               {entry.term}
             </span>
-            <span className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Flame className="size-3 text-destructive" aria-hidden />
+            <span className="text-muted-foreground flex items-center gap-1 text-xs">
+              <Flame className="text-destructive size-3" aria-hidden />
               {entry.searchCount} searches
             </span>
           </div>
@@ -1897,11 +2368,17 @@ export function MarketPulseSidebar({
       <SidebarWidget title="Top Active Suppliers" showViewAll>
         {topSuppliers.map((supplier) => (
           <div key={supplier.id} className="flex items-center gap-2 text-sm">
-            <SupplierLogoTile initial={supplier.companyName.charAt(0)} size="sm" />
+            <SupplierLogoTile
+              initial={supplier.companyName.charAt(0)}
+              size="sm"
+            />
             <div className="min-w-0">
-              <div className="truncate font-medium text-foreground">{supplier.companyName}</div>
-              <div className="text-xs text-muted-foreground">
-                {supplier.activeOfferCount} offers · {supplier.positiveScorePercent}% positive
+              <div className="text-foreground truncate font-medium">
+                {supplier.companyName}
+              </div>
+              <div className="text-muted-foreground text-xs">
+                {supplier.activeOfferCount} offers ·{" "}
+                {supplier.positiveScorePercent}% positive
               </div>
             </div>
           </div>
@@ -1912,7 +2389,7 @@ export function MarketPulseSidebar({
         {MOCK_WTB_REQUESTS.map((request) => (
           <div key={request.id} className="text-sm">
             <div className="text-foreground">{request.title}</div>
-            <div className="text-xs text-muted-foreground">
+            <div className="text-muted-foreground text-xs">
               {request.location} · {request.postedLabel}
             </div>
           </div>
@@ -1940,9 +2417,11 @@ git commit -m "feat: add LiveMarketFeed and MarketPulseSidebar"
 ### Task 10: Homepage assembly
 
 **Files:**
+
 - Modify: `src/app/page.tsx` (full replacement)
 
 **Interfaces:**
+
 - Consumes: every component/module from Tasks 2–9.
 
 - [ ] **Step 1: Replace `src/app/page.tsx`**
@@ -1965,7 +2444,8 @@ import type { OfferFilterCriteria } from "@/modules/offers/types";
 const LOCATION_NAMES = ["Bur Dubai", "Deira", "Al Fahidi", "Al Rigga"];
 
 export default function HomePage() {
-  const [criteria, setCriteria] = useState<OfferFilterCriteria>(EMPTY_OFFER_FILTERS);
+  const [criteria, setCriteria] =
+    useState<OfferFilterCriteria>(EMPTY_OFFER_FILTERS);
 
   const brands = getMockBrands();
   const categories = getMockCategories();
@@ -1982,10 +2462,15 @@ export default function HomePage() {
         categories={categories}
         categoryId={criteria.categoryIds[0] ?? null}
         onCategoryChange={(categoryId) =>
-          setCriteria((prev) => ({ ...prev, categoryIds: categoryId ? [categoryId] : [] }))
+          setCriteria((prev) => ({
+            ...prev,
+            categoryIds: categoryId ? [categoryId] : [],
+          }))
         }
         searchQuery={criteria.searchQuery}
-        onSearchQueryChange={(searchQuery) => setCriteria((prev) => ({ ...prev, searchQuery }))}
+        onSearchQueryChange={(searchQuery) =>
+          setCriteria((prev) => ({ ...prev, searchQuery }))
+        }
       />
       <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-6 py-6 lg:flex-row">
         <FiltersSidebar
@@ -1996,7 +2481,10 @@ export default function HomePage() {
           onCriteriaChange={setCriteria}
         />
         <LiveMarketFeed offers={offers} criteria={criteria} />
-        <MarketPulseSidebar trendingCategories={categories} topSuppliers={topSuppliers} />
+        <MarketPulseSidebar
+          trendingCategories={categories}
+          topSuppliers={topSuppliers}
+        />
       </div>
     </>
   );
@@ -2025,11 +2513,13 @@ git commit -m "feat: assemble the Live Market homepage"
 ### Task 11: `SupplierHeader`, `SupplierStatRow`, `SupplierContactPanel`
 
 **Files:**
+
 - Create: `src/components/suppliers/supplier-header.tsx`
 - Create: `src/components/suppliers/supplier-stat-row.tsx`
 - Create: `src/components/suppliers/supplier-contact-panel.tsx`
 
 **Interfaces:**
+
 - Consumes: `SupplierProfile` (Task 4), `SupplierLogoTile`/`StatTile` (Task 5), shadcn `Button` (Task 1).
 - Produces: `<SupplierHeader supplier />`, `<SupplierStatRow supplier />`, `<SupplierContactPanel supplier />`. Task 13's page renders all three.
 
@@ -2046,9 +2536,9 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
   const whatsappHref = `https://wa.me/${supplier.whatsappNumber.replace(/\D/g, "")}`;
 
   return (
-    <div className="border-b border-border bg-card">
+    <div className="border-border bg-card border-b">
       <div className="mx-auto max-w-[1440px] px-6 py-6">
-        <nav className="mb-4 text-sm text-muted-foreground">
+        <nav className="text-muted-foreground mb-4 text-sm">
           <Link href="/" className="hover:text-foreground">
             Home
           </Link>
@@ -2061,12 +2551,17 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
             <SupplierLogoTile initial={supplier.logoInitial} size="lg" />
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-2xl font-bold break-words text-foreground">{supplier.companyName}</h1>
+                <h1 className="text-foreground text-2xl font-bold break-words">
+                  {supplier.companyName}
+                </h1>
                 {supplier.verified && (
-                  <BadgeCheck className="size-5 shrink-0 text-primary" aria-label="Verified Supplier" />
+                  <BadgeCheck
+                    className="text-primary size-5 shrink-0"
+                    aria-label="Verified Supplier"
+                  />
                 )}
               </div>
-              <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+              <div className="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
                 <span className="flex items-center gap-1">
                   <MapPin className="size-3.5" aria-hidden />
                   {supplier.locationName}
@@ -2079,11 +2574,16 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
                 <span className="text-primary">Verified Supplier</span>
               </div>
               {supplier.description && (
-                <p className="mt-3 max-w-2xl text-sm text-muted-foreground">{supplier.description}</p>
+                <p className="text-muted-foreground mt-3 max-w-2xl text-sm">
+                  {supplier.description}
+                </p>
               )}
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {supplier.tags.map((tag) => (
-                  <span key={tag} className="rounded border border-border px-2 py-0.5 text-xs text-muted-foreground">
+                  <span
+                    key={tag}
+                    className="border-border text-muted-foreground rounded border px-2 py-0.5 text-xs"
+                  >
                     {tag}
                   </span>
                 ))}
@@ -2092,15 +2592,27 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <Button render={<a href={whatsappHref} target="_blank" rel="noreferrer" />}>WhatsApp</Button>
+            <Button
+              render={
+                <a href={whatsappHref} target="_blank" rel="noreferrer" />
+              }
+            >
+              WhatsApp
+            </Button>
             {supplier.phone && (
-              <Button variant="outline" render={<a href={`tel:${supplier.phone}`} />}>
+              <Button
+                variant="outline"
+                render={<a href={`tel:${supplier.phone}`} />}
+              >
                 <Phone className="mr-1 size-4" aria-hidden />
                 Call
               </Button>
             )}
             {supplier.email && (
-              <Button variant="outline" render={<a href={`mailto:${supplier.email}`} />}>
+              <Button
+                variant="outline"
+                render={<a href={`mailto:${supplier.email}`} />}
+              >
                 <Mail className="mr-1 size-4" aria-hidden />
                 Email
               </Button>
@@ -2108,7 +2620,13 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
             {supplier.googleMapsUrl && (
               <Button
                 variant="outline"
-                render={<a href={supplier.googleMapsUrl} target="_blank" rel="noreferrer" />}
+                render={
+                  <a
+                    href={supplier.googleMapsUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  />
+                }
               >
                 <MapPin className="mr-1 size-4" aria-hidden />
                 Visit Location
@@ -2132,7 +2650,10 @@ import { StatTile } from "@/components/ui/stat-tile";
 import type { SupplierProfile } from "@/modules/suppliers/types";
 
 function formatRelativeTime(iso: string): string {
-  const hours = Math.max(1, Math.round((Date.now() - new Date(iso).getTime()) / 3_600_000));
+  const hours = Math.max(
+    1,
+    Math.round((Date.now() - new Date(iso).getTime()) / 3_600_000),
+  );
   if (hours < 24) return `${hours} hours ago`;
   return `${Math.round(hours / 24)} days ago`;
 }
@@ -2142,12 +2663,36 @@ export function SupplierStatRow({ supplier }: { supplier: SupplierProfile }) {
 
   return (
     <div className="mx-auto grid max-w-[1440px] grid-cols-2 gap-3 px-6 py-4 sm:grid-cols-3 lg:grid-cols-6">
-      <StatTile icon={Users} value={String(supplier.activeOfferCount)} label="Active Offers" />
-      <StatTile icon={Clock} value={formatRelativeTime(supplier.lastBroadcastAt)} label="Last Broadcast" />
-      <StatTile icon={ThumbsUp} value={`${supplier.positiveScorePercent}%`} label="Positive Score" />
-      <StatTile icon={Layers} value={String(supplier.categoryMix.length)} label="Product Categories" />
-      <StatTile icon={Zap} value={supplier.avgResponseTimeLabel} label="Avg Response Speed" />
-      <StatTile icon={Calendar} value={`${yearsActive}+ years`} label="Active on SouqFeed" />
+      <StatTile
+        icon={Users}
+        value={String(supplier.activeOfferCount)}
+        label="Active Offers"
+      />
+      <StatTile
+        icon={Clock}
+        value={formatRelativeTime(supplier.lastBroadcastAt)}
+        label="Last Broadcast"
+      />
+      <StatTile
+        icon={ThumbsUp}
+        value={`${supplier.positiveScorePercent}%`}
+        label="Positive Score"
+      />
+      <StatTile
+        icon={Layers}
+        value={String(supplier.categoryMix.length)}
+        label="Product Categories"
+      />
+      <StatTile
+        icon={Zap}
+        value={supplier.avgResponseTimeLabel}
+        label="Avg Response Speed"
+      />
+      <StatTile
+        icon={Calendar}
+        value={`${yearsActive}+ years`}
+        label="Active on SouqFeed"
+      />
     </div>
   );
 }
@@ -2159,12 +2704,18 @@ export function SupplierStatRow({ supplier }: { supplier: SupplierProfile }) {
 import { Mail, MapPin, Phone } from "lucide-react";
 import type { SupplierProfile } from "@/modules/suppliers/types";
 
-export function SupplierContactPanel({ supplier }: { supplier: SupplierProfile }) {
+export function SupplierContactPanel({
+  supplier,
+}: {
+  supplier: SupplierProfile;
+}) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      <div className="rounded-md border border-border bg-card p-4">
-        <h3 className="mb-3 text-sm font-semibold text-foreground">Contact Information</h3>
-        <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+      <div className="border-border bg-card rounded-md border p-4">
+        <h3 className="text-foreground mb-3 text-sm font-semibold">
+          Contact Information
+        </h3>
+        <div className="text-muted-foreground flex flex-col gap-2 text-sm">
           {supplier.phone && (
             <span className="flex items-center gap-2">
               <Phone className="size-4 shrink-0" aria-hidden />
@@ -2196,11 +2747,16 @@ export function SupplierContactPanel({ supplier }: { supplier: SupplierProfile }
         </div>
       </div>
 
-      <div className="rounded-md border border-border bg-card p-4">
-        <h3 className="mb-3 text-sm font-semibold text-foreground">Business Hours</h3>
+      <div className="border-border bg-card rounded-md border p-4">
+        <h3 className="text-foreground mb-3 text-sm font-semibold">
+          Business Hours
+        </h3>
         <div className="flex flex-col gap-2 text-sm">
           {supplier.businessHours.map((entry) => (
-            <div key={entry.day} className="flex items-center justify-between text-muted-foreground">
+            <div
+              key={entry.day}
+              className="text-muted-foreground flex items-center justify-between"
+            >
               <span>{entry.day}</span>
               <span className="text-foreground">{entry.hours}</span>
             </div>
@@ -2229,11 +2785,13 @@ git commit -m "feat: add SupplierHeader, SupplierStatRow, and SupplierContactPan
 ### Task 12: `CategoryMixDonut`, `BroadcastActivityBars`, `SupplierInsightsSidebar`
 
 **Files:**
+
 - Create: `src/components/suppliers/category-mix-donut.tsx`
 - Create: `src/components/suppliers/broadcast-activity-bars.tsx`
 - Create: `src/components/suppliers/supplier-insights-sidebar.tsx`
 
 **Interfaces:**
+
 - Consumes: `CategoryMixSlice`/`BroadcastActivityDay`/`SupplierProfile` (Task 4), `SidebarWidget` (Task 5).
 - Produces: `<CategoryMixDonut slices totalLabel />`, `<BroadcastActivityBars days />`, `<SupplierInsightsSidebar supplier />`. Task 13's page renders the sidebar.
 
@@ -2242,11 +2800,24 @@ git commit -m "feat: add SupplierHeader, SupplierStatRow, and SupplierContactPan
 ```tsx
 import type { CategoryMixSlice } from "@/modules/suppliers/types";
 
-const COLORS = ["#0F6B45", "#2A5C8A", "#16A34A", "#6B7280", "#9CA3AF", "#DC2626"];
+const COLORS = [
+  "#0F6B45",
+  "#2A5C8A",
+  "#16A34A",
+  "#6B7280",
+  "#9CA3AF",
+  "#DC2626",
+];
 const RADIUS = 40;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-export function CategoryMixDonut({ slices, totalLabel }: { slices: CategoryMixSlice[]; totalLabel: string }) {
+export function CategoryMixDonut({
+  slices,
+  totalLabel,
+}: {
+  slices: CategoryMixSlice[];
+  totalLabel: string;
+}) {
   let offset = 0;
 
   return (
@@ -2273,7 +2844,9 @@ export function CategoryMixDonut({ slices, totalLabel }: { slices: CategoryMixSl
         })}
       </svg>
       <div className="flex min-w-0 flex-col gap-1 text-xs">
-        <span className="text-sm font-semibold text-foreground">{totalLabel}</span>
+        <span className="text-foreground text-sm font-semibold">
+          {totalLabel}
+        </span>
         {slices.map((slice, index) => (
           <div key={slice.categoryId} className="flex items-center gap-1.5">
             <span
@@ -2281,8 +2854,12 @@ export function CategoryMixDonut({ slices, totalLabel }: { slices: CategoryMixSl
               style={{ backgroundColor: COLORS[index % COLORS.length] }}
               aria-hidden
             />
-            <span className="truncate text-muted-foreground">{slice.categoryName}</span>
-            <span className="tabular-nums text-foreground">{slice.sharePercent}%</span>
+            <span className="text-muted-foreground truncate">
+              {slice.categoryName}
+            </span>
+            <span className="text-foreground tabular-nums">
+              {slice.sharePercent}%
+            </span>
           </div>
         ))}
       </div>
@@ -2296,19 +2873,26 @@ export function CategoryMixDonut({ slices, totalLabel }: { slices: CategoryMixSl
 ```tsx
 import type { BroadcastActivityDay } from "@/modules/suppliers/types";
 
-export function BroadcastActivityBars({ days }: { days: BroadcastActivityDay[] }) {
+export function BroadcastActivityBars({
+  days,
+}: {
+  days: BroadcastActivityDay[];
+}) {
   const max = Math.max(...days.map((day) => day.count), 1);
 
   return (
     <div className="flex h-24 items-end gap-2">
       {days.map((day) => (
-        <div key={day.label} className="flex flex-1 flex-col items-center gap-1">
+        <div
+          key={day.label}
+          className="flex flex-1 flex-col items-center gap-1"
+        >
           <div
-            className="w-full rounded-sm bg-primary/70"
+            className="bg-primary/70 w-full rounded-sm"
             style={{ height: `${Math.max(4, (day.count / max) * 72)}px` }}
             aria-hidden
           />
-          <span className="text-[10px] text-muted-foreground">{day.label}</span>
+          <span className="text-muted-foreground text-[10px]">{day.label}</span>
         </div>
       ))}
     </div>
@@ -2325,22 +2909,34 @@ import { CategoryMixDonut } from "@/components/suppliers/category-mix-donut";
 import { BroadcastActivityBars } from "@/components/suppliers/broadcast-activity-bars";
 import type { SupplierProfile } from "@/modules/suppliers/types";
 
-export function SupplierInsightsSidebar({ supplier }: { supplier: SupplierProfile }) {
+export function SupplierInsightsSidebar({
+  supplier,
+}: {
+  supplier: SupplierProfile;
+}) {
   const yearsActive = new Date().getFullYear() - supplier.memberSinceYear;
 
   return (
     <div className="flex flex-col gap-4">
       <SidebarWidget title="Top Brands Supplied" showViewAll>
         {supplier.topBrands.map((brand) => (
-          <div key={brand.brandId} className="flex items-center justify-between text-sm">
+          <div
+            key={brand.brandId}
+            className="flex items-center justify-between text-sm"
+          >
             <span className="text-foreground">{brand.brandName}</span>
-            <span className="tabular-nums text-muted-foreground">{brand.sharePercent}%</span>
+            <span className="text-muted-foreground tabular-nums">
+              {brand.sharePercent}%
+            </span>
           </div>
         ))}
       </SidebarWidget>
 
       <SidebarWidget title="Category Mix">
-        <CategoryMixDonut slices={supplier.categoryMix} totalLabel={`${supplier.activeOfferCount} Active Offers`} />
+        <CategoryMixDonut
+          slices={supplier.categoryMix}
+          totalLabel={`${supplier.activeOfferCount} Active Offers`}
+        />
       </SidebarWidget>
 
       <SidebarWidget title="Broadcast Activity (Last 7 Days)">
@@ -2350,31 +2946,47 @@ export function SupplierInsightsSidebar({ supplier }: { supplier: SupplierProfil
       <SidebarWidget title="Market Trust Signals">
         <div className="flex flex-col gap-3 text-sm">
           <div className="flex items-start gap-2">
-            <BadgeCheck className="size-4 shrink-0 text-primary" aria-hidden />
+            <BadgeCheck className="text-primary size-4 shrink-0" aria-hidden />
             <div>
-              <div className="font-medium text-foreground">Verified Supplier</div>
-              <div className="text-xs text-muted-foreground">Identity, business & location verified</div>
+              <div className="text-foreground font-medium">
+                Verified Supplier
+              </div>
+              <div className="text-muted-foreground text-xs">
+                Identity, business & location verified
+              </div>
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <ThumbsUp className="size-4 shrink-0 text-primary" aria-hidden />
+            <ThumbsUp className="text-primary size-4 shrink-0" aria-hidden />
             <div>
-              <div className="font-medium text-foreground">{supplier.positiveScorePercent}% Positive Score</div>
-              <div className="text-xs text-muted-foreground">Based on buyer feedback</div>
+              <div className="text-foreground font-medium">
+                {supplier.positiveScorePercent}% Positive Score
+              </div>
+              <div className="text-muted-foreground text-xs">
+                Based on buyer feedback
+              </div>
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <Zap className="size-4 shrink-0 text-primary" aria-hidden />
+            <Zap className="text-primary size-4 shrink-0" aria-hidden />
             <div>
-              <div className="font-medium text-foreground">{supplier.avgResponseTimeLabel} Response Speed</div>
-              <div className="text-xs text-muted-foreground">Average time to respond to inquiries</div>
+              <div className="text-foreground font-medium">
+                {supplier.avgResponseTimeLabel} Response Speed
+              </div>
+              <div className="text-muted-foreground text-xs">
+                Average time to respond to inquiries
+              </div>
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <Calendar className="size-4 shrink-0 text-primary" aria-hidden />
+            <Calendar className="text-primary size-4 shrink-0" aria-hidden />
             <div>
-              <div className="font-medium text-foreground">{yearsActive}+ years on SouqFeed</div>
-              <div className="text-xs text-muted-foreground">Active since {supplier.memberSinceYear}</div>
+              <div className="text-foreground font-medium">
+                {yearsActive}+ years on SouqFeed
+              </div>
+              <div className="text-muted-foreground text-xs">
+                Active since {supplier.memberSinceYear}
+              </div>
             </div>
           </div>
         </div>
@@ -2409,11 +3021,13 @@ rather than inlining it into the page, keeping the page thin per the
 project's screen-implementation workflow.
 
 **Files:**
+
 - Create: `src/components/suppliers/supplier-tabs.tsx`
 - Create: `src/components/suppliers/supplier-offers-section.tsx`
 - Create: `src/app/suppliers/[slug]/page.tsx`
 
 **Interfaces:**
+
 - Consumes: everything from Tasks 4, 7, and 11–12.
 
 - [ ] **Step 1: Write `supplier-tabs.tsx`**
@@ -2424,7 +3038,11 @@ project's screen-implementation workflow.
 import type { ReactNode } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export function SupplierTabs({ liveOffersContent }: { liveOffersContent: ReactNode }) {
+export function SupplierTabs({
+  liveOffersContent,
+}: {
+  liveOffersContent: ReactNode;
+}) {
   return (
     <Tabs defaultValue="live-offers">
       <TabsList>
@@ -2436,20 +3054,24 @@ export function SupplierTabs({ liveOffersContent }: { liveOffersContent: ReactNo
       </TabsList>
       <TabsContent value="live-offers">{liveOffersContent}</TabsContent>
       <TabsContent value="history">
-        <p className="py-8 text-center text-sm text-muted-foreground">Broadcast history is not available yet.</p>
+        <p className="text-muted-foreground py-8 text-center text-sm">
+          Broadcast history is not available yet.
+        </p>
       </TabsContent>
       <TabsContent value="about">
-        <p className="py-8 text-center text-sm text-muted-foreground">
+        <p className="text-muted-foreground py-8 text-center text-sm">
           Supplier details are shown in the header above.
         </p>
       </TabsContent>
       <TabsContent value="brands">
-        <p className="py-8 text-center text-sm text-muted-foreground">
+        <p className="text-muted-foreground py-8 text-center text-sm">
           Brand and category management is not available yet.
         </p>
       </TabsContent>
       <TabsContent value="contact">
-        <p className="py-8 text-center text-sm text-muted-foreground">See Contact Information in the sidebar.</p>
+        <p className="text-muted-foreground py-8 text-center text-sm">
+          See Contact Information in the sidebar.
+        </p>
       </TabsContent>
     </Tabs>
   );
@@ -2467,7 +3089,11 @@ import { Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { LiveMarketCard } from "@/components/market/live-market-card";
-import { EMPTY_OFFER_FILTERS, filterOffers, sortOffers } from "@/modules/offers/filter-offers";
+import {
+  EMPTY_OFFER_FILTERS,
+  filterOffers,
+  sortOffers,
+} from "@/modules/offers/filter-offers";
 import type { OfferListItem } from "@/modules/offers/types";
 
 export function SupplierOffersSection({
@@ -2480,7 +3106,11 @@ export function SupplierOffersSection({
   const [searchQuery, setSearchQuery] = useState("");
 
   const visibleOffers = useMemo(
-    () => sortOffers(filterOffers(offers, { ...EMPTY_OFFER_FILTERS, searchQuery }), "recent"),
+    () =>
+      sortOffers(
+        filterOffers(offers, { ...EMPTY_OFFER_FILTERS, searchQuery }),
+        "recent",
+      ),
     [offers, searchQuery],
   );
 
@@ -2488,7 +3118,7 @@ export function SupplierOffersSection({
     <div className="flex min-w-0 flex-1 flex-col gap-4">
       <div className="relative">
         <Search
-          className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+          className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
           aria-hidden
         />
         <Input
@@ -2499,19 +3129,23 @@ export function SupplierOffersSection({
         />
       </div>
 
-      <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
-        <span className="size-2 rounded-full bg-live" aria-hidden />
+      <h2 className="text-foreground flex items-center gap-2 text-sm font-semibold">
+        <span className="bg-live size-2 rounded-full" aria-hidden />
         Live Offers from {supplierName}
       </h2>
 
       {visibleOffers.length === 0 ? (
-        <div className="rounded-md border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
+        <div className="border-border text-muted-foreground rounded-md border border-dashed p-12 text-center text-sm">
           No offers match your search.
         </div>
       ) : (
         <div className="flex flex-col gap-4">
           {visibleOffers.map((offer) => (
-            <LiveMarketCard key={offer.id} offer={offer} actionLabel="View Product" />
+            <LiveMarketCard
+              key={offer.id}
+              offer={offer}
+              actionLabel="View Product"
+            />
           ))}
         </div>
       )}
@@ -2523,6 +3157,7 @@ export function SupplierOffersSection({
 - [ ] **Step 3: Write the supplier profile page**
 
 `src/app/suppliers/[slug]/page.tsx`:
+
 ```tsx
 import { notFound } from "next/navigation";
 import { SupplierHeader } from "@/components/suppliers/supplier-header";
@@ -2534,7 +3169,11 @@ import { SupplierOffersSection } from "@/components/suppliers/supplier-offers-se
 import { getMockSupplierBySlug } from "@/modules/suppliers/mock-data";
 import { getMockOffers } from "@/modules/offers/mock-data";
 
-export default async function SupplierProfilePage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function SupplierProfilePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const supplier = getMockSupplierBySlug(slug);
 
@@ -2552,7 +3191,10 @@ export default async function SupplierProfilePage({ params }: { params: Promise<
         <SupplierTabs
           liveOffersContent={
             <div className="flex flex-col gap-6 pt-4 lg:flex-row">
-              <SupplierOffersSection supplierName={supplier.companyName} offers={offers} />
+              <SupplierOffersSection
+                supplierName={supplier.companyName}
+                offers={offers}
+              />
               <div className="w-full shrink-0 lg:w-80">
                 <SupplierInsightsSidebar supplier={supplier} />
                 <div className="mt-4">
@@ -2578,6 +3220,7 @@ Expected: no errors.
 - [ ] **Step 5: Manual smoke check**
 
 Run: `pnpm dev`.
+
 - Open `http://localhost:3000/suppliers/al-hadi-computers` — expect the full header, stat row, tabs, offers list (one card: Lenovo ThinkPad E14 Gen 7), and the insights/contact sidebar.
 - Open `http://localhost:3000/suppliers/does-not-exist` — expect Next.js's 404 page, not a crash or blank page (Review Focus item 1).
 - From the homepage, click "View Supplier" on any card — expect navigation to that supplier's real profile page.
@@ -2594,6 +3237,7 @@ git commit -m "feat: assemble the supplier profile page"
 ### Task 14: Whole-phase verification
 
 **Files:**
+
 - Modify: `current.md` (mark Phase 0.5 complete)
 
 No new product code — this task is the full verification pass plus the doc update that closes out the phase.
@@ -2616,6 +3260,7 @@ Expected: builds successfully with no type errors.
 - [ ] **Step 4: Manual browser pass against both mockups**
 
 Run: `pnpm dev`. With `ui-design-ideas/livefeed-home-ui.png` and `ui-design-ideas/supplier-details-view.png` open side-by-side:
+
 - Desktop width (~1440px): compare the homepage and `/suppliers/al-hadi-computers` against the two mockups — hero, stat tiles, badges (NEW green / LIVE and PRICE UPDATED dark blue-grey), live-market cards, filters sidebar, Market Pulse sidebar, supplier header/stat row/tabs/insights sidebar should all be present and visually close.
 - Mobile width (~375px, browser dev tools): confirm the filters "Filters" button opens the Sheet and checkboxes still work inside it; confirm cards stack in a single column; confirm the supplier page's sidebar content moves below the offers list; confirm nothing overflows horizontally.
 - Deliberately trigger the empty state: filter by search query `nonexistent` on both the homepage and a supplier page and confirm an explicit empty-state message renders (not a blank area) — then clear it.
@@ -2629,6 +3274,7 @@ Move the Phase 0.5 items from "Next" into "Completed", and update "Next" to poin
 ## Completed
 
 ... (existing bullets unchanged) ...
+
 - **Phase 0.5 (UI foundation) complete** — Live Market homepage and Supplier
   profile page built against static mock data, matching
   `ui-design-ideas/`'s visual language, per

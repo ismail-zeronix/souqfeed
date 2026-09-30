@@ -1,5 +1,6 @@
 export type PriceType = "FIXED" | "ASK" | "HIDDEN" | "UNKNOWN";
-export type AvailabilityStatus = "AVAILABLE" | "LIMITED" | "ASK" | "UNKNOWN" | "SOLD_OUT";
+export type AvailabilityStatus =
+  "AVAILABLE" | "LIMITED" | "ASK" | "UNKNOWN" | "SOLD_OUT";
 export type OfferBadge = "NEW" | "LIVE" | "PRICE_UPDATED" | null;
 
 export interface OfferListItem {

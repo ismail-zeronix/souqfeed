@@ -8,7 +8,11 @@ import { SupplierOffersSection } from "@/components/suppliers/supplier-offers-se
 import { getMockSupplierBySlug } from "@/modules/suppliers/mock-data";
 import { getMockOffers } from "@/modules/offers/mock-data";
 
-export default async function SupplierProfilePage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function SupplierProfilePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const supplier = getMockSupplierBySlug(slug);
 
@@ -26,7 +30,10 @@ export default async function SupplierProfilePage({ params }: { params: Promise<
         <SupplierTabs
           liveOffersContent={
             <div className="flex flex-col gap-6 pt-4 lg:flex-row">
-              <SupplierOffersSection supplierName={supplier.companyName} offers={offers} />
+              <SupplierOffersSection
+                supplierName={supplier.companyName}
+                offers={offers}
+              />
               <div className="w-full shrink-0 lg:w-80">
                 <SupplierInsightsSidebar supplier={supplier} />
                 <div className="mt-4">

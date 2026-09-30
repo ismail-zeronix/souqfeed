@@ -8,18 +8,38 @@ export interface StatTileProps {
   label: string;
   trendPercent?: number;
   className?: string;
+  /** Set when `value` is computed from `Date.now()` (e.g. relative time) and may
+   * legitimately differ between the server render and client hydration instant. */
+  suppressValueHydrationWarning?: boolean;
 }
 
-export function StatTile({ icon: Icon, value, label, trendPercent, className }: StatTileProps) {
+export function StatTile({
+  icon: Icon,
+  value,
+  label,
+  trendPercent,
+  className,
+  suppressValueHydrationWarning,
+}: StatTileProps) {
   const hasTrend = typeof trendPercent === "number";
   const isUp = hasTrend && trendPercent >= 0;
 
   return (
-    <div className={cn("flex items-center gap-3 rounded-md border border-border bg-card px-4 py-3", className)}>
-      <Icon className="size-5 text-muted-foreground" aria-hidden />
+    <div
+      className={cn(
+        "border-border bg-card flex items-center gap-3 rounded-md border px-4 py-3",
+        className,
+      )}
+    >
+      <Icon className="text-muted-foreground size-5" aria-hidden />
       <div className="flex min-w-0 flex-col">
         <div className="flex items-baseline gap-2">
-          <span className="text-lg font-semibold tabular-nums text-foreground">{value}</span>
+          <span
+            className="text-foreground text-lg font-semibold tabular-nums"
+            suppressHydrationWarning={suppressValueHydrationWarning}
+          >
+            {value}
+          </span>
           {hasTrend && (
             <span
               className={cn(
@@ -27,12 +47,16 @@ export function StatTile({ icon: Icon, value, label, trendPercent, className }: 
                 isUp ? "text-live" : "text-destructive",
               )}
             >
-              {isUp ? <ArrowUp className="size-3" aria-hidden /> : <ArrowDown className="size-3" aria-hidden />}
+              {isUp ? (
+                <ArrowUp className="size-3" aria-hidden />
+              ) : (
+                <ArrowDown className="size-3" aria-hidden />
+              )}
               {Math.abs(trendPercent)}%
             </span>
           )}
         </div>
-        <span className="truncate text-xs text-muted-foreground">{label}</span>
+        <span className="text-muted-foreground truncate text-xs">{label}</span>
       </div>
     </div>
   );

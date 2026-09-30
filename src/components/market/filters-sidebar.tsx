@@ -4,7 +4,13 @@ import { SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import type { Brand } from "@/modules/brands/types";
 import type { Category } from "@/modules/categories/types";
 import type { OfferFilterCriteria } from "@/modules/offers/types";
@@ -18,17 +24,25 @@ export interface FiltersSidebarProps {
 }
 
 function toggleValue(values: string[], value: string): string[] {
-  return values.includes(value) ? values.filter((v) => v !== value) : [...values, value];
+  return values.includes(value)
+    ? values.filter((v) => v !== value)
+    : [...values, value];
 }
 
-function FilterControls({ brands, categories, locationNames, criteria, onCriteriaChange }: FiltersSidebarProps) {
+function FilterControls({
+  brands,
+  categories,
+  locationNames,
+  criteria,
+  onCriteriaChange,
+}: FiltersSidebarProps) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-foreground">Filters</h2>
+        <h2 className="text-foreground text-sm font-semibold">Filters</h2>
         <button
           type="button"
-          className="text-xs font-medium text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground text-xs font-medium"
           onClick={() =>
             onCriteriaChange({
               brandIds: [],
@@ -44,13 +58,18 @@ function FilterControls({ brands, categories, locationNames, criteria, onCriteri
       </div>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-xs font-semibold text-muted-foreground uppercase">Brand</legend>
+        <legend className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
+          Brand
+        </legend>
         {brands.map((brand) => (
           <Label key={brand.id} className="font-normal">
             <Checkbox
               checked={criteria.brandIds.includes(brand.id)}
               onCheckedChange={() =>
-                onCriteriaChange({ ...criteria, brandIds: toggleValue(criteria.brandIds, brand.id) })
+                onCriteriaChange({
+                  ...criteria,
+                  brandIds: toggleValue(criteria.brandIds, brand.id),
+                })
               }
             />
             {brand.name}
@@ -59,31 +78,43 @@ function FilterControls({ brands, categories, locationNames, criteria, onCriteri
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-xs font-semibold text-muted-foreground uppercase">Category</legend>
+        <legend className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
+          Category
+        </legend>
         {categories.map((category) => (
           <Label key={category.id} className="justify-between font-normal">
             <span className="flex items-center gap-2">
               <Checkbox
                 checked={criteria.categoryIds.includes(category.id)}
                 onCheckedChange={() =>
-                  onCriteriaChange({ ...criteria, categoryIds: toggleValue(criteria.categoryIds, category.id) })
+                  onCriteriaChange({
+                    ...criteria,
+                    categoryIds: toggleValue(criteria.categoryIds, category.id),
+                  })
                 }
               />
               {category.name}
             </span>
-            <span className="tabular-nums text-xs text-muted-foreground">{category.offerCount}</span>
+            <span className="text-muted-foreground text-xs tabular-nums">
+              {category.offerCount}
+            </span>
           </Label>
         ))}
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-xs font-semibold text-muted-foreground uppercase">Location</legend>
+        <legend className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
+          Location
+        </legend>
         {locationNames.map((location) => (
           <Label key={location} className="font-normal">
             <Checkbox
               checked={criteria.locationNames.includes(location)}
               onCheckedChange={() =>
-                onCriteriaChange({ ...criteria, locationNames: toggleValue(criteria.locationNames, location) })
+                onCriteriaChange({
+                  ...criteria,
+                  locationNames: toggleValue(criteria.locationNames, location),
+                })
               }
             />
             {location}
@@ -92,11 +123,15 @@ function FilterControls({ brands, categories, locationNames, criteria, onCriteri
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-1 text-xs font-semibold text-muted-foreground uppercase">Availability</legend>
+        <legend className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
+          Availability
+        </legend>
         <Label className="font-normal">
           <Checkbox
             checked={criteria.inStockOnly}
-            onCheckedChange={(checked) => onCriteriaChange({ ...criteria, inStockOnly: checked })}
+            onCheckedChange={(checked) =>
+              onCriteriaChange({ ...criteria, inStockOnly: checked })
+            }
           />
           In Stock only
         </Label>

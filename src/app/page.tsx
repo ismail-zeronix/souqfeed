@@ -15,7 +15,8 @@ import type { OfferFilterCriteria } from "@/modules/offers/types";
 const LOCATION_NAMES = ["Bur Dubai", "Deira", "Al Fahidi", "Al Rigga"];
 
 export default function HomePage() {
-  const [criteria, setCriteria] = useState<OfferFilterCriteria>(EMPTY_OFFER_FILTERS);
+  const [criteria, setCriteria] =
+    useState<OfferFilterCriteria>(EMPTY_OFFER_FILTERS);
 
   const brands = getMockBrands();
   const categories = getMockCategories();
@@ -32,10 +33,15 @@ export default function HomePage() {
         categories={categories}
         categoryId={criteria.categoryIds[0] ?? null}
         onCategoryChange={(categoryId) =>
-          setCriteria((prev) => ({ ...prev, categoryIds: categoryId ? [categoryId] : [] }))
+          setCriteria((prev) => ({
+            ...prev,
+            categoryIds: categoryId ? [categoryId] : [],
+          }))
         }
         searchQuery={criteria.searchQuery}
-        onSearchQueryChange={(searchQuery) => setCriteria((prev) => ({ ...prev, searchQuery }))}
+        onSearchQueryChange={(searchQuery) =>
+          setCriteria((prev) => ({ ...prev, searchQuery }))
+        }
       />
       <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-6 py-6 lg:flex-row">
         <FiltersSidebar
@@ -46,7 +52,10 @@ export default function HomePage() {
           onCriteriaChange={setCriteria}
         />
         <LiveMarketFeed offers={offers} criteria={criteria} />
-        <MarketPulseSidebar trendingCategories={categories} topSuppliers={topSuppliers} />
+        <MarketPulseSidebar
+          trendingCategories={categories}
+          topSuppliers={topSuppliers}
+        />
       </div>
     </>
   );

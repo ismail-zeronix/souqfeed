@@ -46,24 +46,24 @@ Full reasoning: `docs/superpowers/specs/2026-09-30-souqfeed-foundation-design.md
 
 Finish and verify each phase before starting the next.
 
-| Phase | Scope                                                                                                     |
-| ----- | --------------------------------------------------------------------------------------------------------- |
-| 0     | Repo scaffold (Next.js/TS/Tailwind/shadcn, pnpm, Docker Compose, env validation) + this documentation set |
+| Phase | Scope                                                                                                                                                                                        |
+| ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0     | Repo scaffold (Next.js/TS/Tailwind/shadcn, pnpm, Docker Compose, env validation) + this documentation set                                                                                    |
 | 0.5   | UI foundation: theme tokens, shared components, Live Market homepage + Supplier profile page against static mock data (`docs/superpowers/specs/2026-09-30-souqfeed-ui-foundation-design.md`) |
-| 1     | Database schema (full) + Better Auth + role guards + seed admin + minimal login                           |
-| 2     | Supplier profiles (CRUD, public `/suppliers/[slug]` page)                                                 |
-| 3     | Brands + Categories + Products (admin CRUD, canonical product model)                                      |
-| 4     | Broadcast submission (paste, store raw, status lifecycle)                                                 |
-| 5     | Broadcast parser (`RuleBasedBroadcastParser`, deterministic extraction)                                   |
-| 6     | Review + publishing (NEEDS_REVIEW UI, product matcher, publish flow)                                      |
-| 7     | Offers (creation from published items, offer observations/history)                                        |
-| 8     | Public live feed (`/`, live market cards)                                                                 |
-| 9     | Search (`/search`, FTS + trigram, filters, grouping by product)                                           |
-| 10    | Supplier public profiles (broadcast history, active offers)                                               |
-| 11    | Realtime (Redis pub/sub → SSE → live feed updates)                                                        |
-| 12    | Analytics (`analytics_events`, profile views, WhatsApp clicks)                                            |
-| 13    | Admin panel (verification, review queue, brand/category/product management)                               |
-| 14    | Deployment (Docker Compose prod, Caddy, VPS)                                                              |
+| 1     | Database schema (full) + Better Auth + role guards + seed admin + minimal login                                                                                                              |
+| 2     | Supplier profiles (CRUD, public `/suppliers/[slug]` page)                                                                                                                                    |
+| 3     | Brands + Categories + Products (admin CRUD, canonical product model)                                                                                                                         |
+| 4     | Broadcast submission (paste, store raw, status lifecycle)                                                                                                                                    |
+| 5     | Broadcast parser (`RuleBasedBroadcastParser`, deterministic extraction)                                                                                                                      |
+| 6     | Review + publishing (NEEDS_REVIEW UI, product matcher, publish flow)                                                                                                                         |
+| 7     | Offers (creation from published items, offer observations/history)                                                                                                                           |
+| 8     | Public live feed (`/`, live market cards)                                                                                                                                                    |
+| 9     | Search (`/search`, FTS + trigram, filters, grouping by product)                                                                                                                              |
+| 10    | Supplier public profiles (broadcast history, active offers)                                                                                                                                  |
+| 11    | Realtime (Redis pub/sub → SSE → live feed updates)                                                                                                                                           |
+| 12    | Analytics (`analytics_events`, profile views, WhatsApp clicks)                                                                                                                               |
+| 13    | Admin panel (verification, review queue, brand/category/product management)                                                                                                                  |
+| 14    | Deployment (Docker Compose prod, Caddy, VPS)                                                                                                                                                 |
 
 Current phase: see `current.md`.
 

@@ -9,7 +9,11 @@ import type { SupplierSummary } from "@/modules/suppliers/types";
 const MOCK_PRICE_MOVEMENTS = [
   { categoryId: "cat-laptops", categoryName: "Laptops", changePercent: 24 },
   { categoryId: "cat-storage", categoryName: "Storage", changePercent: 18 },
-  { categoryId: "cat-networking", categoryName: "Networking", changePercent: 32 },
+  {
+    categoryId: "cat-networking",
+    categoryName: "Networking",
+    changePercent: 32,
+  },
   { categoryId: "cat-desktops", categoryName: "Desktops", changePercent: 12 },
   { categoryId: "cat-monitors", categoryName: "Monitors", changePercent: 9 },
 ];
@@ -25,10 +29,30 @@ const MOCK_TRENDING_SEARCHES = [
 
 // placeholder — no backing schema field yet (WTB is a deferred feature)
 const MOCK_WTB_REQUESTS = [
-  { id: "wtb-1", title: "WTB iPhone 15 Pro Max 256GB", location: "Dubai", postedLabel: "5m ago" },
-  { id: "wtb-2", title: "WTB RTX 4080 / 4090", location: "Urgent", postedLabel: "12m ago" },
-  { id: "wtb-3", title: "WTB Cisco Switches", location: "Dubai", postedLabel: "28m ago" },
-  { id: "wtb-4", title: "WTB Dell Laptops (i7)", location: "Corporate", postedLabel: "41m ago" },
+  {
+    id: "wtb-1",
+    title: "WTB iPhone 15 Pro Max 256GB",
+    location: "Dubai",
+    postedLabel: "5m ago",
+  },
+  {
+    id: "wtb-2",
+    title: "WTB RTX 4080 / 4090",
+    location: "Urgent",
+    postedLabel: "12m ago",
+  },
+  {
+    id: "wtb-3",
+    title: "WTB Cisco Switches",
+    location: "Dubai",
+    postedLabel: "28m ago",
+  },
+  {
+    id: "wtb-4",
+    title: "WTB Dell Laptops (i7)",
+    location: "Corporate",
+    postedLabel: "41m ago",
+  },
 ];
 
 export function MarketPulseSidebar({
@@ -52,17 +76,27 @@ export function MarketPulseSidebar({
           </TabsList>
           <TabsContent value="categories" className="flex flex-col gap-2">
             {trendingCategories.map((category) => (
-              <div key={category.id} className="flex items-center justify-between text-sm">
+              <div
+                key={category.id}
+                className="flex items-center justify-between text-sm"
+              >
                 <span className="text-foreground">{category.name}</span>
-                <span className="tabular-nums text-muted-foreground">{category.offerCount}</span>
+                <span className="text-muted-foreground tabular-nums">
+                  {category.offerCount}
+                </span>
               </div>
             ))}
           </TabsContent>
           <TabsContent value="prices" className="flex flex-col gap-2">
             {MOCK_PRICE_MOVEMENTS.map((movement) => (
-              <div key={movement.categoryId} className="flex items-center justify-between text-sm">
+              <div
+                key={movement.categoryId}
+                className="flex items-center justify-between text-sm"
+              >
                 <span className="text-foreground">{movement.categoryName}</span>
-                <span className={`tabular-nums ${movement.changePercent >= 0 ? "text-live" : "text-destructive"}`}>
+                <span
+                  className={`tabular-nums ${movement.changePercent >= 0 ? "text-live" : "text-destructive"}`}
+                >
                   {movement.changePercent >= 0 ? "+" : ""}
                   {movement.changePercent}%
                 </span>
@@ -74,13 +108,16 @@ export function MarketPulseSidebar({
 
       <SidebarWidget title="Trending Today" showViewAll>
         {MOCK_TRENDING_SEARCHES.map((entry, index) => (
-          <div key={entry.term} className="flex items-center justify-between text-sm">
+          <div
+            key={entry.term}
+            className="flex items-center justify-between text-sm"
+          >
             <span className="text-foreground">
-              <span className="mr-2 text-muted-foreground">{index + 1}</span>
+              <span className="text-muted-foreground mr-2">{index + 1}</span>
               {entry.term}
             </span>
-            <span className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Flame className="size-3 text-destructive" aria-hidden />
+            <span className="text-muted-foreground flex items-center gap-1 text-xs">
+              <Flame className="text-destructive size-3" aria-hidden />
               {entry.searchCount} searches
             </span>
           </div>
@@ -90,11 +127,17 @@ export function MarketPulseSidebar({
       <SidebarWidget title="Top Active Suppliers" showViewAll>
         {topSuppliers.map((supplier) => (
           <div key={supplier.id} className="flex items-center gap-2 text-sm">
-            <SupplierLogoTile initial={supplier.companyName.charAt(0)} size="sm" />
+            <SupplierLogoTile
+              initial={supplier.companyName.charAt(0)}
+              size="sm"
+            />
             <div className="min-w-0">
-              <div className="truncate font-medium text-foreground">{supplier.companyName}</div>
-              <div className="text-xs text-muted-foreground">
-                {supplier.activeOfferCount} offers · {supplier.positiveScorePercent}% positive
+              <div className="text-foreground truncate font-medium">
+                {supplier.companyName}
+              </div>
+              <div className="text-muted-foreground text-xs">
+                {supplier.activeOfferCount} offers ·{" "}
+                {supplier.positiveScorePercent}% positive
               </div>
             </div>
           </div>
@@ -105,7 +148,7 @@ export function MarketPulseSidebar({
         {MOCK_WTB_REQUESTS.map((request) => (
           <div key={request.id} className="text-sm">
             <div className="text-foreground">{request.title}</div>
-            <div className="text-xs text-muted-foreground">
+            <div className="text-muted-foreground text-xs">
               {request.location} · {request.postedLabel}
             </div>
           </div>

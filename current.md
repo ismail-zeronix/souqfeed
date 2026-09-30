@@ -31,21 +31,52 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   - Full loop verified end-to-end: docker up → install → lint → format:check
     → test → build → dev server responds → docker down, with no secrets
     tracked in git.
+- **Phase 0.5 (UI foundation) complete** — Live Market homepage and Supplier
+  profile page built against static mock data, matching `ui-design-ideas/`'s
+  visual language, per
+  `docs/superpowers/specs/2026-09-30-souqfeed-ui-foundation-design.md` and
+  `docs/superpowers/plans/2026-09-30-souqfeed-ui-foundation.md` (implemented
+  inline on `master`, all 14 tasks). Theme tokens applied to `globals.css`;
+  shared components (`LiveMarketCard`, `StatTile`, `SupplierLogoTile`,
+  `SidebarWidget`, `SiteHeader`) built once and reused across both screens;
+  mock data lives in `src/modules/{suppliers,offers,brands,categories}/`
+  behind the same accessor shapes their real `queries.ts` counterparts will
+  eventually have. Full verification pass: `pnpm test`/`lint`/`build` clean,
+  plus a real headless-browser pass (desktop + mobile viewports, empty
+  states, long-content wrapping) that caught and fixed three bugs the static
+  checks missed: a React-hydration mismatch from `Date.now()`-based relative
+  timestamps (fixed with `suppressHydrationWarning` on the two affected
+  spans — the standard, documented pattern for this exact case), a mobile
+  layout overflow from the supplier page's un-scrollable tab bar, and a
+  React Compiler lint violation in `CategoryMixDonut` (mutating a variable
+  during render). Also fixed in passing: `eslint.config.mjs`'s
+  `globalIgnores` didn't account for nested worktrees, so `pnpm lint` was
+  scanning `.worktrees/*/.next` build output — added `.worktrees/**`.
 
 ## In Progress
 
-- Final whole-branch review of the Phase 0 work (per
-  `superpowers:executing-plans`), before merging `phase0-repo-scaffold` into
-  `master`.
+- **Phase 1 (DB + auth)** has real, separate progress already underway in
+  an unmerged worktree/branch (`phase1-database-auth`), done via
+  `subagent-driven-development` on 2026-09-30 — apparently a concurrent
+  session, discovered mid-Phase-0.5 and left untouched. Its ledger
+  (`.worktrees/phase1-database-auth/.superpowers/sdd/2026-09-30-phase1-database-auth/progress.md`)
+  shows Tasks 1–4 complete and reviewed clean (Drizzle client, Better Auth,
+  full domain schema with migrations, role guards/middleware, placeholder
+  dashboard/admin pages); Task 5 (seed script) was dispatched but has no
+  completion report. Whoever resumes it should read that ledger first
+  rather than restarting Task 5. This worktree still needs to be merged
+  into `master` at some point — expect `current.md` and this phase's
+  `docs/superpowers/plans/2026-09-30-phase1-database-auth.md` to need
+  reconciling with whatever's landed here in the meantime.
 
 ## Next
 
-- Phase 0.5: UI foundation — theme tokens, shared components, and the Live
-  Market homepage + Supplier profile page against static mock data, per
-  `docs/superpowers/specs/2026-09-30-souqfeed-ui-foundation-design.md` and
-  `docs/superpowers/plans/2026-09-30-souqfeed-ui-foundation.md`.
-- Phase 1 (DB schema + Better Auth) follows once Phase 0.5 is verified —
-  plan already written at `docs/superpowers/plans/2026-09-30-phase1-database-auth.md`.
+- Finish and merge Phase 1 from the `phase1-database-auth` worktree (Task 5
+  onward), or restart it against `master`'s current state if that worktree
+  is abandoned — check with whoever owns that session first.
+- Once Phase 1's real DB/auth lands, wire Phase 0.5's mock-data modules to
+  real `queries.ts` per the DB-first/seed-fallback pattern in
+  `docs/architecture.md`.
 
 ## Decisions
 

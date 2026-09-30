@@ -15,9 +15,21 @@ const VARIANT_LABELS: Record<MarketBadgeVariant, string> = {
   PRICE_UPDATED: "PRICE UPDATED",
 };
 
-export function MarketBadge({ variant, className }: { variant: MarketBadgeVariant; className?: string }) {
+export function MarketBadge({
+  variant,
+  className,
+}: {
+  variant: MarketBadgeVariant;
+  className?: string;
+}) {
   return (
-    <Badge className={cn(VARIANT_CLASSES[variant], "rounded px-2 font-semibold tracking-wide", className)}>
+    <Badge
+      className={cn(
+        VARIANT_CLASSES[variant],
+        "rounded px-2 font-semibold tracking-wide",
+        className,
+      )}
+    >
       {VARIANT_LABELS[variant]}
     </Badge>
   );
