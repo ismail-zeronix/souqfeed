@@ -8,6 +8,9 @@ const MOCK_BRANDS: Brand[] = [
   { id: "brand-acer", name: "Acer", slug: "acer" },
   { id: "brand-wd", name: "WD", slug: "wd" },
   { id: "brand-aruba", name: "Aruba", slug: "aruba" },
+  { id: "brand-samsung", name: "Samsung", slug: "samsung" },
+  { id: "brand-cisco", name: "Cisco", slug: "cisco" },
+  { id: "brand-logitech", name: "Logitech", slug: "logitech" },
 ];
 
 export function getMockBrands(): Brand[] {

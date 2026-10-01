@@ -3,7 +3,7 @@ import { Bell, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const NAV_ITEMS: { label: string; href: string | null }[] = [
-  { label: "Live Market", href: "/" },
+  { label: "Live Market", href: "/feed" },
   { label: "Suppliers", href: null },
   { label: "Search", href: null },
   { label: "WTB", href: null },
