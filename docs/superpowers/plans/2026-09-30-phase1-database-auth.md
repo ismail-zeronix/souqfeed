@@ -24,20 +24,22 @@
 ## Review Focus
 
 1. **`BETTER_AUTH_SECRET`'s placeholder is now actively rejected.** Phase 0's `env.ts` throws if `BETTER_AUTH_SECRET` is still `"replace-with-a-random-32-byte-secret"` — the value currently in every local `.env`. Nothing in this phase can boot until a real secret is generated. Task 1 generates one before touching anything else.
-2. **Role authorization must be enforced on the actual protected page, not just in `middleware.ts`.** Middleware only checks for a session cookie's *presence* (edge-safe, no DB round-trip) — it cannot verify the session is valid or check its role. A SUPPLIER who is logged in and hits `/admin` must be redirected away by the page itself, not waved through because *a* cookie existed. Task 4's tests exercise this directly.
+2. **Role authorization must be enforced on the actual protected page, not just in `middleware.ts`.** Middleware only checks for a session cookie's _presence_ (edge-safe, no DB round-trip) — it cannot verify the session is valid or check its role. A SUPPLIER who is logged in and hits `/admin` must be redirected away by the page itself, not waved through because _a_ cookie existed. Task 4's tests exercise this directly.
 3. **Migrating against a Postgres container that reports "Up" but isn't accepting connections yet** — Phase 0's own Review Focus #4 already fixed the healthcheck race; this phase is the first to actually run a migration against it, so it's the first real proof that fix holds. Task 2 and Task 3 both wait for `healthy` before migrating, not just `docker compose up -d`.
 4. **The seed script must not crash uninformatively on a second run.** `auth.api.signUpEmail` will reject a duplicate email; running `pnpm db:seed` twice (a very plausible mistake) must report "admin already exists" and exit cleanly, not throw a raw stack trace.
-5. **A self-referencing FK (`categories.parentId`) and cross-module FKs (`suppliers.userId` → `users.id`, `broadcast_items.matchedProductId` → `products.id`, etc.) must resolve correctly.** Drizzle needs the `AnyPgColumn` type-lazy pattern for the self-reference, and the domain schema (Task 3) must run *after* Better Auth's schema (Task 2) exists, or `suppliers.userId`'s FK target won't exist yet. Task 3's steps depend on Task 2's `users` table.
+5. **A self-referencing FK (`categories.parentId`) and cross-module FKs (`suppliers.userId` → `users.id`, `broadcast_items.matchedProductId` → `products.id`, etc.) must resolve correctly.** Drizzle needs the `AnyPgColumn` type-lazy pattern for the self-reference, and the domain schema (Task 3) must run _after_ Better Auth's schema (Task 2) exists, or `suppliers.userId`'s FK target won't exist yet. Task 3's steps depend on Task 2's `users` table.
 
 ---
 
 ### Task 1: Drizzle + Postgres client, wired to `getEnv()`
 
 **Files:**
+
 - Create: `drizzle.config.ts`, `src/lib/database/client.ts`, `src/lib/database/schema.ts` (empty barrel for now)
 - Modify: `package.json` (dependencies, `db:generate`/`db:migrate` scripts)
 
 **Interfaces:**
+
 - Consumes: `getEnv()` from `src/lib/validation/env.ts` (Phase 0).
 - Produces: `db` (a Drizzle client) from `src/lib/database/client.ts` — every later task's schema/service code imports this. **Do not import this file from any Vitest test** (Global Constraints).
 
@@ -59,6 +61,7 @@ pnpm add -D drizzle-kit tsx
 - [ ] **Step 3: Create the schema barrel (empty for now)**
 
 `src/lib/database/schema.ts`:
+
 ```ts
 // Re-exports every module's schema so drizzle() gets one combined object
 // for its relational query API. Tasks 2 and 3 append to this as they add
@@ -69,6 +72,7 @@ export {};
 - [ ] **Step 4: Create the Drizzle client**
 
 `src/lib/database/client.ts`:
+
 ```ts
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
@@ -100,6 +104,7 @@ Note: `drizzle-kit` reads `.env` itself (it doesn't go through our `getEnv()` �
 - [ ] **Step 6: Add scripts**
 
 `package.json`:
+
 ```json
 "db:generate": "drizzle-kit generate",
 "db:migrate": "drizzle-kit migrate"
@@ -147,10 +152,12 @@ git commit -m "feat: add Drizzle client wired to getEnv(), drizzle-kit config"
 ### Task 2: Better Auth (users/sessions/accounts, role enum, API route)
 
 **Files:**
+
 - Create: `src/lib/auth/config.ts`, `src/lib/auth/client.ts`, `src/modules/auth/schema.ts` (generated, then hand-edited), `src/app/api/auth/[...all]/route.ts`
 - Modify: `src/lib/database/schema.ts` (barrel), `.env.example`, `src/lib/validation/env.ts` (no new fields needed — `BETTER_AUTH_SECRET`/`BETTER_AUTH_URL` already exist from Phase 0)
 
 **Interfaces:**
+
 - Consumes: `db` from Task 1, `getEnv()` from Phase 0.
 - Produces: `auth` (server instance) from `src/lib/auth/config.ts`; `authClient` from `src/lib/auth/client.ts`; the `users` table (with a `role` column, enum `ADMIN` | `SUPPLIER`, default `SUPPLIER`) that Task 3's `suppliers.userId` references.
 
@@ -163,6 +170,7 @@ pnpm add better-auth
 - [ ] **Step 2: Write the server config**
 
 `src/lib/auth/config.ts`:
+
 ```ts
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -217,6 +225,7 @@ export const userRoleEnum = pgEnum("user_role", ["ADMIN", "SUPPLIER"]);
 ```
 
 Replace the generated `role: text("role")...` line with:
+
 ```ts
   role: userRoleEnum("role").notNull().default("SUPPLIER"),
 ```
@@ -226,6 +235,7 @@ Replace the generated `role: text("role")...` line with:
 - [ ] **Step 5: Populate the schema barrel**
 
 `src/lib/database/schema.ts`:
+
 ```ts
 export * from "@/modules/auth/schema";
 ```
@@ -233,6 +243,7 @@ export * from "@/modules/auth/schema";
 - [ ] **Step 6: API route handler**
 
 `src/app/api/auth/[...all]/route.ts`:
+
 ```ts
 import { auth } from "@/lib/auth/config";
 import { toNextJsHandler } from "better-auth/next-js";
@@ -243,6 +254,7 @@ export const { GET, POST } = toNextJsHandler(auth);
 - [ ] **Step 7: Client auth instance**
 
 `src/lib/auth/client.ts`:
+
 ```ts
 import { createAuthClient } from "better-auth/react";
 
@@ -297,16 +309,19 @@ git commit -m "feat: wire up Better Auth (email/password, ADMIN/SUPPLIER role en
 ### Task 3: Domain schema (brands, categories, suppliers, products, broadcasts, offers, analytics)
 
 **Files:**
+
 - Create: `src/modules/brands/schema.ts`, `src/modules/categories/schema.ts`, `src/modules/suppliers/schema.ts`, `src/modules/products/schema.ts`, `src/modules/broadcasts/schema.ts`, `src/modules/offers/schema.ts`, `src/modules/analytics/schema.ts`
 - Modify: `src/lib/database/schema.ts` (barrel)
 
 **Interfaces:**
+
 - Consumes: `users` table from Task 2 (`suppliers.userId` references it).
 - Produces: every table in `docs/data-model.md`, ready for later phases' `service.ts`/`queries.ts` files to import from `@/modules/<name>/schema`.
 
 - [ ] **Step 1: Brands**
 
 `src/modules/brands/schema.ts`:
+
 ```ts
 import { pgTable, uuid, text, timestamp } from "drizzle-orm/pg-core";
 
@@ -323,8 +338,15 @@ export const brands = pgTable("brands", {
 - [ ] **Step 2: Categories (self-referencing hierarchy)**
 
 `src/modules/categories/schema.ts`:
+
 ```ts
-import { pgTable, uuid, text, timestamp, type AnyPgColumn } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  uuid,
+  text,
+  timestamp,
+  type AnyPgColumn,
+} from "drizzle-orm/pg-core";
 
 export const categories = pgTable("categories", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -339,6 +361,7 @@ export const categories = pgTable("categories", {
 - [ ] **Step 3: Suppliers (+ supplier_brands, supplier_categories)**
 
 `src/modules/suppliers/schema.ts`:
+
 ```ts
 import {
   pgTable,
@@ -407,6 +430,7 @@ export const supplierCategories = pgTable(
 - [ ] **Step 4: Products (+ product_aliases)**
 
 `src/modules/products/schema.ts`:
+
 ```ts
 import {
   pgTable,
@@ -467,6 +491,7 @@ export const productAliases = pgTable(
 - [ ] **Step 5: Broadcasts (+ broadcast_items)**
 
 `src/modules/broadcasts/schema.ts`:
+
 ```ts
 import {
   pgTable,
@@ -568,9 +593,7 @@ export const broadcastItems = pgTable(
     detectedCurrency: text("detected_currency").default("AED"),
     priceType: priceTypeEnum("price_type"),
 
-    matchedProductId: uuid("matched_product_id").references(
-      () => products.id,
-    ),
+    matchedProductId: uuid("matched_product_id").references(() => products.id),
     matchConfidence: numeric("match_confidence"),
     matchMethod: matchMethodEnum("match_method"),
     matchReasons: jsonb("match_reasons"),
@@ -581,9 +604,7 @@ export const broadcastItems = pgTable(
   },
   (table) => [
     index("broadcast_items_broadcast_id_idx").on(table.broadcastId),
-    index("broadcast_items_matched_product_id_idx").on(
-      table.matchedProductId,
-    ),
+    index("broadcast_items_matched_product_id_idx").on(table.matchedProductId),
     index("broadcast_items_review_status_idx").on(table.reviewStatus),
   ],
 );
@@ -592,6 +613,7 @@ export const broadcastItems = pgTable(
 - [ ] **Step 6: Offers (+ offer_observations)**
 
 `src/modules/offers/schema.ts`:
+
 ```ts
 import {
   pgTable,
@@ -663,6 +685,7 @@ expression — Drizzle's `uniqueIndex().where()` takes that, not a column
 comparison directly, which is what the `sql` import above is for.
 
 Then add `offer_observations` to the same file:
+
 ```ts
 export const offerObservations = pgTable(
   "offer_observations",
@@ -690,8 +713,16 @@ export const offerObservations = pgTable(
 - [ ] **Step 7: Analytics events**
 
 `src/modules/analytics/schema.ts`:
+
 ```ts
-import { pgTable, uuid, text, jsonb, timestamp, index } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  uuid,
+  text,
+  jsonb,
+  timestamp,
+  index,
+} from "drizzle-orm/pg-core";
 import { suppliers } from "@/modules/suppliers/schema";
 import { products } from "@/modules/products/schema";
 import { offers } from "@/modules/offers/schema";
@@ -719,6 +750,7 @@ export const analyticsEvents = pgTable(
 - [ ] **Step 8: Populate the schema barrel**
 
 `src/lib/database/schema.ts`:
+
 ```ts
 export * from "@/modules/auth/schema";
 export * from "@/modules/brands/schema";
@@ -770,15 +802,18 @@ git commit -m "feat: add full domain schema (suppliers, brands, categories, prod
 ### Task 4: Role guards + middleware + placeholder protected pages (TDD for the pure logic)
 
 **Files:**
+
 - Create: `src/modules/auth/guards.ts`, `src/modules/auth/guards.test.ts`, `src/lib/auth/session.ts`, `middleware.ts`, `src/app/dashboard/page.tsx`, `src/app/admin/page.tsx`
 
 **Interfaces:**
+
 - Consumes: `auth` from Task 2 (only inside `session.ts`, never inside `guards.ts` — see Global Constraints).
 - Produces: `authorizeRole(userRole, requiredRole): boolean` from `src/modules/auth/guards.ts` (pure, unit-tested); `getCurrentSession()` from `src/lib/auth/session.ts` (I/O, verified via Task 6's live curl flow, not Vitest).
 
 - [ ] **Step 1: Write the failing test for the pure authorization logic**
 
 `src/modules/auth/guards.test.ts`:
+
 ```ts
 import { describe, expect, it } from "vitest";
 import { authorizeRole } from "./guards";
@@ -830,6 +865,7 @@ Expected: PASS — all 3 new tests green, plus the existing 12 from Phase 0 (15 
 - [ ] **Step 5: Server-side session helper (not unit-tested — see Global Constraints)**
 
 `src/lib/auth/session.ts`:
+
 ```ts
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth/config";
@@ -842,6 +878,7 @@ export async function getCurrentSession() {
 - [ ] **Step 6: Middleware — cheap redirect only, not the security boundary**
 
 `middleware.ts` (repo root, next to `package.json`):
+
 ```ts
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
@@ -862,6 +899,7 @@ export const config = {
 - [ ] **Step 7: Placeholder protected pages — real role check happens here**
 
 `src/app/dashboard/page.tsx`:
+
 ```tsx
 import { redirect } from "next/navigation";
 import { getCurrentSession } from "@/lib/auth/session";
@@ -882,6 +920,7 @@ export default async function DashboardPage() {
 ```
 
 `src/app/admin/page.tsx`:
+
 ```tsx
 import { redirect } from "next/navigation";
 import { getCurrentSession } from "@/lib/auth/session";
@@ -928,28 +967,31 @@ git commit -m "feat: add role guards, middleware, and placeholder dashboard/admi
 ### Task 5: Seed script (one admin user)
 
 **Files:**
+
 - Create: `src/lib/database/seed.ts`
 - Modify: `src/lib/validation/env.ts`, `src/lib/validation/env.test.ts`, `.env.example`, `package.json` (`db:seed` script)
 
 **Interfaces:**
+
 - Consumes: `auth` (Task 2), `db` and `user`/`userRoleEnum`-bearing schema (Tasks 2-3), `getEnv()` (Phase 0).
 - Produces: one row in `user` with `role = 'ADMIN'` after running `pnpm db:seed`.
 
 - [ ] **Step 1: Add ADMIN_EMAIL/ADMIN_PASSWORD to the env schema (TDD)**
 
 Add to `src/lib/validation/env.test.ts`, inside the existing `describe("parseEnv", ...)`:
-```ts
-  it("defaults ADMIN_EMAIL and ADMIN_PASSWORD when not set", () => {
-    const env = parseEnv(validEnv);
-    expect(env.ADMIN_EMAIL).toBe("admin@souqfeed.local");
-    expect(env.ADMIN_PASSWORD).toBe("changeme-admin-1234");
-  });
 
-  it("throws when ADMIN_PASSWORD is too short", () => {
-    expect(() =>
-      parseEnv({ ...validEnv, ADMIN_PASSWORD: "short" }),
-    ).toThrow(/ADMIN_PASSWORD/);
-  });
+```ts
+it("defaults ADMIN_EMAIL and ADMIN_PASSWORD when not set", () => {
+  const env = parseEnv(validEnv);
+  expect(env.ADMIN_EMAIL).toBe("admin@souqfeed.local");
+  expect(env.ADMIN_PASSWORD).toBe("changeme-admin-1234");
+});
+
+it("throws when ADMIN_PASSWORD is too short", () => {
+  expect(() => parseEnv({ ...validEnv, ADMIN_PASSWORD: "short" })).toThrow(
+    /ADMIN_PASSWORD/,
+  );
+});
 ```
 
 - [ ] **Step 2: Run it, verify it fails**
@@ -963,6 +1005,7 @@ Expected: FAIL — `env.ts`'s schema has no `ADMIN_EMAIL`/`ADMIN_PASSWORD` field
 - [ ] **Step 3: Add the fields to `env.ts`**
 
 In `src/lib/validation/env.ts`, add to `envSchema`:
+
 ```ts
   ADMIN_EMAIL: z.string().email().default("admin@souqfeed.local"),
   ADMIN_PASSWORD: z.string().min(8).default("changeme-admin-1234"),
@@ -986,6 +1029,7 @@ ADMIN_PASSWORD=changeme-admin-1234
 - [ ] **Step 6: Write the seed script**
 
 `src/lib/database/seed.ts`:
+
 ```ts
 import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth/config";
@@ -1038,6 +1082,7 @@ Better Auth's usual default).
 - [ ] **Step 7: Add the script**
 
 `package.json`:
+
 ```json
 "db:seed": "tsx src/lib/database/seed.ts"
 ```
@@ -1079,15 +1124,18 @@ git commit -m "feat: add seed script for the admin user (idempotent)"
 ### Task 6: Minimal login page + end-to-end verification
 
 **Files:**
+
 - Create: `src/app/login/page.tsx`
 
 **Interfaces:**
+
 - Consumes: `authClient` from Task 2.
 - Produces: a working `/login` page; no new exports for later tasks.
 
 - [ ] **Step 1: Write the login page**
 
 `src/app/login/page.tsx`:
+
 ```tsx
 "use client";
 
@@ -1239,6 +1287,7 @@ git commit -m "feat: add minimal login page, verify role-based access end-to-end
 ### Task 7: Full-loop verification and status update
 
 **Files:**
+
 - Modify: `current.md`
 
 - [ ] **Step 1: Full loop from a clean start**
