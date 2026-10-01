@@ -96,7 +96,7 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
 ## Next
 
 - Wire Phase 0.5's mock-data modules (`src/modules/{suppliers,offers,brands,
-  categories}/`) to real `queries.ts` against the now-real database, per the
+categories}/`) to real `queries.ts` against the now-real database, per the
   DB-first/seed-fallback pattern in `docs/architecture.md` — Phase 0.5's UI
   already assumes this shape, so this is largely plumbing, not redesign.
 - Phase 2: the remaining write-side work — supplier CRUD (self-service
