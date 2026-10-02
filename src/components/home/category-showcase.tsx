@@ -36,9 +36,11 @@ export function CategoryShowcase({ categories }: { categories: Category[] }) {
             <Link
               key={category.id}
               href="/feed"
-              className="border-border bg-card hover:bg-primary/5 flex flex-col items-center gap-2 rounded-md border p-4 text-center transition-colors"
+              className="border-border bg-card hover:border-primary/30 group flex flex-col items-center gap-2.5 rounded-xl border p-4 text-center transition-all hover:-translate-y-0.5 hover:shadow-md"
             >
-              <Icon className="text-primary size-6" aria-hidden />
+              <span className="bg-primary/10 text-primary group-hover:bg-primary flex size-11 items-center justify-center rounded-full transition-colors group-hover:text-white">
+                <Icon className="size-5" aria-hidden />
+              </span>
               <span className="text-foreground text-sm font-medium">
                 {category.name}
               </span>

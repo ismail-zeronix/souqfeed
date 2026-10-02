@@ -34,7 +34,9 @@ const UAE_MARKERS: UaeMarker[] = [
   { location: [25.1288, 56.3265], baseSize: 0.05 }, // Fujairah
 ];
 
-const BRAND_GREEN = hexToGlobeColor("#0F6B45");
+const GOLD_MARKER = hexToGlobeColor("#E8B968");
+const GOLD_GLOW = hexToGlobeColor("#C98A3A");
+const DEEP_GREEN = hexToGlobeColor("#062015");
 const ROTATION_SPEED = 0.0026;
 
 export function LiveNetworkGlobe() {
@@ -53,18 +55,18 @@ export function LiveNetworkGlobe() {
 
     const globe = createGlobe(canvas, {
       devicePixelRatio: 2,
-      width: 700,
-      height: 700,
+      width: 900,
+      height: 900,
       phi,
       theta: 0.32,
-      scale: 1.35, // zoom in — a full-world view would make the UAE a speck
-      dark: 0,
-      diffuse: 1.2,
-      mapSamples: 18000,
-      mapBrightness: 6,
-      baseColor: [0.9, 0.9, 0.88],
-      markerColor: BRAND_GREEN,
-      glowColor: [0.96, 0.96, 0.93],
+      scale: 1.7, // zoom in hard — a full-world view would make the UAE a speck
+      dark: 1,
+      diffuse: 1.4,
+      mapSamples: 20000,
+      mapBrightness: 3.2,
+      baseColor: DEEP_GREEN,
+      markerColor: GOLD_MARKER,
+      glowColor: GOLD_GLOW,
       markers: UAE_MARKERS.map((marker) => ({
         location: marker.location,
         size: marker.baseSize,
@@ -106,7 +108,7 @@ export function LiveNetworkGlobe() {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className="aspect-square w-full max-w-[280px]"
+      className="aspect-square w-full max-w-[320px]"
       style={{ width: "100%", height: "100%" }}
     />
   );

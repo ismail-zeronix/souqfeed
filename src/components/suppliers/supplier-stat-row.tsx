@@ -17,33 +17,33 @@ export function SupplierStatRow({ supplier }: { supplier: SupplierProfile }) {
   return (
     <div className="mx-auto grid max-w-[1440px] grid-cols-2 gap-3 px-6 py-4 sm:grid-cols-3 lg:grid-cols-6">
       <StatTile
-        icon={Users}
+        icon={<Users className="text-muted-foreground size-5" aria-hidden />}
         value={String(supplier.activeOfferCount)}
         label="Active Offers"
       />
       <StatTile
-        icon={Clock}
+        icon={<Clock className="text-muted-foreground size-5" aria-hidden />}
         value={formatRelativeTime(supplier.lastBroadcastAt)}
         label="Last Broadcast"
         suppressValueHydrationWarning
       />
       <StatTile
-        icon={ThumbsUp}
+        icon={<ThumbsUp className="text-muted-foreground size-5" aria-hidden />}
         value={`${supplier.positiveScorePercent}%`}
         label="Positive Score"
       />
       <StatTile
-        icon={Layers}
+        icon={<Layers className="text-muted-foreground size-5" aria-hidden />}
         value={String(supplier.categoryMix.length)}
         label="Product Categories"
       />
       <StatTile
-        icon={Zap}
+        icon={<Zap className="text-muted-foreground size-5" aria-hidden />}
         value={supplier.avgResponseTimeLabel}
         label="Avg Response Speed"
       />
       <StatTile
-        icon={Calendar}
+        icon={<Calendar className="text-muted-foreground size-5" aria-hidden />}
         value={`${yearsActive}+ years`}
         label="Active on SouqFeed"
       />

@@ -83,25 +83,36 @@ export function MarketHero({
 
         <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
           <StatTile
-            icon={Users}
+            icon={
+              <Users className="text-muted-foreground size-5" aria-hidden />
+            }
             value={stats.activeSuppliersToday.toLocaleString()}
             label="Active Suppliers Today"
             trendPercent={stats.activeSuppliersTrendPercent}
           />
           <StatTile
-            icon={FileText}
+            icon={
+              <FileText className="text-muted-foreground size-5" aria-hidden />
+            }
             value={stats.offersPostedToday.toLocaleString()}
             label="Offers Posted Today"
             trendPercent={stats.offersPostedTrendPercent}
           />
           <StatTile
-            icon={TrendingUp}
+            icon={
+              <TrendingUp
+                className="text-muted-foreground size-5"
+                aria-hidden
+              />
+            }
             value={stats.priceUpdatesToday.toLocaleString()}
             label="Price Updates"
             trendPercent={stats.priceUpdatesTrendPercent}
           />
           <StatTile
-            icon={Package}
+            icon={
+              <Package className="text-muted-foreground size-5" aria-hidden />
+            }
             value={stats.newProductsToday.toLocaleString()}
             label="New Products"
             trendPercent={stats.newProductsTrendPercent}

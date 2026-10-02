@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Award, ClipboardList, Users } from "lucide-react";
 import { SidebarWidget } from "@/components/ui/sidebar-widget";
 import { SupplierLogoTile } from "@/components/ui/supplier-logo-tile";
 import { getTopBrandsByOfferCount } from "@/modules/offers/top-brands";
@@ -14,7 +15,8 @@ export function MarketSnapshot({
   suppliers: SupplierSummary[];
   wtbRequests: WtbRequestSnippet[];
 }) {
-  const topBrands = getTopBrandsByOfferCount(offers, 6);
+  const topBrands = getTopBrandsByOfferCount(offers, 5);
+  const totalOffers = offers.length;
   const topSuppliers = [...suppliers]
     .sort((a, b) => b.activeOfferCount - a.activeOfferCount)
     .slice(0, 4);
@@ -25,7 +27,7 @@ export function MarketSnapshot({
         Market Snapshot
       </h2>
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
-        <SidebarWidget title="Active Suppliers">
+        <SidebarWidget title="Active Suppliers" icon={Users}>
           {topSuppliers.map((supplier) => (
             <Link
               key={supplier.id}
@@ -46,7 +48,7 @@ export function MarketSnapshot({
           ))}
         </SidebarWidget>
 
-        <SidebarWidget title="Want To Buy">
+        <SidebarWidget title="Want To Buy" icon={ClipboardList}>
           {wtbRequests.slice(0, 4).map((request) => (
             <div key={request.id} className="text-sm">
               <div className="text-foreground">{request.title}</div>
@@ -57,19 +59,29 @@ export function MarketSnapshot({
           ))}
         </SidebarWidget>
 
-        <SidebarWidget title="Top Brands">
-          <div className="flex flex-wrap gap-1.5">
-            {topBrands.map((brand) => (
-              <span
-                key={brand.brandId}
-                className="border-border text-foreground rounded-full border px-2.5 py-1 text-xs font-medium"
-              >
-                {brand.brandName}
-                <span className="text-muted-foreground ml-1 tabular-nums">
-                  {brand.offerCount}
-                </span>
-              </span>
-            ))}
+        <SidebarWidget title="Top Brands" icon={Award}>
+          <div className="flex flex-col gap-2.5">
+            {topBrands.map((brand) => {
+              const sharePercent = Math.round(
+                (brand.offerCount / totalOffers) * 100,
+              );
+              return (
+                <div key={brand.brandId} className="flex items-center gap-3">
+                  <span className="text-foreground w-16 shrink-0 truncate text-sm">
+                    {brand.brandName}
+                  </span>
+                  <div className="bg-muted h-2 flex-1 rounded-full">
+                    <div
+                      className="bg-primary h-full rounded-full"
+                      style={{ width: `${sharePercent}%` }}
+                    />
+                  </div>
+                  <span className="text-muted-foreground w-9 shrink-0 text-right text-xs tabular-nums">
+                    {sharePercent}%
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </SidebarWidget>
       </div>
