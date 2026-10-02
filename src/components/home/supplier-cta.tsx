@@ -5,10 +5,10 @@ import { BroadcastRings } from "@/components/home/broadcast-rings";
 
 export function SupplierCta() {
   return (
-    <section className="mx-auto w-full max-w-[1440px] px-6 py-10">
-      <div className="relative flex flex-col items-start gap-5 overflow-hidden rounded-xl bg-gradient-to-br from-[#06281C] via-[#0F6B45] to-[#1F9D6B] p-8 lg:flex-row lg:items-center lg:justify-between">
-        <BroadcastRings className="top-1/2 right-[-100px] size-[320px] -translate-y-1/2" />
-        <div className="relative max-w-xl">
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#06281C] via-[#0F6B45] to-[#1F9D6B]">
+      <BroadcastRings className="top-1/2 right-[-100px] size-[320px] -translate-y-1/2" />
+      <div className="relative mx-auto flex w-full max-w-[1440px] flex-col items-start gap-5 px-6 py-10 lg:flex-row lg:items-center lg:justify-between">
+        <div className="max-w-xl">
           <h2 className="text-xl font-bold text-white">
             Already broadcasting stock on WhatsApp?
           </h2>
@@ -21,7 +21,7 @@ export function SupplierCta() {
         <Button
           size="lg"
           nativeButton={false}
-          className="relative bg-white text-[#0F6B45] hover:bg-white/90"
+          className="bg-white text-[#0F6B45] hover:bg-white/90"
           render={<Link href="/login" />}
         >
           <MessageCircle className="mr-1 size-4" aria-hidden />

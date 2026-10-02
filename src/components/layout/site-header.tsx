@@ -11,7 +11,7 @@ const NAV_ITEMS: { label: string; href: string | null }[] = [
   { label: "Home", href: "/" },
   { label: "Live Market", href: "/feed" },
   { label: "Suppliers", href: null },
-  { label: "Search", href: null },
+  { label: "Products", href: null },
   { label: "WTB", href: null },
   { label: "Insights", href: null },
 ];
@@ -70,10 +70,10 @@ export function SiteHeader() {
             className="text-muted-foreground hidden size-5 sm:block"
             aria-hidden
           />
-          <Globe
-            className="text-muted-foreground hidden size-5 sm:block"
-            aria-hidden
-          />
+          <div className="text-muted-foreground hidden items-center gap-1 text-xs font-medium sm:flex">
+            <Globe className="size-4" aria-hidden />
+            UAE
+          </div>
           <Button
             variant="outline"
             nativeButton={false}
