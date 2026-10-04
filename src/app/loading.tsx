@@ -1,17 +1,11 @@
-import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SouqFeedAgent } from "@/components/ui/souqfeed-agent";
 
 export default function Loading() {
   return (
     <div className="mx-auto w-full max-w-[1440px] px-4 py-6 md:px-6">
       <div className="flex justify-center py-6">
-        <Image
-          src="/logo-icon.svg"
-          alt=""
-          width={40}
-          height={44}
-          className="motion-safe:animate-bounce"
-        />
+        <SouqFeedAgent state="loading" size="md" />
       </div>
 
       <Skeleton className="h-7 w-3/4" />

@@ -8,6 +8,8 @@ import {
 import { db } from "@/lib/database/client";
 import { categories as categoryTable } from "@/modules/categories/schema";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const stats = getMockMarketStats();
   const offers = getMockOffers();

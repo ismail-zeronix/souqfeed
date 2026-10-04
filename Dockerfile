@@ -30,7 +30,7 @@ COPY . .
 # by Next.js's compiler — this must be a build ARG, not a container
 # `environment:` entry (that would only affect the server-side value,
 # not what's already baked into the client bundle inside this image).
-ARG NEXT_PUBLIC_APP_URL
+ARG NEXT_PUBLIC_APP_URL=http://localhost:3000
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 
 # Next.js's "Collecting page data" build step imports every page module

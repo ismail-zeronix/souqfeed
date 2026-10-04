@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState, type FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -16,6 +15,7 @@ import { getAuthErrorMessage } from "@/components/auth/auth-error";
 import { authClient } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SouqFeedAgent } from "@/components/ui/souqfeed-agent";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -78,14 +78,7 @@ export default function LoginPage() {
       <section className="w-full max-w-md">
         <div className="mb-6 flex flex-col items-center text-center">
           <div className="bg-primary/10 mb-3 flex size-16 items-center justify-center rounded-2xl">
-            <Image
-              src="/brand/mascot-animated.svg"
-              alt=""
-              width={48}
-              height={48}
-              className="size-12"
-              priority
-            />
+            <SouqFeedAgent state="waving" size="sm" priority />
           </div>
           <p className="text-primary text-sm font-semibold">SouqFeed</p>
           <h1 className="mt-2 text-2xl font-semibold tracking-tight">

@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { SouqFeedAgent } from "@/components/ui/souqfeed-agent";
 
 export function SouqFeedMascot({
   size = 28,
@@ -9,13 +8,10 @@ export function SouqFeedMascot({
   className?: string;
 }) {
   return (
-    <Image
-      src="/brand/mascot-animated.svg"
-      alt=""
-      width={size}
-      height={Math.round(size * 1.08)}
-      className={cn("shrink-0", className)}
-      aria-hidden
+    <SouqFeedAgent
+      state="idle"
+      size={size <= 32 ? "sm" : size <= 64 ? "md" : "lg"}
+      className={className}
     />
   );
 }

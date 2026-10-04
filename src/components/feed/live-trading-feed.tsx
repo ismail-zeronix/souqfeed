@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { SouqFeedMascot } from "@/components/ui/souqfeed-mascot";
+import { SouqFeedAgent } from "@/components/ui/souqfeed-agent";
 import { TickerCard } from "@/components/feed/ticker-card";
 import { TickerSkeleton } from "@/components/feed/ticker-skeleton";
 import { getLiveFeedSummary } from "@/components/feed/live-feed-utils";
@@ -129,9 +129,10 @@ export function LiveTradingFeed({
         if (!isPausedRef.current) {
           const index = arrivalCounterRef.current % offers.length;
           const base = offers[index];
-          const badge = SIMULATED_BADGES[
-            arrivalCounterRef.current % SIMULATED_BADGES.length
-          ];
+          const badge =
+            SIMULATED_BADGES[
+              arrivalCounterRef.current % SIMULATED_BADGES.length
+            ];
           arrivalCounterRef.current += 1;
           const arrival: OfferListItem = {
             ...base,
@@ -196,7 +197,8 @@ export function LiveTradingFeed({
   }
 
   function goToPage(nextPage: number) {
-    if (nextPage < 1 || nextPage > pageCount || nextPage === currentPage) return;
+    if (nextPage < 1 || nextPage > pageCount || nextPage === currentPage)
+      return;
     const params = new URLSearchParams(paginationQuery);
     if (nextPage === 1) {
       params.delete("page");
@@ -213,69 +215,185 @@ export function LiveTradingFeed({
         className="relative flex min-w-0 flex-1 flex-col gap-3"
         aria-label={`Live feed showing ${liveSummary.offerCount} loaded offers from ${liveSummary.supplierCount} suppliers`}
       >
-        <div className="bg-[#f7f8fc]/95 sticky top-14 z-20 -mx-1 flex flex-col gap-2 px-1 py-1.5 backdrop-blur-md">
+        <div className="sticky top-14 z-20 -mx-1 flex flex-col gap-2 bg-[#f7f8fc]/95 px-1 py-1.5 backdrop-blur-md">
           <div className="relative flex items-center gap-2">
-            <div className="flex min-w-0 items-center gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {FEED_TABS.map((tab) => (
-              <button
-                key={tab.label}
-                type="button"
-                onClick={() => handleTabChange(tab.label)}
-                className={
-                  activeTab === tab.label
-                    ? "bg-primary text-primary-foreground rounded-full px-4 py-2 text-xs font-semibold whitespace-nowrap shadow-sm"
-                    : "bg-card text-slate-600 hover:text-primary rounded-full border border-slate-200 px-4 py-2 text-xs font-medium whitespace-nowrap transition-colors"
-                }
-              >
-                {tab.label} <span className="opacity-70">({tab.count.toLocaleString()})</span>
-              </button>
-            ))}
+            <div className="flex min-w-0 [scrollbar-width:none] items-center gap-2 overflow-x-auto pb-0.5 [&::-webkit-scrollbar]:hidden">
+              {FEED_TABS.map((tab) => (
+                <button
+                  key={tab.label}
+                  type="button"
+                  onClick={() => handleTabChange(tab.label)}
+                  className={
+                    activeTab === tab.label
+                      ? "bg-primary text-primary-foreground rounded-full px-4 py-2 text-xs font-semibold whitespace-nowrap shadow-sm"
+                      : "bg-card hover:text-primary rounded-full border border-slate-200 px-4 py-2 text-xs font-medium whitespace-nowrap text-slate-600 transition-colors"
+                  }
+                >
+                  {tab.label}{" "}
+                  <span className="opacity-70">
+                    ({tab.count.toLocaleString()})
+                  </span>
+                </button>
+              ))}
             </div>
-          <Button
-            variant={isFilterOpen || activeFilterCount > 0 ? "default" : "outline"}
-            size="sm"
-            className="shrink-0 rounded-full"
-            onClick={() => setIsFilterOpen((open) => !open)}
-            aria-expanded={isFilterOpen}
-          >
-            <SlidersHorizontal className="size-3.5" aria-hidden />
-            Filters
-            {activeFilterCount > 0 && <span className="bg-white/20 rounded-full px-1.5 text-[10px]">{activeFilterCount}</span>}
-            <ChevronDown className={`size-3.5 transition-transform ${isFilterOpen ? "rotate-180" : ""}`} aria-hidden />
-          </Button>
+            <Button
+              variant={
+                isFilterOpen || activeFilterCount > 0 ? "default" : "outline"
+              }
+              size="sm"
+              className="shrink-0 rounded-full"
+              onClick={() => setIsFilterOpen((open) => !open)}
+              aria-expanded={isFilterOpen}
+            >
+              <SlidersHorizontal className="size-3.5" aria-hidden />
+              Filters
+              {activeFilterCount > 0 && (
+                <span className="rounded-full bg-white/20 px-1.5 text-[10px]">
+                  {activeFilterCount}
+                </span>
+              )}
+              <ChevronDown
+                className={`size-3.5 transition-transform ${isFilterOpen ? "rotate-180" : ""}`}
+                aria-hidden
+              />
+            </Button>
 
             {isFilterOpen && (
-            <div className="border-border bg-card absolute top-11 right-0 z-30 w-[min(390px,calc(100vw-2rem))] rounded-2xl border p-4 shadow-[0_14px_40px_rgba(40,16,95,0.16)]">
-              <div className="mb-3 flex items-center justify-between">
-                <div>
-                  <h2 className="text-sm font-bold text-slate-950">Filter offers</h2>
-                  <p className="text-muted-foreground mt-0.5 text-[10px]">Refine the live market without leaving the feed.</p>
+              <div className="border-border bg-card absolute top-11 right-0 z-30 w-[min(390px,calc(100vw-2rem))] rounded-2xl border p-4 shadow-[0_14px_40px_rgba(40,16,95,0.16)]">
+                <div className="mb-3 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-sm font-bold text-slate-950">
+                      Filter offers
+                    </h2>
+                    <p className="text-muted-foreground mt-0.5 text-[10px]">
+                      Refine the live market without leaving the feed.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsFilterOpen(false)}
+                    className="text-muted-foreground hover:text-foreground rounded-full p-1"
+                    aria-label="Close filters"
+                  >
+                    <X className="size-4" />
+                  </button>
                 </div>
-                <button type="button" onClick={() => setIsFilterOpen(false)} className="text-muted-foreground hover:text-foreground rounded-full p-1" aria-label="Close filters"><X className="size-4" /></button>
+                <div className="grid max-h-[min(62vh,390px)] gap-4 overflow-y-auto pr-1 sm:grid-cols-2">
+                  <fieldset className="flex flex-col gap-2">
+                    <legend className="mb-1 text-[11px] font-bold text-slate-900">
+                      Category
+                    </legend>
+                    {categories.map((category) => (
+                      <label
+                        key={category.id}
+                        className="flex items-center justify-between gap-2 text-xs text-slate-700"
+                      >
+                        <span className="flex items-center gap-2">
+                          <Checkbox
+                            checked={criteria.categoryIds.includes(category.id)}
+                            onCheckedChange={() =>
+                              onCriteriaChange({
+                                ...criteria,
+                                categoryIds: toggleValue(
+                                  criteria.categoryIds,
+                                  category.id,
+                                ),
+                              })
+                            }
+                          />
+                          {category.name}
+                        </span>
+                        <span className="text-muted-foreground text-[10px]">
+                          {category.offerCount}
+                        </span>
+                      </label>
+                    ))}
+                  </fieldset>
+                  <fieldset className="flex flex-col gap-2">
+                    <legend className="mb-1 text-[11px] font-bold text-slate-900">
+                      Brand
+                    </legend>
+                    {brands.map((brand) => (
+                      <label
+                        key={brand.id}
+                        className="flex items-center gap-2 text-xs text-slate-700"
+                      >
+                        <Checkbox
+                          checked={criteria.brandIds.includes(brand.id)}
+                          onCheckedChange={() =>
+                            onCriteriaChange({
+                              ...criteria,
+                              brandIds: toggleValue(
+                                criteria.brandIds,
+                                brand.id,
+                              ),
+                            })
+                          }
+                        />
+                        {brand.name}
+                      </label>
+                    ))}
+                  </fieldset>
+                  <fieldset className="flex flex-col gap-2">
+                    <legend className="mb-1 text-[11px] font-bold text-slate-900">
+                      Location (UAE)
+                    </legend>
+                    {locationNames.map((location) => (
+                      <label
+                        key={location}
+                        className="flex items-center gap-2 text-xs text-slate-700"
+                      >
+                        <Checkbox
+                          checked={criteria.locationNames.includes(location)}
+                          onCheckedChange={() =>
+                            onCriteriaChange({
+                              ...criteria,
+                              locationNames: toggleValue(
+                                criteria.locationNames,
+                                location,
+                              ),
+                            })
+                          }
+                        />
+                        {location}
+                      </label>
+                    ))}
+                  </fieldset>
+                  <fieldset className="flex flex-col gap-2">
+                    <legend className="mb-1 text-[11px] font-bold text-slate-900">
+                      Availability
+                    </legend>
+                    <label className="flex items-center gap-2 text-xs text-slate-700">
+                      <Checkbox
+                        checked={criteria.inStockOnly}
+                        onCheckedChange={(checked) =>
+                          onCriteriaChange({
+                            ...criteria,
+                            inStockOnly: checked === true,
+                          })
+                        }
+                      />
+                      In stock only
+                    </label>
+                  </fieldset>
+                </div>
+                <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3">
+                  <button
+                    type="button"
+                    onClick={clearFilters}
+                    className="text-primary text-xs font-medium hover:underline"
+                  >
+                    Clear all
+                  </button>
+                  <Button
+                    size="sm"
+                    className="rounded-full px-4"
+                    onClick={() => setIsFilterOpen(false)}
+                  >
+                    Show offers
+                  </Button>
+                </div>
               </div>
-              <div className="grid max-h-[min(62vh,390px)] gap-4 overflow-y-auto pr-1 sm:grid-cols-2">
-                <fieldset className="flex flex-col gap-2">
-                  <legend className="mb-1 text-[11px] font-bold text-slate-900">Category</legend>
-                  {categories.map((category) => <label key={category.id} className="flex items-center justify-between gap-2 text-xs text-slate-700"><span className="flex items-center gap-2"><Checkbox checked={criteria.categoryIds.includes(category.id)} onCheckedChange={() => onCriteriaChange({ ...criteria, categoryIds: toggleValue(criteria.categoryIds, category.id) })} />{category.name}</span><span className="text-muted-foreground text-[10px]">{category.offerCount}</span></label>)}
-                </fieldset>
-                <fieldset className="flex flex-col gap-2">
-                  <legend className="mb-1 text-[11px] font-bold text-slate-900">Brand</legend>
-                  {brands.map((brand) => <label key={brand.id} className="flex items-center gap-2 text-xs text-slate-700"><Checkbox checked={criteria.brandIds.includes(brand.id)} onCheckedChange={() => onCriteriaChange({ ...criteria, brandIds: toggleValue(criteria.brandIds, brand.id) })} />{brand.name}</label>)}
-                </fieldset>
-                <fieldset className="flex flex-col gap-2">
-                  <legend className="mb-1 text-[11px] font-bold text-slate-900">Location (UAE)</legend>
-                  {locationNames.map((location) => <label key={location} className="flex items-center gap-2 text-xs text-slate-700"><Checkbox checked={criteria.locationNames.includes(location)} onCheckedChange={() => onCriteriaChange({ ...criteria, locationNames: toggleValue(criteria.locationNames, location) })} />{location}</label>)}
-                </fieldset>
-                <fieldset className="flex flex-col gap-2">
-                  <legend className="mb-1 text-[11px] font-bold text-slate-900">Availability</legend>
-                  <label className="flex items-center gap-2 text-xs text-slate-700"><Checkbox checked={criteria.inStockOnly} onCheckedChange={(checked) => onCriteriaChange({ ...criteria, inStockOnly: checked === true })} />In stock only</label>
-                </fieldset>
-              </div>
-              <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3">
-                <button type="button" onClick={clearFilters} className="text-primary text-xs font-medium hover:underline">Clear all</button>
-                <Button size="sm" className="rounded-full px-4" onClick={() => setIsFilterOpen(false)}>Show offers</Button>
-              </div>
-            </div>
             )}
           </div>
 
@@ -290,23 +408,34 @@ export function LiveTradingFeed({
                 onClick={() => setIsManuallyPaused((prev) => !prev)}
               >
                 {isManuallyPaused ? (
-                  <><Play className="size-3" aria-hidden /> Resume</>
+                  <>
+                    <Play className="size-3" aria-hidden /> Resume
+                  </>
                 ) : (
-                  <><Pause className="size-3" aria-hidden /> Pause</>
+                  <>
+                    <Pause className="size-3" aria-hidden /> Pause
+                  </>
                 )}
               </Button>
             </div>
             <div className="flex items-center gap-2">
               <div className="border-border bg-card flex h-8 items-center gap-1 rounded-lg border px-1">
-                <ArrowDownUp className="text-muted-foreground ml-1 size-3.5" aria-hidden />
+                <ArrowDownUp
+                  className="text-muted-foreground ml-1 size-3.5"
+                  aria-hidden
+                />
                 <select
                   aria-label="Sort offers"
                   value={sort}
-                  onChange={(event) => setSort(event.target.value as SortOption)}
+                  onChange={(event) =>
+                    setSort(event.target.value as SortOption)
+                  }
                   className="bg-transparent px-1 text-xs font-medium text-slate-700 outline-none"
                 >
                   {SORT_OPTIONS.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -325,7 +454,7 @@ export function LiveTradingFeed({
               role="status"
               aria-live="polite"
             >
-              <SouqFeedMascot size={28} className="-my-1" />
+              <SouqFeedAgent state="searching" size="sm" className="-my-1" />
               Updating the live feed…
             </motion.div>
           )}
@@ -333,11 +462,15 @@ export function LiveTradingFeed({
 
         {isLoading ? (
           <>
-            <p className="text-muted-foreground text-xs">Connecting to live market…</p>
+            <div className="text-muted-foreground flex items-center gap-2 text-xs">
+              <SouqFeedAgent state="loading" size="sm" />
+              Connecting to live market…
+            </div>
             <TickerSkeleton rows={6} />
           </>
         ) : displayedOffers.length === 0 ? (
-          <div className="border-border text-muted-foreground rounded-xl border border-dashed bg-white p-12 text-center text-sm">
+          <div className="border-border text-muted-foreground flex flex-col items-center gap-3 rounded-xl border border-dashed bg-white p-8 text-center text-sm sm:p-12">
+            <SouqFeedAgent state="thinking" size="md" />
             No offers match the selected filters.
           </div>
         ) : (
@@ -359,12 +492,20 @@ export function LiveTradingFeed({
                       y: 0,
                       scale: 1,
                       boxShadow: flash
-                        ? [`0 0 0 2px rgba(${flash}, 0.45)`, `0 0 0 0px rgba(${flash}, 0)`]
+                        ? [
+                            `0 0 0 2px rgba(${flash}, 0.45)`,
+                            `0 0 0 0px rgba(${flash}, 0)`,
+                          ]
                         : "0 0 0 0px rgba(0,0,0,0)",
                     }}
                     exit={{ opacity: 0, scale: 0.96 }}
                     transition={{
-                      layout: { type: "spring", stiffness: 500, damping: 36, mass: 0.6 },
+                      layout: {
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 36,
+                        mass: 0.6,
+                      },
                       opacity: { duration: 0.2 },
                       boxShadow: { duration: 1.3, ease: "easeOut" },
                       delay: index * 0.03,
@@ -381,25 +522,45 @@ export function LiveTradingFeed({
 
         <div className="border-border bg-card flex flex-wrap items-center justify-between gap-3 rounded-xl border px-3 py-2.5 shadow-[0_2px_10px_rgba(34,22,80,0.03)]">
           <span className="text-muted-foreground text-xs">
-            Showing {totalOfferCount === 0 ? 0 : (currentPage - 1) * pageSize + 1}–{Math.min(currentPage * pageSize, totalOfferCount)} of {totalOfferCount} offers
+            Showing{" "}
+            {totalOfferCount === 0 ? 0 : (currentPage - 1) * pageSize + 1}–
+            {Math.min(currentPage * pageSize, totalOfferCount)} of{" "}
+            {totalOfferCount} offers
           </span>
-          <nav className="flex items-center gap-1" aria-label="Live feed pagination">
-            <Button variant="ghost" size="icon-sm" disabled={currentPage === 1} onClick={() => goToPage(currentPage - 1)} aria-label="Previous page">
+          <nav
+            className="flex items-center gap-1"
+            aria-label="Live feed pagination"
+          >
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              disabled={currentPage === 1}
+              onClick={() => goToPage(currentPage - 1)}
+              aria-label="Previous page"
+            >
               <ChevronLeft className="size-4" aria-hidden />
             </Button>
-            {Array.from({ length: pageCount }, (_, index) => index + 1).map((pageNumber) => (
-              <Button
-                key={pageNumber}
-                variant={pageNumber === currentPage ? "default" : "ghost"}
-                size="icon-sm"
-                onClick={() => goToPage(pageNumber)}
-                aria-current={pageNumber === currentPage ? "page" : undefined}
-                aria-label={`Page ${pageNumber}`}
-              >
-                {pageNumber}
-              </Button>
-            ))}
-            <Button variant="ghost" size="icon-sm" disabled={currentPage === pageCount} onClick={() => goToPage(currentPage + 1)} aria-label="Next page">
+            {Array.from({ length: pageCount }, (_, index) => index + 1).map(
+              (pageNumber) => (
+                <Button
+                  key={pageNumber}
+                  variant={pageNumber === currentPage ? "default" : "ghost"}
+                  size="icon-sm"
+                  onClick={() => goToPage(pageNumber)}
+                  aria-current={pageNumber === currentPage ? "page" : undefined}
+                  aria-label={`Page ${pageNumber}`}
+                >
+                  {pageNumber}
+                </Button>
+              ),
+            )}
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              disabled={currentPage === pageCount}
+              onClick={() => goToPage(currentPage + 1)}
+              aria-label="Next page"
+            >
               <ChevronRight className="size-4" aria-hidden />
             </Button>
           </nav>

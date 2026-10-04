@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import {
   ArrowLeft,
@@ -14,6 +13,7 @@ import {
 import { MobileOfferCard } from "@/components/home/mobile/mobile-offer-card";
 import { SupplierLogoTile } from "@/components/ui/supplier-logo-tile";
 import { Button } from "@/components/ui/button";
+import { SouqFeedAgent } from "@/components/ui/souqfeed-agent";
 import type { OfferListItem } from "@/modules/offers/types";
 import type { SupplierProfile } from "@/modules/suppliers/types";
 
@@ -128,13 +128,7 @@ export function MobileSupplierProfile({
       <div className="relative min-h-80 px-4 py-4">
         {isLoading && (
           <div className="bg-background/95 absolute inset-0 z-10 flex min-h-72 flex-col items-center justify-center gap-3">
-            <Image
-              src="/brand/mascot-animated.svg"
-              alt=""
-              width={56}
-              height={60}
-              className="size-14"
-            />
+            <SouqFeedAgent state="loading" size="md" />
             <span className="text-muted-foreground text-xs">
               Loading {activeTab.toLowerCase()}...
             </span>
