@@ -43,7 +43,7 @@ export function HomeHero({
     <section className="relative overflow-hidden">
       <div className="absolute inset-0">
         <Image
-          src="/images/hero-dubai-creek.jpg"
+          src="/images/dubai-downtown.webp"
           alt=""
           fill
           priority
@@ -175,15 +175,6 @@ export function HomeHero({
           />
         </div>
       </div>
-
-      <a
-        href="https://commons.wikimedia.org/wiki/File:Dubai_Creek.jpg"
-        target="_blank"
-        rel="noreferrer"
-        className="absolute right-2 bottom-1 text-[10px] text-white/40 hover:text-white/70"
-      >
-        Photo: Senemm, CC BY-SA 3.0
-      </a>
     </section>
   );
 }
