@@ -81,18 +81,18 @@ target can run `pnpm db:seed` ad hoc: `docker compose --profile tools run --rm m
 
 ## Environment variables (grows as modules are added)
 
-| Variable              | Purpose                                                                                                                                             |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DATABASE_URL`        | Postgres connection string                                                                                                                          |
-| `REDIS_URL`           | Redis connection string (shared by BullMQ and pub/sub)                                                                                              |
-| `BETTER_AUTH_SECRET`  | Session signing secret                                                                                                                              |
-| `BETTER_AUTH_URL`     | Public app URL, for auth callbacks                                                                                                                  |
+| Variable              | Purpose                                                                                                                                                          |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`        | Postgres connection string                                                                                                                                       |
+| `REDIS_URL`           | Redis connection string (shared by BullMQ and pub/sub)                                                                                                           |
+| `BETTER_AUTH_SECRET`  | Session signing secret                                                                                                                                           |
+| `BETTER_AUTH_URL`     | Public app URL, for auth callbacks                                                                                                                               |
 | `NEXT_PUBLIC_APP_URL` | Public app URL, for client-side links (e.g. WhatsApp deep links) — inlined into the client bundle at build time, so it must also be passed as a Docker build ARG |
-| `ADMIN_EMAIL`         | Email for the seeded admin user (defaults to `admin@souqfeed.local`)                                                                                |
-| `ADMIN_PASSWORD`      | Password for the seeded admin user — **required, no default**. Must not be the `.env.example` placeholder; use a strong, unique value in production |
-| `POSTGRES_USER`       | `compose.yaml`'s `postgres` service credential — must match the user in `DATABASE_URL`                                                              |
-| `POSTGRES_PASSWORD`   | `compose.yaml`'s `postgres` service credential — must match the password in `DATABASE_URL`                                                          |
-| `POSTGRES_DB`         | `compose.yaml`'s `postgres` service credential — must match the database name in `DATABASE_URL`                                                     |
+| `ADMIN_EMAIL`         | Email for the seeded admin user (defaults to `admin@souqfeed.local`)                                                                                             |
+| `ADMIN_PASSWORD`      | Password for the seeded admin user — **required, no default**. Must not be the `.env.example` placeholder; use a strong, unique value in production              |
+| `POSTGRES_USER`       | `compose.yaml`'s `postgres` service credential — must match the user in `DATABASE_URL`                                                                           |
+| `POSTGRES_PASSWORD`   | `compose.yaml`'s `postgres` service credential — must match the password in `DATABASE_URL`                                                                       |
+| `POSTGRES_DB`         | `compose.yaml`'s `postgres` service credential — must match the database name in `DATABASE_URL`                                                                  |
 
 All environment variables are validated at startup with Zod
 (`src/lib/validation`) — the app should fail fast on a missing/malformed

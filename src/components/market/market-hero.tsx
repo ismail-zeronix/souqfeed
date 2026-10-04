@@ -64,7 +64,7 @@ export function MarketHero({
               onCategoryChange(value === "all" ? null : String(value))
             }
           >
-            <SelectTrigger className="h-11 sm:w-48">
+            <SelectTrigger className="data-[size=default]:h-11 sm:w-48">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>

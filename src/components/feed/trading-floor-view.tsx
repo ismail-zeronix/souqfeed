@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FiltersSidebar } from "@/components/market/filters-sidebar";
 import { MarketPulseSidebar } from "@/components/market/market-pulse-sidebar";
 import { LiveTradingFeed } from "@/components/feed/live-trading-feed";
+import { LOCATION_NAMES } from "@/modules/offers/constants";
 import { EMPTY_OFFER_FILTERS } from "@/modules/offers/filter-offers";
 import type {
   CategoryPriceMovement,
@@ -16,8 +17,6 @@ import type { Brand } from "@/modules/brands/types";
 import type { Category } from "@/modules/categories/types";
 import type { SupplierSummary } from "@/modules/suppliers/types";
 
-const LOCATION_NAMES = ["Bur Dubai", "Deira", "Al Fahidi", "Al Rigga"];
-
 export interface TradingFloorViewProps {
   brands: Brand[];
   categories: Category[];
@@ -26,6 +25,7 @@ export interface TradingFloorViewProps {
   priceMovements: CategoryPriceMovement[];
   trendingSearches: TrendingSearchTerm[];
   wtbRequests: WtbRequestSnippet[];
+  initialCriteria?: OfferFilterCriteria;
 }
 
 export function TradingFloorView({
@@ -36,9 +36,11 @@ export function TradingFloorView({
   priceMovements,
   trendingSearches,
   wtbRequests,
+  initialCriteria,
 }: TradingFloorViewProps) {
-  const [criteria, setCriteria] =
-    useState<OfferFilterCriteria>(EMPTY_OFFER_FILTERS);
+  const [criteria, setCriteria] = useState<OfferFilterCriteria>(
+    initialCriteria ?? EMPTY_OFFER_FILTERS,
+  );
 
   return (
     <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-6 py-6 lg:flex-row">

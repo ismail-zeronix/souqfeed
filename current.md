@@ -105,6 +105,37 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   `postgres`/`redis` unreachable from `proxy-net`). See `docs/deployment.md`
   for the exact migration command and env vars.
 
+- **Home page redesign + SEO baseline complete** — done ahead of sequence
+  at explicit request (neither is in `project_plan.md`'s phase roadmap;
+  same out-of-sequence precedent as the earlier production-Docker-deployment
+  work above); does not block Phase 2 next. Header de-stickied site-wide
+  (was `sticky`/transparent-over-hero via `IntersectionObserver`, now a
+  normal static, always-solid header); fixed a real `SelectTrigger`
+  height bug in both `home-hero.tsx` and `market-hero.tsx` (a bare `h-11`
+  override was losing to the base component's `data-[size=default]:h-8`
+  on specificity); `CategoryShowcase` moved directly below the hero,
+  redesigned as a horizontally-scrollable, card-chrome-free row using
+  `@tabler/icons-react` for category icons (added as a new dependency,
+  scoped to that one file — `lucide-react` is untouched everywhere else);
+  two new sections (`HowItWorks`, `SampleFeedback` — the latter explicitly
+  labeled "Illustrative — not real accounts," since SouqFeed has no real
+  suppliers/buyers onboarded yet); a `LocationCategoryLinks` band above the
+  footer with separate (not paired) category and area links, the area
+  labels aliased to real mock location strings after confirming via web
+  search that "Al Raffa Street" and "Al Ain Centre/Computer Plaza" both
+  sit inside the existing `"Al Fahidi"`/`"Bur Dubai"` mock data, not a
+  separate market. `/feed` now reads `searchParams` (`category`/`location`/
+  `q`) into `TradingFloorView`'s initial filter state, so these links (and
+  the pre-existing category tiles) actually filter instead of being
+  decorative. SEO baseline added: `public/llms.txt`, `src/app/robots.ts`,
+  `src/app/sitemap.ts` (deliberately excludes `/suppliers/[slug]` — mock
+  company data), OpenGraph/Twitter/`metadataBase` metadata and
+  Organization+WebSite JSON-LD in `layout.tsx` (no `LocalBusiness` schema
+  or logo — no real address/asset to back them), `noindex` on
+  `/login`/`/dashboard`/`/admin`. Full keyword/competitive research, a
+  current-state audit, and a future-pages roadmap written up in
+  `docs/seo.md`.
+
 ## In Progress
 
 - Nothing currently in flight — Phase 0, 0.5, and 1 are all merged to
@@ -197,3 +228,6 @@ categories}/`) to real `queries.ts` against the now-real database, per the
 - `src/lib/database/seed.ts` — idempotent, self-healing admin-user seed script
 - `src/app/login/page.tsx`, `src/app/dashboard/page.tsx`, `src/app/admin/page.tsx` — auth flow + role-gated placeholder pages
 - `src/app/page.tsx`, `src/app/suppliers/[slug]/page.tsx` — Phase 0.5's Live Market homepage and Supplier profile page (mock data)
+- `docs/seo.md` — SEO strategy: keyword/competitive research, audit, future-pages roadmap
+- `public/llms.txt`, `src/app/robots.ts`, `src/app/sitemap.ts`, `src/components/seo/json-ld.tsx` — SEO baseline
+- `src/components/home/{how-it-works,sample-feedback,location-category-links}.tsx` — home page sections added alongside the SEO baseline

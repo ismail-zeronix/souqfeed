@@ -40,7 +40,7 @@ export function HomeHero({
   }
 
   return (
-    <section id="home-hero" className="relative -mt-16 overflow-hidden">
+    <section className="relative overflow-hidden">
       <div className="absolute inset-0">
         <Image
           src="/images/hero-dubai-creek.jpg"
@@ -49,11 +49,11 @@ export function HomeHero({
           priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-[#06281C]/80" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#06281C] via-[#06281C]/60 to-[#06281C]/30" />
+        <div className="bg-brand-dark/80 absolute inset-0" />
+        <div className="from-brand-dark via-brand-dark/60 to-brand-dark/30 absolute inset-0 bg-gradient-to-t" />
       </div>
 
-      <div className="relative mx-auto max-w-[1440px] px-6 pt-32 pb-12">
+      <div className="relative mx-auto max-w-[1440px] px-6 pt-16 pb-12">
         <p className="text-xs font-semibold tracking-widest text-white/70 uppercase">
           Live supplier offers from <span className="text-white">Dubai</span>
         </p>
@@ -91,7 +91,7 @@ export function HomeHero({
               setCategoryId(value === "all" ? null : String(value))
             }
           >
-            <SelectTrigger className="h-11 border-white/20 bg-white/10 text-white sm:w-48">
+            <SelectTrigger className="border-white/20 bg-white/10 text-white data-[size=default]:h-11 sm:w-48">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
@@ -112,7 +112,7 @@ export function HomeHero({
           <Button
             nativeButton={false}
             render={<Link href="/feed" />}
-            className="bg-white text-[#0F6B45] hover:bg-white/90"
+            className="text-primary bg-white hover:bg-white/90"
           >
             View Live Market
           </Button>

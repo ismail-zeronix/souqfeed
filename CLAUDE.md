@@ -54,19 +54,20 @@ for the exact command.
 
 ## Where to look
 
-| Need                                       | File                          |
-| ------------------------------------------ | ----------------------------- |
-| Roadmap, phases, locked stack decisions    | `project_plan.md`             |
-| What's done / in progress / next           | `current.md`                  |
-| System architecture, process topology      | `docs/architecture.md`        |
-| Full schema, tables, indexes               | `docs/data-model.md`          |
-| Broadcast parsing pipeline, matching rules | `docs/broadcast-parsing.md`   |
-| Search ranking, filters                    | `docs/search.md`              |
-| Brand identity, voice                      | `docs/branding.md`            |
-| Design tokens, visual language             | `docs/theme.md`               |
-| Docker/Caddy/VPS setup                     | `docs/deployment.md`          |
-| Why a decision was made                    | `docs/superpowers/specs/*.md` |
-| Phase-by-phase implementation checklists   | `docs/superpowers/plans/*.md` |
+| Need                                               | File                          |
+| -------------------------------------------------- | ----------------------------- |
+| Roadmap, phases, locked stack decisions            | `project_plan.md`             |
+| What's done / in progress / next                   | `current.md`                  |
+| System architecture, process topology              | `docs/architecture.md`        |
+| Full schema, tables, indexes                       | `docs/data-model.md`          |
+| Broadcast parsing pipeline, matching rules         | `docs/broadcast-parsing.md`   |
+| Search ranking, filters                            | `docs/search.md`              |
+| Brand identity, voice                              | `docs/branding.md`            |
+| Design tokens, visual language                     | `docs/theme.md`               |
+| SEO strategy, keyword research, technical baseline | `docs/seo.md`                 |
+| Docker/Caddy/VPS setup                             | `docs/deployment.md`          |
+| Why a decision was made                            | `docs/superpowers/specs/*.md` |
+| Phase-by-phase implementation checklists           | `docs/superpowers/plans/*.md` |
 
 No project-specific Claude Code Skills exist under `.claude/skills/` — module
 context lives in the docs above instead (see the foundation spec for why).

@@ -1,7 +1,7 @@
 import type { CategoryMixSlice } from "@/modules/suppliers/types";
 
 const COLORS = [
-  "#0F6B45",
+  "#6C42F5",
   "#2A5C8A",
   "#16A34A",
   "#6B7280",

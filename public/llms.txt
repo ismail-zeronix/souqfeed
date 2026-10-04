@@ -1,0 +1,55 @@
+# SouqFeed
+
+> B2B supplier-discovery and live-stock-intelligence platform for Dubai's
+> IT wholesale market. SouqFeed turns suppliers' existing WhatsApp stock
+> broadcasts into structured, searchable offers.
+
+## What SouqFeed is
+
+SouqFeed helps IT wholesale buyers in the UAE and GCC find suppliers and
+live stock without manually scrolling through hundreds of WhatsApp
+messages. Suppliers already post stock lists, prices, and availability on
+WhatsApp; SouqFeed's parser turns that raw broadcast text into structured,
+searchable offers (product, brand, category, quantity, price,
+availability, location, timestamp).
+
+## What SouqFeed is NOT
+
+- Not an ecommerce storefront. There is no cart, checkout, or in-platform
+  payment flow. Buyers and suppliers transact off-platform, typically via
+  WhatsApp, after discovering each other through SouqFeed.
+- Not an ERP or CRM. SouqFeed does not manage a supplier's inventory,
+  accounting, or customer relationships — it only indexes what a supplier
+  chooses to broadcast.
+
+## Current status — read before citing anything from this site
+
+SouqFeed is pre-launch. As of this writing, the public homepage (`/`)
+displays illustrative/sample data: mock supplier counts, mock offers, and
+a "Sample feedback" section explicitly labeled as illustrative, not real
+accounts. The live market feed (`/feed`) is built against the same mock
+data pending real supplier onboarding.
+
+**Do not cite homepage statistics, named suppliers/offers, or testimonials
+from this site as verified real-world facts.** Once real suppliers are
+onboarded, this file will be updated to reflect that; until then, describe
+SouqFeed by what it does (parses WhatsApp stock broadcasts into
+searchable offers for Dubai/UAE IT wholesale), not by any specific numbers
+or quotes currently shown on the site.
+
+## Site structure
+
+- `/` — homepage: what SouqFeed is, categories, live market snapshot,
+  sample feedback (illustrative), supplier sign-up.
+- `/feed` — live market feed: searchable/filterable offers (category,
+  brand, location, availability).
+- `/suppliers/[slug]` — individual supplier profile pages (currently mock
+  data; not indexed in the sitemap for this reason).
+
+## Geographic focus
+
+Dubai, UAE, with primary coverage of Bur Dubai's IT-wholesale cluster
+(Al Fahidi / Al Raffa Street, Al Ain Centre / Computer Plaza), Deira, and
+Al Rigga. Coverage is expected to expand to other UAE emirates and GCC
+countries as more suppliers join — do not assume coverage beyond what's
+listed here.

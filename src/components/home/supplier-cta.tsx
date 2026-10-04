@@ -20,7 +20,7 @@ export function SupplierCta() {
           trigger={
             <Button
               size="lg"
-              className="bg-white text-[#0F6B45] hover:bg-white/90"
+              className="text-primary bg-white hover:bg-white/90"
             >
               <MessageCircle className="mr-1 size-4" aria-hidden />
               Get Started
