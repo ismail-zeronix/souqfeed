@@ -57,20 +57,28 @@ See `docs/broadcast-parsing.md` for the parser/matcher internals and
 **Local development:**
 
 ```
-docker compose up -d      # postgres, redis
+docker compose -f docker-compose.yml up -d   # postgres, redis
 pnpm dev                  # web (Next.js)
 pnpm worker               # worker (BullMQ) -- Phase 1+, not yet implemented
 ```
 
+`-f docker-compose.yml` is required because `compose.yaml` (below) also
+exists in the repo root, and bare `docker compose` commands prefer
+`compose.yaml` by default when both are present.
+
 **Production (VPS):**
 
 ```
-Cloudflare (optional)
-     ↓
-Caddy (TLS termination, reverse proxy)
-     ↓
-Docker Compose: web container | worker container | postgres | redis
+Caddy (external, TLS termination + reverse proxy)
+     ↓  proxy-net (external Docker network)
+souqfeed-app:3000 (`app` service, compose.yaml)
+     ↓  souqfeed-net (private Docker network)
+postgres | redis
 ```
+
+See `docs/deployment.md` for the full compose/Dockerfile design and the
+exact migration command. A `worker` container (BullMQ) sharing the same
+image with a different start command is planned but not yet built.
 
 Deployment target is a VPS, not a serverless platform — chosen specifically
 because a persistent BullMQ worker process and long-lived SSE connections

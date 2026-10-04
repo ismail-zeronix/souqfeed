@@ -88,6 +88,23 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
     first time this phase's migrations ran against a truly empty database
     rather than an already-migrated one. No secrets tracked in git.
 
+- **Production Docker deployment prep complete** — normally Phase 14, done
+  ahead of sequence at explicit request; does not block Phase 2 next.
+  `next.config.ts` (`output: "standalone"`), multi-stage `Dockerfile`
+  (`deps` → `builder` → `runner`, plus a `migrator` stage branched off
+  `deps` so `drizzle-kit` never ships in the runtime image), `.dockerignore`,
+  and `compose.yaml` (`app`/`postgres`/`redis` + a profile-gated one-off
+  `migrate` service) for the `proxy-net`/`souqfeed-net` + external-Caddy
+  VPS topology. `src/app/api/health/route.ts` added; `src/lib/auth/client.ts`
+  gets a fail-fast guard on `NEXT_PUBLIC_APP_URL`. Better Auth's
+  secure-cookie/`trustedOrigins` defaults verified (from `better-auth`'s own
+  source) to already derive correctly from `BETTER_AUTH_URL`'s `https://`
+  scheme — no config change needed there. Full stack smoke-tested locally
+  with real Docker networking (build → migrate → up → healthcheck → curl
+  `souqfeed-app:3000/api/health` from a `proxy-net` container → confirmed
+  `postgres`/`redis` unreachable from `proxy-net`). See `docs/deployment.md`
+  for the exact migration command and env vars.
+
 ## In Progress
 
 - Nothing currently in flight — Phase 0, 0.5, and 1 are all merged to

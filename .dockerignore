@@ -1,0 +1,31 @@
+node_modules
+.next
+.git
+.github
+.worktrees
+.superpowers
+.claude
+
+# env files are never baked into an image layer
+.env
+.env.*
+!.env.example
+
+# local/dev-only compose file and anything build-context-irrelevant
+docker-compose.yml
+
+coverage
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.DS_Store
+
+# planning/reference docs, not needed to build or run the app
+docs
+ui-design-ideas
+project_plan.md
+current.md
+README.md

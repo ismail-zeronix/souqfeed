@@ -27,7 +27,7 @@ export function CategoryShowcase({ categories }: { categories: Category[] }) {
   return (
     <section className="mx-auto w-full max-w-[1440px] px-6 py-10">
       <h2 className="text-foreground text-sm font-semibold tracking-wide uppercase">
-        Shop by Category
+        Categories
       </h2>
       <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
         {categories.map((category) => {
@@ -35,8 +35,8 @@ export function CategoryShowcase({ categories }: { categories: Category[] }) {
           return (
             <Link
               key={category.id}
-              href="/feed"
-              className="border-border bg-card hover:border-primary/30 group flex flex-col items-center gap-2.5 rounded-xl border p-4 text-center transition-all hover:-translate-y-0.5 hover:shadow-md"
+              href={`/feed?category=${category.id}`}
+              className="border-border bg-card hover:border-primary group flex flex-col items-center gap-2.5 rounded-md border p-4 text-center transition-colors"
             >
               <span className="bg-primary/10 text-primary group-hover:bg-primary flex size-11 items-center justify-center rounded-full transition-colors group-hover:text-white">
                 <Icon className="size-5" aria-hidden />

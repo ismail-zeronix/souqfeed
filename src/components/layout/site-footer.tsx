@@ -28,7 +28,7 @@ function FooterLinkColumn({
           <Link
             key={link.label}
             href={link.href}
-            className="text-sm text-white/80 transition-colors hover:text-[#E8B968]"
+            className="hover:text-live text-sm text-white/80 transition-colors"
           >
             {link.label}
           </Link>
@@ -49,12 +49,10 @@ function FooterLinkColumn({
 export function SiteFooter() {
   return (
     <footer className="bg-[#06281C]">
-      <div className="h-1 bg-gradient-to-r from-[#06281C] via-[#E8B968] to-[#06281C]" />
-
       <div className="mx-auto grid w-full max-w-[1440px] gap-10 px-6 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="max-w-xs">
           <div className="flex items-center gap-2 font-semibold text-white">
-            <span className="flex size-7 items-center justify-center rounded bg-[#E8B968] text-xs font-bold text-[#06281C]">
+            <span className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded text-xs font-bold">
               S
             </span>
             SouqFeed
@@ -63,7 +61,7 @@ export function SiteFooter() {
             Structured, searchable offers from Dubai&apos;s IT wholesale
             WhatsApp market.
           </p>
-          <div className="mt-4 flex items-center gap-1.5 text-xs font-medium text-[#E8B968]">
+          <div className="text-live mt-4 flex items-center gap-1.5 text-xs font-medium">
             <Radio className="size-3.5" aria-hidden />
             Live across the UAE
           </div>

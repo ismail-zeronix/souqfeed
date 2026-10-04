@@ -31,14 +31,17 @@ Docker Compose, Caddy, pnpm.
 ## Local development
 
 ```bash
-docker compose up -d   # starts postgres + redis
+docker compose -f docker-compose.yml up -d   # starts postgres + redis
 pnpm install
 pnpm dev                # starts the web app at http://localhost:3000
 ```
 
-`pnpm db:migrate`, `pnpm db:seed`, and `pnpm worker` are Phase 1+ commands —
-their targets (the Drizzle schema, the seed script, the worker entrypoint)
-don't exist yet. This section will grow as each phase lands.
+`-f docker-compose.yml` is required because `compose.yaml` (the production
+stack) also exists in the repo root, and bare `docker compose` commands
+prefer `compose.yaml` by default when both are present.
+
+`pnpm worker` is a Phase 1+ command — its target (the BullMQ worker
+entrypoint) doesn't exist yet. This section will grow as each phase lands.
 
 ## Environment variables
 
