@@ -68,11 +68,13 @@ export function formatAvailability(status: AvailabilityStatus): {
 export interface LiveMarketCardProps {
   offer: OfferListItem;
   actionLabel?: "View Supplier" | "View Product";
+  summary?: boolean;
 }
 
 export function LiveMarketCard({
   offer,
   actionLabel = "View Supplier",
+  summary = false,
 }: LiveMarketCardProps) {
   const price = formatPrice(offer);
   const availability = formatAvailability(offer.availabilityStatus);
@@ -134,53 +136,57 @@ export function LiveMarketCard({
         </div>
       </div>
 
-      <div className="border-border flex flex-wrap items-end justify-between gap-4 border-t pt-3">
-        <div className="flex gap-6 text-sm">
-          <div>
-            <div className="text-muted-foreground text-xs">Quantity</div>
-            <div className="text-foreground font-semibold tabular-nums">
-              {offer.quantity ?? "—"}
-              {offer.quantity ? " units" : ""}
-            </div>
-            <div className={`text-xs ${availability.colorClass}`}>
-              {availability.label}
-            </div>
-          </div>
-          <div>
-            <div className="text-muted-foreground text-xs">
-              Price ({offer.currency})
-            </div>
-            <div
-              className={`font-semibold tabular-nums ${isPriceDown ? "text-destructive" : "text-foreground"}`}
-            >
-              {price.primary}
-            </div>
-            {price.secondary && (
-              <div className="text-muted-foreground text-xs">
-                {price.secondary}
+      {!summary && (
+        <div className="border-border flex flex-wrap items-end justify-between gap-4 border-t pt-3">
+          <div className="flex gap-6 text-sm">
+            <div>
+              <div className="text-muted-foreground text-xs">Quantity</div>
+              <div className="text-foreground font-semibold tabular-nums">
+                {offer.quantity ?? "—"}
+                {offer.quantity ? " units" : ""}
               </div>
-            )}
+              <div className={`text-xs ${availability.colorClass}`}>
+                {availability.label}
+              </div>
+            </div>
+            <div>
+              <div className="text-muted-foreground text-xs">
+                Price ({offer.currency})
+              </div>
+              <div
+                className={`font-semibold tabular-nums ${isPriceDown ? "text-destructive" : "text-foreground"}`}
+              >
+                {price.primary}
+              </div>
+              {price.secondary && (
+                <div className="text-muted-foreground text-xs">
+                  {price.secondary}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              nativeButton={false}
+              render={<Link href={`/suppliers/${offer.supplierSlug}`} />}
+            >
+              {actionLabel}
+            </Button>
+            <Button
+              size="sm"
+              nativeButton={false}
+              render={
+                <a href={whatsappHref} target="_blank" rel="noreferrer" />
+              }
+            >
+              <MessageCircle className="mr-1 size-4" aria-hidden />
+              WhatsApp
+            </Button>
           </div>
         </div>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            nativeButton={false}
-            render={<Link href={`/suppliers/${offer.supplierSlug}`} />}
-          >
-            {actionLabel}
-          </Button>
-          <Button
-            size="sm"
-            nativeButton={false}
-            render={<a href={whatsappHref} target="_blank" rel="noreferrer" />}
-          >
-            <MessageCircle className="mr-1 size-4" aria-hidden />
-            WhatsApp
-          </Button>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

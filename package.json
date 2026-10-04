@@ -18,6 +18,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx --env-file=.env src/lib/database/seed.ts",
+    "db:seed:categories": "tsx --env-file=.env src/lib/database/seed-categories.ts",
     "db:seed:buraqa": "tsx --env-file=.env src/lib/database/seed-buraqa.ts"
   },
   "dependencies": {

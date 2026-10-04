@@ -7,15 +7,26 @@ const LOCATION_ALIASES: Record<string, string> = {
   "Bur Dubai": "Bur Dubai — Al Ain Centre / Computer Plaza",
 };
 
+const MARKET_KEYWORDS = [
+  "Laptop wholesale Dubai",
+  "Dell business laptops UAE",
+  "HP desktops Bur Dubai",
+  "Networking equipment Dubai",
+  "CCTV storage suppliers",
+  "Computer accessories UAE",
+  "Servers and UPS Dubai",
+  "iPhone wholesale Deira",
+];
+
 export function LocationCategoryLinks({
   categories,
 }: {
   categories: Category[];
 }) {
   return (
-    <section className="border-border mx-auto w-full max-w-[1440px] border-t px-6 py-10">
-      <div className="flex flex-col gap-6 sm:flex-row sm:gap-12">
-        <div className="flex-1">
+    <section className="border-border mx-auto w-full max-w-[1180px] border-t px-5 py-10">
+      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div>
           <h2 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
             Suppliers by category
           </h2>
@@ -34,6 +45,22 @@ export function LocationCategoryLinks({
                   {category.name}
                 </Link>
               </span>
+            ))}
+          </nav>
+        </div>
+        <div>
+          <h2 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+            Popular market searches
+          </h2>
+          <nav className="mt-3 flex flex-wrap gap-2">
+            {MARKET_KEYWORDS.map((keyword) => (
+              <Link
+                key={keyword}
+                href={`/feed?q=${encodeURIComponent(keyword)}`}
+                className="hover:text-primary rounded-full border border-[#ebe6ff] bg-white px-2.5 py-1.5 text-xs text-slate-600 transition hover:border-[#cfc4ff]"
+              >
+                {keyword}
+              </Link>
             ))}
           </nav>
         </div>

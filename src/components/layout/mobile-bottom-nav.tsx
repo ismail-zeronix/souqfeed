@@ -6,6 +6,9 @@ import { usePathname } from "next/navigation";
 import { ClipboardList, Home, Menu, Search, Users } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 import { cn } from "@/lib/utils";
+import { MobileSearchBar } from "@/components/home/mobile/mobile-search-bar";
+import { getMockCategories } from "@/modules/categories/mock-data";
+import { getMockBrands } from "@/modules/brands/mock-data";
 
 type IconType = ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
 
@@ -31,7 +34,7 @@ function NavItemShell({
   return (
     <span
       className={cn(
-        "flex min-w-11 flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors",
+        "flex w-full min-w-11 flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors",
         active && "text-primary",
         !active && !disabled && "text-muted-foreground",
         disabled && "text-muted-foreground/50",
@@ -60,21 +63,27 @@ export function MobileBottomNav() {
       }}
       aria-label="Primary"
     >
-      <Link href="/" aria-current={pathname === "/" ? "page" : undefined}>
+      <Link
+        className="flex flex-1"
+        href="/"
+        aria-current={pathname === "/" ? "page" : undefined}
+      >
         <NavItemShell label="Market" icon={Home} active={pathname === "/"} />
       </Link>
-      <Link
-        href="/feed"
-        aria-current={pathname === "/feed" ? "page" : undefined}
-      >
-        <NavItemShell
-          label="Search"
-          icon={Search}
-          active={pathname === "/feed"}
-        />
-      </Link>
+      <MobileSearchBar
+        categories={getMockCategories()}
+        brands={getMockBrands()}
+        inline
+        trigger={
+          <NavItemShell
+            label="Search"
+            icon={Search}
+            active={pathname === "/feed"}
+          />
+        }
+      />
       <span
-        className="cursor-not-allowed"
+        className="flex flex-1 cursor-not-allowed"
         aria-disabled
         title="WTB — Coming soon"
       >
@@ -86,13 +95,14 @@ export function MobileBottomNav() {
         />
       </span>
       <span
-        className="cursor-not-allowed"
+        className="flex flex-1 cursor-not-allowed"
         aria-disabled
         title="Suppliers — Coming soon"
       >
         <NavItemShell label="Suppliers" icon={Users} active={false} disabled />
       </span>
       <Link
+        className="flex flex-1"
         href={profileHref(session)}
         aria-current={profileActive ? "page" : undefined}
       >

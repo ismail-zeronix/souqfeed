@@ -17,7 +17,13 @@ import {
 } from "@/components/market/live-market-card";
 import type { OfferListItem } from "@/modules/offers/types";
 
-export function MobileOfferCard({ offer }: { offer: OfferListItem }) {
+export function MobileOfferCard({
+  offer,
+  summary = false,
+}: {
+  offer: OfferListItem;
+  summary?: boolean;
+}) {
   const router = useRouter();
   const price = formatPrice(offer);
   const availability = formatAvailability(offer.availabilityStatus);
@@ -95,29 +101,31 @@ export function MobileOfferCard({ offer }: { offer: OfferListItem }) {
         </p>
       </div>
 
-      <div className="border-border flex items-end justify-between gap-3 border-t pt-2">
-        <div className="text-xs">
-          <span className="text-foreground font-semibold tabular-nums">
-            {offer.quantity ?? "—"}
-            {offer.quantity ? " units" : ""}
-          </span>
-          <span className={`ml-1 ${availability.colorClass}`}>
-            {availability.label}
-          </span>
-        </div>
-        <div className="text-right">
-          <div
-            className={`text-base font-bold tabular-nums ${isPriceDown ? "text-destructive" : "text-primary"}`}
-          >
-            {price.primary}
+      {!summary && (
+        <div className="border-border flex items-end justify-between gap-3 border-t pt-2">
+          <div className="text-xs">
+            <span className="text-foreground font-semibold tabular-nums">
+              {offer.quantity ?? "—"}
+              {offer.quantity ? " units" : ""}
+            </span>
+            <span className={`ml-1 ${availability.colorClass}`}>
+              {availability.label}
+            </span>
           </div>
-          {price.secondary && (
-            <div className="text-muted-foreground text-[11px]">
-              {price.secondary}
+          <div className="text-right">
+            <div
+              className={`text-base font-bold tabular-nums ${isPriceDown ? "text-destructive" : "text-primary"}`}
+            >
+              {price.primary}
             </div>
-          )}
+            {price.secondary && (
+              <div className="text-muted-foreground text-[11px]">
+                {price.secondary}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="flex items-center justify-between gap-3 text-xs font-medium">
         <Link

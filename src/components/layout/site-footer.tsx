@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Radio } from "lucide-react";
+import { ArrowUpRight, Mail, Radio } from "lucide-react";
 
 const PLATFORM_LINKS: { label: string; href: string | null }[] = [
   { label: "Live Market", href: "/feed" },
@@ -54,24 +54,31 @@ export function SiteFooter() {
   const pathname = usePathname();
   if (pathname.startsWith("/login")) return null;
   return (
-    <footer className="bg-brand-dark">
-      <div className="mx-auto grid w-full max-w-[1440px] gap-10 px-6 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-        <div className="max-w-xs">
-          <div className="flex items-center gap-2 font-semibold text-white">
-            <Image src="/logo-icon.svg" alt="" width={26} height={28} />
-            SouqFeed
+    <footer className="bg-[#21184e]">
+      <div className="mx-auto grid w-full max-w-[1180px] gap-10 px-5 py-12 sm:grid-cols-2 lg:grid-cols-[1.5fr_0.8fr_0.8fr_0.8fr]">
+        <div className="max-w-sm">
+          <div className="flex items-center gap-2 text-lg font-bold tracking-tight text-white">
+            <Image
+              src="/brand/mascot/souqfeed_mascot_happy.gif"
+              alt=""
+              width={42}
+              height={42}
+              unoptimized
+              className="size-10 object-contain"
+            />
+            Souq<span className="text-[#b9a6ff]">Feed</span>
           </div>
           <p className="mt-3 text-sm text-white/60">
             Structured, searchable offers from Dubai&apos;s IT wholesale
             WhatsApp market.
           </p>
-          <div className="text-live mt-4 flex items-center gap-1.5 text-xs font-medium">
+          <div className="text-live mt-4 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium">
             <Radio className="size-3.5" aria-hidden />
             Live across the UAE
           </div>
         </div>
 
-        <FooterLinkColumn title="Platform" links={PLATFORM_LINKS} />
+        <FooterLinkColumn title="Explore" links={PLATFORM_LINKS} />
         <FooterLinkColumn
           title="Company"
           links={COMPANY_LINKS.map((label) => ({ label, href: null }))}
@@ -80,6 +87,18 @@ export function SiteFooter() {
           title="Legal"
           links={LEGAL_LINKS.map((label) => ({ label, href: null }))}
         />
+      </div>
+
+      <div className="mx-auto flex w-full max-w-[1180px] flex-wrap items-center justify-between gap-3 px-5 pb-8 text-xs text-white/45">
+        <span className="inline-flex items-center gap-1.5">
+          <Mail className="size-3.5" /> Built for UAE IT trade
+        </span>
+        <Link
+          href="/feed"
+          className="inline-flex items-center gap-1 text-white/70 transition hover:text-white"
+        >
+          Browse the live market <ArrowUpRight className="size-3.5" />
+        </Link>
       </div>
 
       <div className="border-t border-white/10">

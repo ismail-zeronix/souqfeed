@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bell, Menu } from "lucide-react";
@@ -17,6 +16,7 @@ import {
 import { SignupDialog } from "@/components/layout/signup-dialog";
 import { NAV_ITEMS } from "@/components/layout/site-header";
 import { cn } from "@/lib/utils";
+import { HeaderMascot } from "@/components/layout/header-mascot";
 
 export function MobileHeader() {
   const pathname = usePathname();
@@ -24,7 +24,7 @@ export function MobileHeader() {
   if (pathname.startsWith("/login")) return null;
 
   return (
-    <header className="border-border bg-card flex h-14 items-center gap-2 border-b px-4 md:hidden">
+    <header className="border-border bg-card flex h-16 items-center gap-2 border-b px-4 md:hidden">
       <Sheet>
         <SheetTrigger
           render={
@@ -89,8 +89,8 @@ export function MobileHeader() {
         href="/"
         className="flex flex-1 items-center justify-center gap-2 font-semibold"
       >
-        <Image src="/logo-icon.svg" alt="" width={22} height={24} />
-        <span className="text-foreground text-sm">
+        <HeaderMascot />
+        <span className="text-foreground text-base font-semibold tracking-tight">
           Souq<span className="text-primary">Feed</span>
         </span>
       </Link>

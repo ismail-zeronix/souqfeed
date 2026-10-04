@@ -11,6 +11,7 @@ import { SignupDialog } from "@/components/layout/signup-dialog";
 import { MobileHeader } from "@/components/layout/mobile-header";
 import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth/client";
+import { HeaderMascot } from "@/components/layout/header-mascot";
 
 export const NAV_ITEMS: { label: string; href: string | null }[] = [
   { label: "Market", href: "/feed" },
@@ -54,24 +55,24 @@ export function SiteHeader() {
         <MobileHeader />
       )}
       <header className="border-border bg-card sticky top-0 z-50 hidden border-b md:block">
-        <div className="mx-auto flex h-14 max-w-[1440px] items-center gap-5 px-6">
+        <div className="mx-auto flex h-16 max-w-[1440px] items-center gap-6 px-6">
           <Link
             href="/"
-            className="flex shrink-0 items-center gap-2 font-semibold"
+            className="flex shrink-0 items-center gap-2 text-[15px] font-bold tracking-tight"
           >
-            <Image src="/logo-icon.svg" alt="" width={26} height={28} />
+            <HeaderMascot showCallout />
             <span className="text-foreground">
               Souq<span className="text-primary">Feed</span>
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-0.5 text-xs font-medium xl:flex">
+          <nav className="hidden items-center gap-1 text-[13px] font-semibold xl:flex">
             {NAV_ITEMS.map((item) => {
               if (!item.href) {
                 return (
                   <span
                     key={item.label}
-                    className="text-muted-foreground/70 cursor-not-allowed rounded-md px-3 py-2"
+                    className="text-muted-foreground/55 cursor-not-allowed rounded-lg px-3 py-2"
                     aria-disabled
                     title="Coming soon"
                   >
@@ -86,10 +87,10 @@ export function SiteHeader() {
                   key={item.label}
                   href={item.href}
                   className={cn(
-                    "rounded-md px-3 py-2 transition-colors",
+                    "rounded-lg px-3 py-2 transition-colors",
                     isActive
                       ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                      : "hover:bg-primary/5 hover:text-primary text-slate-600",
                   )}
                 >
                   {item.label}

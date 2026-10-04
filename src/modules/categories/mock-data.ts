@@ -24,6 +24,11 @@ const MOCK_CATEGORIES: Category[] = [
     offerCount: 124,
   },
   { id: "cat-software", name: "Software", slug: "software", offerCount: 18 },
+  { id: "cat-servers", name: "Servers", slug: "servers", offerCount: 31 },
+  { id: "cat-phones", name: "Phones", slug: "phones", offerCount: 47 },
+  { id: "cat-printers", name: "Printers", slug: "printers", offerCount: 26 },
+  { id: "cat-security", name: "Security", slug: "security", offerCount: 22 },
+  { id: "cat-power", name: "Power & UPS", slug: "power-ups", offerCount: 19 },
 ];
 
 export function getMockCategories(): Category[] {

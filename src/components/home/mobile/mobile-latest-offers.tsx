@@ -21,7 +21,7 @@ export function MobileLatestOffers({ offers }: { offers: OfferListItem[] }) {
       <div className="mt-3 flex flex-col gap-2.5">
         {preview.length > 0 ? (
           preview.map((offer) => (
-            <MobileOfferCard key={offer.id} offer={offer} />
+            <MobileOfferCard key={offer.id} offer={offer} summary />
           ))
         ) : (
           <MobileEmptyState />
