@@ -12,6 +12,7 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { authRoleContent, type AuthRole } from "@/components/auth/auth-content";
+import { getAuthErrorMessage } from "@/components/auth/auth-error";
 import { authClient } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,34 +31,50 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
-    const result =
-      mode === "login"
-        ? await authClient.signIn.email({ email, password })
-        : await authClient.signUp.email({
-            name,
-            email,
-            password,
-            role: role === "seller" ? "SUPPLIER" : "BUYER",
-          } as Parameters<typeof authClient.signUp.email>[0]);
-    if (result.error) {
-      setError(
-        result.error.message ??
-          (mode === "login" ? "Unable to sign in" : "Unable to create account"),
-      );
-      return;
+    setToast(null);
+    try {
+      const result =
+        mode === "login"
+          ? await authClient.signIn.email({ email, password })
+          : await authClient.signUp.email({
+              name,
+              email,
+              password,
+              role: role === "seller" ? "SUPPLIER" : "BUYER",
+            } as Parameters<typeof authClient.signUp.email>[0]);
+      if (result.error) {
+        const message = getAuthErrorMessage(result.error);
+        setError(message);
+        setToast(message);
+        return;
+      }
+      const accountRole = (result.data?.user as { role?: string } | undefined)
+        ?.role;
+      router.push(accountRole === "ADMIN" ? "/admin" : "/dashboard");
+    } catch {
+      const message =
+        "We couldn’t reach the account service. Please check your connection and try again.";
+      setError(message);
+      setToast(message);
     }
-    const accountRole = (result.data?.user as { role?: string } | undefined)
-      ?.role;
-    router.push(accountRole === "ADMIN" ? "/admin" : "/dashboard");
   }
 
   const roleContent = authRoleContent[role];
   return (
     <main className="bg-muted/40 flex min-h-[calc(100vh-4rem)] flex-1 items-center justify-center px-4 py-8 sm:py-12">
+      {toast && (
+        <div
+          role="alert"
+          className="bg-destructive text-destructive-foreground fixed top-5 right-5 z-50 max-w-sm rounded-xl px-4 py-3 text-sm font-medium shadow-lg"
+        >
+          {toast}
+        </div>
+      )}
       <section className="w-full max-w-md">
         <div className="mb-6 flex flex-col items-center text-center">
           <div className="bg-primary/10 mb-3 flex size-16 items-center justify-center rounded-2xl">
