@@ -3,177 +3,47 @@
 import { type FormEvent, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FileText, Package, Search, TrendingUp, Users } from "lucide-react";
+import { ArrowRight, Package, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { StatTile } from "@/components/ui/stat-tile";
 import { SignupDialog } from "@/components/layout/signup-dialog";
 import type { Category } from "@/modules/categories/types";
 import type { MarketStats } from "@/modules/offers/types";
 
-export function HomeHero({
-  stats,
-  categories,
-}: {
-  stats: MarketStats;
-  categories: Category[];
-}) {
+const POPULAR_SEARCHES = ["iPhone 15", "RTX 4090", "Lenovo ThinkPad", "Dell OptiPlex", "HP 250 G10"];
+
+export function HomeHero({ stats: _stats, categories: _categories }: { stats: MarketStats; categories: Category[] }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [categoryId, setCategoryId] = useState<string | null>(null);
 
   function handleSearchSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const params = new URLSearchParams();
-    if (query.trim()) params.set("q", query.trim());
-    if (categoryId) params.set("category", categoryId);
-    const qs = params.toString();
-    router.push(qs ? `/feed?${qs}` : "/feed");
+    router.push(query.trim() ? `/feed?q=${encodeURIComponent(query.trim())}` : "/feed");
   }
 
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0">
-        <Image
-          src="/images/dubai-downtown.webp"
-          alt=""
-          fill
-          priority
-          className="object-cover"
-        />
-        <div className="bg-brand-dark/80 absolute inset-0" />
-        <div className="from-brand-dark via-brand-dark/60 to-brand-dark/30 absolute inset-0 bg-gradient-to-t" />
+    <section className="relative overflow-hidden border-b border-[#ebe6ff] bg-[#f4f1ff]">
+      <div className="absolute inset-y-0 right-0 hidden w-[48%] lg:block">
+        <Image src="/images/hero-dubai-creek.jpg" alt="" fill priority className="object-cover object-center" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#f4f1ff] via-[#f4f1ff]/60 to-transparent" />
+        <div className="absolute inset-0 bg-[#6c42f5]/10" />
       </div>
-
-      <div className="relative mx-auto max-w-[1440px] px-6 pt-16 pb-12">
-        <p className="text-xs font-semibold tracking-widest text-white/70 uppercase">
-          Live supplier offers from <span className="text-white">Dubai</span>
-        </p>
-        <h1 className="mt-2 max-w-2xl text-4xl font-bold text-white lg:text-5xl">
-          Stop searching hundreds of WhatsApp messages.
-        </h1>
-        <p className="mt-1 text-xl font-semibold text-white/90 lg:text-2xl">
-          Search the Dubai IT market instead.
-        </p>
-        <p className="mt-3 max-w-xl text-sm text-white/70">
-          SouqFeed turns suppliers&apos; WhatsApp stock broadcasts into
-          structured, searchable offers. Real-time offers. Verified suppliers.
-          Better sourcing.
-        </p>
-
-        <form
-          onSubmit={handleSearchSubmit}
-          className="mt-6 flex max-w-2xl flex-col gap-2 sm:flex-row"
-        >
-          <div className="relative flex-1">
-            <Search
-              className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-white/50"
-              aria-hidden
-            />
-            <Input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search model, SKU, part number, specification..."
-              className="h-11 border-white/20 bg-white/10 pl-9 text-white placeholder:text-white/50 focus-visible:border-white/50"
-            />
-          </div>
-          <Select
-            value={categoryId ?? "all"}
-            onValueChange={(value) =>
-              setCategoryId(value === "all" ? null : String(value))
-            }
-          >
-            <SelectTrigger className="border-white/20 bg-white/10 text-white data-[size=default]:h-11 sm:w-48">
-              <SelectValue placeholder="All Categories" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
-              {categories.map((category) => (
-                <SelectItem key={category.id} value={category.id}>
-                  {category.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button type="submit" size="lg" className="h-11">
-            Search
-          </Button>
-        </form>
-
-        <div className="mt-4 flex flex-wrap gap-3">
-          <Button
-            nativeButton={false}
-            render={<Link href="/feed" />}
-            className="text-primary bg-white hover:bg-white/90"
-          >
-            View Live Market
-          </Button>
-          <SignupDialog
-            trigger={
-              <Button
-                variant="outline"
-                className="border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"
-              >
-                <Package className="mr-1 size-4" aria-hidden />
-                List your stock
-              </Button>
-            }
-          />
+      <div className="pointer-events-none absolute right-[19%] bottom-20 hidden size-40 rounded-full bg-[#8b5cf6]/20 blur-3xl lg:block" />
+      <div className="relative mx-auto min-h-[430px] max-w-[1440px] px-6 pt-10 pb-12 lg:pt-12 lg:pb-16">
+        <div className="max-w-2xl">
+          <p className="text-primary text-xs font-bold tracking-[0.18em] uppercase">Live IT trading floor for UAE</p>
+          <h1 className="text-foreground mt-3 max-w-xl text-4xl leading-[1.05] font-bold tracking-tight lg:text-6xl">Real Suppliers. Live Stock.<span className="text-primary block">Faster Deals.</span></h1>
+          <p className="text-muted-foreground mt-4 max-w-lg text-sm leading-6 lg:text-base">Search, compare and connect with verified IT suppliers in the UAE. Turn WhatsApp chaos into a structured, searchable market.</p>
+          <form onSubmit={handleSearchSubmit} className="mt-6 flex max-w-2xl gap-2">
+            <div className="relative flex-1"><Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" aria-hidden /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search model, SKU, part number, specification..." className="h-12 border-[#ddd5ff] bg-white pl-10 shadow-[0_10px_35px_rgba(71,42,170,0.08)] placeholder:text-[#9a92b8] focus-visible:border-primary" /></div>
+            <Button type="submit" size="lg" className="h-12 px-6"><Search className="size-4" aria-hidden /></Button>
+          </form>
+          <div className="text-muted-foreground mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs"><span className="font-semibold">Popular:</span>{POPULAR_SEARCHES.map((term) => <button key={term} type="button" onClick={() => setQuery(term)} className="hover:text-primary transition-colors">{term}</button>)}</div>
+          <div className="mt-5 flex flex-wrap gap-3"><Button nativeButton={false} render={<Link href="/feed" />} className="bg-primary hover:bg-primary/90">View Live Market <ArrowRight className="ml-1 size-4" aria-hidden /></Button><SignupDialog trigger={<Button variant="outline" className="border-[#cfc4ff] bg-white text-primary hover:bg-[#f1edff]"><Package className="mr-1 size-4" aria-hidden />List your stock</Button>} /></div>
+          <div className="text-muted-foreground mt-7 flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium"><span>◉ Live supplier stock from Dubai</span><span>✓ Verified & trusted suppliers</span><span>▥ Real market prices</span></div>
         </div>
-
-        <div className="relative z-10 mt-8 grid max-w-4xl grid-cols-2 gap-3 lg:grid-cols-4">
-          <StatTile
-            icon={
-              <Users className="text-muted-foreground size-5" aria-hidden />
-            }
-            value={stats.activeSuppliersToday.toLocaleString()}
-            animateFrom={stats.activeSuppliersToday}
-            label="Active Suppliers Today"
-            trendPercent={stats.activeSuppliersTrendPercent}
-            className="shadow-lg shadow-black/20"
-          />
-          <StatTile
-            icon={
-              <FileText className="text-muted-foreground size-5" aria-hidden />
-            }
-            value={stats.offersPostedToday.toLocaleString()}
-            animateFrom={stats.offersPostedToday}
-            label="Offers Posted Today"
-            trendPercent={stats.offersPostedTrendPercent}
-            className="shadow-lg shadow-black/20"
-          />
-          <StatTile
-            icon={
-              <TrendingUp
-                className="text-muted-foreground size-5"
-                aria-hidden
-              />
-            }
-            value={stats.priceUpdatesToday.toLocaleString()}
-            animateFrom={stats.priceUpdatesToday}
-            label="Price Updates"
-            trendPercent={stats.priceUpdatesTrendPercent}
-            className="shadow-lg shadow-black/20"
-          />
-          <StatTile
-            icon={
-              <Package className="text-muted-foreground size-5" aria-hidden />
-            }
-            value={stats.newProductsToday.toLocaleString()}
-            animateFrom={stats.newProductsToday}
-            label="New Products"
-            trendPercent={stats.newProductsTrendPercent}
-            className="shadow-lg shadow-black/20"
-          />
-        </div>
+        <div className="absolute right-[13%] bottom-16 hidden items-end gap-4 lg:flex"><div className="rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-[#21184e] shadow-[0_10px_30px_rgba(48,25,122,0.12)]">Smarter sourcing<br /><span className="text-primary">starts here</span></div><Image src="/brand/mascot-animated.svg" alt="SouqFeed mascot" width={150} height={150} className="drop-shadow-[0_16px_16px_rgba(72,34,182,0.24)]" /></div>
       </div>
     </section>
   );

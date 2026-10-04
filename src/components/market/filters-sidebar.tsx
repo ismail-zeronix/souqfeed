@@ -37,12 +37,12 @@ function FilterControls({
   onCriteriaChange,
 }: FiltersSidebarProps) {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="border-border bg-card flex flex-col gap-5 rounded-xl border p-4 shadow-[0_2px_10px_rgba(34,22,80,0.04)]">
       <div className="flex items-center justify-between">
-        <h2 className="text-foreground text-sm font-semibold">Filters</h2>
+        <h2 className="text-foreground text-base font-bold">Filters</h2>
         <button
           type="button"
-          className="text-muted-foreground hover:text-foreground text-xs font-medium"
+          className="text-primary text-xs font-medium hover:underline"
           onClick={() =>
             onCriteriaChange({
               brandIds: [],
@@ -58,56 +58,56 @@ function FilterControls({
       </div>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
-          Brand
+        <legend className="text-foreground mb-1 flex w-full items-center justify-between text-xs font-bold">
+          Category <span className="text-muted-foreground">⌃</span>
         </legend>
-        {brands.map((brand) => (
-          <Label key={brand.id} className="font-normal">
+        {categories.map((category) => (
+          <Label key={category.id} className="justify-between text-xs font-normal">
+            <span className="flex items-center gap-2">
             <Checkbox
-              checked={criteria.brandIds.includes(brand.id)}
+              checked={criteria.categoryIds.includes(category.id)}
               onCheckedChange={() =>
                 onCriteriaChange({
                   ...criteria,
-                  brandIds: toggleValue(criteria.brandIds, brand.id),
+                  categoryIds: toggleValue(criteria.categoryIds, category.id),
                 })
               }
             />
-            {brand.name}
+            {category.name}
+            </span>
+            <span className="text-muted-foreground text-[11px] tabular-nums">{category.offerCount}</span>
           </Label>
         ))}
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
-          Category
+        <legend className="text-foreground mb-1 flex w-full items-center justify-between text-xs font-bold">
+          Brand <span className="text-muted-foreground">⌃</span>
         </legend>
-        {categories.map((category) => (
-          <Label key={category.id} className="justify-between font-normal">
+        {brands.map((brand) => (
+          <Label key={brand.id} className="justify-between text-xs font-normal">
             <span className="flex items-center gap-2">
               <Checkbox
-                checked={criteria.categoryIds.includes(category.id)}
+                checked={criteria.brandIds.includes(brand.id)}
                 onCheckedChange={() =>
                   onCriteriaChange({
                     ...criteria,
-                    categoryIds: toggleValue(criteria.categoryIds, category.id),
+                    brandIds: toggleValue(criteria.brandIds, brand.id),
                   })
                 }
               />
-              {category.name}
-            </span>
-            <span className="text-muted-foreground text-xs tabular-nums">
-              {category.offerCount}
+              {brand.name}
             </span>
           </Label>
         ))}
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
-          Location
+        <legend className="text-foreground mb-1 flex w-full items-center justify-between text-xs font-bold">
+          Location (UAE) <span className="text-muted-foreground">⌃</span>
         </legend>
         {locationNames.map((location) => (
-          <Label key={location} className="font-normal">
+          <Label key={location} className="text-xs font-normal">
             <Checkbox
               checked={criteria.locationNames.includes(location)}
               onCheckedChange={() =>
@@ -123,10 +123,10 @@ function FilterControls({
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-muted-foreground mb-1 text-xs font-semibold uppercase">
-          Availability
+        <legend className="text-foreground mb-1 flex w-full items-center justify-between text-xs font-bold">
+          Availability <span className="text-muted-foreground">⌃</span>
         </legend>
-        <Label className="font-normal">
+        <Label className="text-xs font-normal">
           <Checkbox
             checked={criteria.inStockOnly}
             onCheckedChange={(checked) =>

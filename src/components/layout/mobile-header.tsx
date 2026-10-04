@@ -21,6 +21,8 @@ import { cn } from "@/lib/utils";
 export function MobileHeader() {
   const pathname = usePathname();
 
+  if (pathname.startsWith("/login")) return null;
+
   return (
     <header className="border-border bg-card flex h-14 items-center gap-2 border-b px-4 md:hidden">
       <Sheet>

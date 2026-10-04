@@ -1,4 +1,4 @@
-import { Calendar, Clock, Layers, ThumbsUp, Users, Zap } from "lucide-react";
+import { Calendar, Clock, ThumbsUp, Users, Zap } from "lucide-react";
 import { StatTile } from "@/components/ui/stat-tile";
 import type { SupplierProfile } from "@/modules/suppliers/types";
 
@@ -15,7 +15,7 @@ export function SupplierStatRow({ supplier }: { supplier: SupplierProfile }) {
   const yearsActive = new Date().getFullYear() - supplier.memberSinceYear;
 
   return (
-    <div className="mx-auto grid max-w-[1440px] grid-cols-2 gap-3 px-6 py-4 sm:grid-cols-3 lg:grid-cols-6">
+    <div className="mx-auto grid max-w-[1440px] grid-cols-2 gap-2 px-4 py-3 sm:grid-cols-4 sm:gap-3 sm:px-6 sm:py-4">
       <StatTile
         icon={<Users className="text-muted-foreground size-5" aria-hidden />}
         value={String(supplier.activeOfferCount)}
@@ -31,11 +31,6 @@ export function SupplierStatRow({ supplier }: { supplier: SupplierProfile }) {
         icon={<ThumbsUp className="text-muted-foreground size-5" aria-hidden />}
         value={`${supplier.positiveScorePercent}%`}
         label="Positive Score"
-      />
-      <StatTile
-        icon={<Layers className="text-muted-foreground size-5" aria-hidden />}
-        value={String(supplier.categoryMix.length)}
-        label="Product Categories"
       />
       <StatTile
         icon={<Zap className="text-muted-foreground size-5" aria-hidden />}

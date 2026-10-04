@@ -152,3 +152,84 @@
     transform: translateX(0);
   }
 }
+
+@keyframes zeronix-ad-slide-one {
+  0%, 23% { opacity: 1; transform: translateY(0); }
+  25%, 100% { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes zeronix-ad-slide-two {
+  0%, 24% { opacity: 0; transform: translateY(8px); }
+  25%, 48% { opacity: 1; transform: translateY(0); }
+  50%, 100% { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes zeronix-ad-slide-three {
+  0%, 49% { opacity: 0; transform: translateY(8px); }
+  50%, 73% { opacity: 1; transform: translateY(0); }
+  75%, 100% { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes zeronix-ad-slide-four {
+  0%, 74% { opacity: 0; transform: translateY(8px); }
+  75%, 98% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes zeronix-ad-orb {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.45; }
+  50% { transform: translate3d(14px, -8px, 0) scale(1.12); opacity: 0.8; }
+}
+
+.zeronix-ad-slide {
+  position: absolute;
+  inset: 1rem 1rem 2.5rem;
+  animation-duration: 15s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.zeronix-ad-slide-one { animation-name: zeronix-ad-slide-one; }
+.zeronix-ad-slide-two { animation-name: zeronix-ad-slide-two; }
+.zeronix-ad-slide-three { animation-name: zeronix-ad-slide-three; }
+.zeronix-ad-slide-four { animation-name: zeronix-ad-slide-four; }
+
+.zeronix-ad-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(1px);
+  animation: zeronix-ad-orb 6s ease-in-out infinite;
+}
+
+.zeronix-ad-orb-one {
+  top: 42px;
+  right: -28px;
+  width: 132px;
+  height: 132px;
+  background: radial-gradient(circle, rgba(142, 105, 255, 0.75), rgba(92, 49, 238, 0));
+}
+
+.zeronix-ad-orb-two {
+  bottom: 14px;
+  left: -38px;
+  width: 112px;
+  height: 112px;
+  background: radial-gradient(circle, rgba(92, 49, 238, 0.7), rgba(92, 49, 238, 0));
+  animation-delay: -2.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zeronix-ad-slide,
+  .zeronix-ad-orb {
+    animation: none;
+  }
+
+  .zeronix-ad-slide-one {
+    opacity: 1;
+    transform: none;
+  }
+
+  .zeronix-ad-slide:not(.zeronix-ad-slide-one) {
+    display: none;
+  }
+}

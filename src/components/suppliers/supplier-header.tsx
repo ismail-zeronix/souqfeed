@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BadgeCheck, Mail, MapPin, Phone } from "lucide-react";
+import { BadgeCheck, Mail, MapPin, Phone, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SupplierLogoTile } from "@/components/ui/supplier-logo-tile";
 import type { SupplierProfile } from "@/modules/suppliers/types";
@@ -9,8 +9,8 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
 
   return (
     <div className="border-border bg-card border-b">
-      <div className="mx-auto max-w-[1440px] px-6 py-6">
-        <nav className="text-muted-foreground mb-4 text-sm">
+      <div className="mx-auto max-w-[1440px] px-4 py-4 sm:px-6 sm:py-6">
+        <nav className="text-muted-foreground mb-3 text-xs sm:mb-4 sm:text-sm">
           <Link href="/" className="hover:text-foreground">
             Home
           </Link>
@@ -18,12 +18,12 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
           <span className="text-foreground">{supplier.companyName}</span>
         </nav>
 
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-start">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex min-w-0 items-start gap-3 sm:gap-4">
             <SupplierLogoTile initial={supplier.logoInitial} size="lg" />
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-foreground text-2xl font-bold break-words">
+                <h1 className="text-foreground text-xl font-bold break-words sm:text-2xl">
                   {supplier.companyName}
                 </h1>
                 {supplier.verified && (
@@ -33,7 +33,7 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
                   />
                 )}
               </div>
-              <div className="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+              <div className="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-sm">
                 <span className="flex items-center gap-1">
                   <MapPin className="size-3.5" aria-hidden />
                   {supplier.locationName}
@@ -43,14 +43,16 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
                 <span>·</span>
                 <span>Active since {supplier.memberSinceYear}</span>
                 <span>·</span>
-                <span className="text-primary">Verified Supplier</span>
+                <span className="text-primary font-medium">
+                  Verified Supplier
+                </span>
               </div>
               {supplier.description && (
                 <p className="text-muted-foreground mt-3 max-w-2xl text-sm">
                   {supplier.description}
                 </p>
               )}
-              <div className="mt-3 flex flex-wrap gap-1.5">
+              <div className="mt-2 flex flex-wrap gap-1.5">
                 {supplier.tags.map((tag) => (
                   <span
                     key={tag}
@@ -63,17 +65,20 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 lg:shrink-0">
             <Button
+              size="sm"
               nativeButton={false}
               render={
                 <a href={whatsappHref} target="_blank" rel="noreferrer" />
               }
             >
+              <MessageCircle className="mr-1 size-4" aria-hidden />
               WhatsApp
             </Button>
             {supplier.phone && (
               <Button
+                size="sm"
                 variant="outline"
                 nativeButton={false}
                 render={<a href={`tel:${supplier.phone}`} />}
@@ -84,6 +89,7 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
             )}
             {supplier.email && (
               <Button
+                size="sm"
                 variant="outline"
                 nativeButton={false}
                 render={<a href={`mailto:${supplier.email}`} />}
@@ -94,6 +100,7 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
             )}
             {supplier.googleMapsUrl && (
               <Button
+                size="sm"
                 variant="outline"
                 nativeButton={false}
                 render={

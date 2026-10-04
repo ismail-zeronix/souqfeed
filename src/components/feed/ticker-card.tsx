@@ -1,5 +1,16 @@
+"use client";
+
 import Link from "next/link";
-import { Lock } from "lucide-react";
+import {
+  Bookmark,
+  Check,
+  Clock3,
+  MapPin,
+  MessageCircle,
+  MoreHorizontal,
+} from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { formatRelativeTime } from "@/components/market/live-market-card";
 import {
@@ -18,33 +29,14 @@ export interface MaskedPrice {
 
 export function getMaskedPrice(offer: OfferListItem): MaskedPrice {
   if (offer.priceType === "HIDDEN") {
-    return {
-      currency: offer.currency,
-      visibleDigit: null,
-      maskedDigits: null,
-      plainLabel: "Hidden",
-      srLabel: "Price not disclosed",
-    };
+    return { currency: offer.currency, visibleDigit: null, maskedDigits: null, plainLabel: "Hidden", srLabel: "Price not disclosed" };
   }
   if (offer.priceType === "UNKNOWN") {
-    return {
-      currency: offer.currency,
-      visibleDigit: null,
-      maskedDigits: null,
-      plainLabel: "—",
-      srLabel: "Price unavailable",
-    };
+    return { currency: offer.currency, visibleDigit: null, maskedDigits: null, plainLabel: "—", srLabel: "Price unavailable" };
   }
   if (offer.priceType === "ASK" || offer.price === null) {
-    return {
-      currency: offer.currency,
-      visibleDigit: null,
-      maskedDigits: null,
-      plainLabel: "ASK",
-      srLabel: "Best price on request",
-    };
+    return { currency: offer.currency, visibleDigit: null, maskedDigits: null, plainLabel: "ASK", srLabel: "Best price on request" };
   }
-
   const formatted = offer.price.toLocaleString();
   return {
     currency: offer.currency,
@@ -55,15 +47,6 @@ export function getMaskedPrice(offer: OfferListItem): MaskedPrice {
   };
 }
 
-// Ticker-tape accent: a thin colored edge so the badge's meaning reads even
-// at a glance, before the text registers — green for a fresh/live print,
-// blue for a price change, transparent otherwise.
-const ACCENT_CLASSES: Record<NonNullable<OfferListItem["badge"]>, string> = {
-  NEW: "before:bg-primary",
-  LIVE: "before:bg-live",
-  PRICE_UPDATED: "before:bg-info",
-};
-
 export interface TickerCardProps {
   offer: OfferListItem;
   className?: string;
@@ -71,80 +54,57 @@ export interface TickerCardProps {
 
 export function TickerCard({ offer, className }: TickerCardProps) {
   const price = getMaskedPrice(offer);
+  const [isSaved, setIsSaved] = useState(false);
+  const whatsappHref = `https://wa.me/${offer.whatsappNumber.replace(/\D/g, "")}`;
+  const initials = offer.supplierName
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2);
 
   return (
-    <Link
-      href={`/suppliers/${offer.supplierSlug}`}
-      className={cn(
-        "border-border bg-card hover:bg-primary/5 relative flex min-w-0 flex-col gap-1 rounded-md border py-2.5 pr-4 pl-5 transition-colors",
-        "before:absolute before:inset-y-0 before:left-0 before:w-1 before:rounded-l-md before:content-['']",
-        offer.badge ? ACCENT_CLASSES[offer.badge] : "before:bg-transparent",
-        className,
-      )}
-    >
-      <div className="text-muted-foreground flex min-w-0 items-center gap-1.5 text-xs">
-        {offer.badge && (
-          <MarketBadge
-            variant={offer.badge as MarketBadgeVariant}
-            className="h-4 px-1.5 py-0 text-[10px]"
-          />
-        )}
-        <span className="truncate">{offer.supplierName}</span>
-        {offer.supplierVerified && (
-          <span
-            className="text-primary shrink-0"
-            title="Verified Supplier"
-            aria-label="Verified Supplier"
-          >
-            ✓
-          </span>
-        )}
-        <span aria-hidden>·</span>
-        <span className="shrink-0">{offer.locationName}</span>
-        <span aria-hidden>·</span>
-        <span className="shrink-0" suppressHydrationWarning>
-          {formatRelativeTime(offer.postedAt)}
-        </span>
-      </div>
-
-      <div className="flex min-w-0 items-center justify-between gap-4">
-        <div className="min-w-0 truncate text-sm">
-          <span className="text-foreground font-semibold">{offer.title}</span>
-          <span className="text-muted-foreground">
-            {" "}
-            — {offer.specLine.join(" · ")}
-          </span>
+    <article className={cn("border-border bg-card hover:border-primary/30 relative flex min-w-0 flex-col rounded-xl border px-3 py-2.5 shadow-[0_2px_10px_rgba(34,22,80,0.04)] transition-colors lg:flex-row lg:items-center sm:px-3.5", className)}>
+      <div className="flex min-w-0 flex-1 flex-col gap-2 lg:flex-row lg:items-center">
+        <div className="bg-primary/10 text-primary flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-bold">
+          {initials}
         </div>
-
-        <div className="flex shrink-0 items-baseline gap-2">
-          <span className="inline-flex items-center gap-1 text-sm font-semibold tabular-nums">
-            <span className="sr-only">{price.srLabel}</span>
-            {price.plainLabel ? (
-              <span aria-hidden className="text-foreground">
-                {price.plainLabel}
-              </span>
-            ) : (
-              <>
-                <span aria-hidden className="text-foreground">
-                  {price.currency} {price.visibleDigit}
-                </span>
-                <span
-                  aria-hidden
-                  className="text-muted-foreground blur-[3px] select-none"
-                >
-                  {price.maskedDigits}
-                </span>
-                <Lock aria-hidden className="text-muted-foreground size-3" />
-              </>
-            )}
-          </span>
-          {offer.quantity !== null && (
-            <span className="text-muted-foreground text-xs tabular-nums">
-              · {offer.quantity} units
-            </span>
-          )}
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <Link href={`/suppliers/${offer.supplierSlug}`} className="truncate text-xs font-semibold text-slate-900 hover:text-primary">
+              {offer.supplierName}
+            </Link>
+            {offer.supplierVerified && <span className="bg-primary text-primary-foreground flex size-3.5 items-center justify-center rounded-full" aria-label="Verified Supplier"><Check className="size-2.5" strokeWidth={3} /></span>}
+            <span className="text-muted-foreground flex items-center gap-1 text-[10px]"><MapPin className="size-3" aria-hidden />{offer.locationName}, UAE</span>
+            <span className="text-muted-foreground flex items-center gap-1 text-[10px]"><Clock3 className="size-3" aria-hidden />{formatRelativeTime(offer.postedAt)}</span>
+          </div>
+          <div className="mt-0.5 flex flex-wrap items-center gap-2">
+            <Link href={`/suppliers/${offer.supplierSlug}`} className="text-sm font-bold text-slate-900 hover:text-primary sm:text-[15px]">{offer.title}</Link>
+            {offer.badge && <MarketBadge variant={offer.badge as MarketBadgeVariant} className="h-5 text-[9px]" />}
+          </div>
+          <p className="text-muted-foreground mt-0.5 truncate text-[11px]">{offer.specLine.join(" · ")}</p>
+        </div>
+        <div className="flex shrink-0 items-start gap-1 lg:pt-0.5">
+          <Button variant="ghost" size="icon-sm" aria-label={isSaved ? "Remove bookmark" : "Bookmark offer"} onClick={() => setIsSaved((saved) => !saved)} className={isSaved ? "text-primary" : "text-slate-400"}><Bookmark className="size-4" fill={isSaved ? "currentColor" : "none"} aria-hidden /></Button>
+          <Button variant="ghost" size="icon-sm" aria-label="More offer actions" className="text-slate-400"><MoreHorizontal className="size-4" aria-hidden /></Button>
         </div>
       </div>
-    </Link>
+
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-2 lg:mt-0 lg:shrink-0 lg:border-t-0 lg:border-l lg:py-0 lg:pl-4">
+        <div className="flex items-center gap-6">
+          <div>
+            <div className="text-primary text-base font-bold tabular-nums">{offer.quantity ?? "—"}{offer.quantity ? " Units" : ""}</div>
+            <div className={`text-[10px] ${offer.availabilityStatus === "AVAILABLE" ? "text-live" : "text-muted-foreground"}`}>{offer.availabilityStatus === "AVAILABLE" ? "In Stock" : "On Request"}</div>
+          </div>
+          <div>
+            <div className="text-primary text-base font-bold tabular-nums">{price.plainLabel ?? `${price.currency} ${price.visibleDigit}${price.maskedDigits}`}</div>
+            <div className="text-muted-foreground text-[10px]">{price.plainLabel === "ASK" ? "Good quantity available" : "Per Unit"}</div>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" nativeButton={false} render={<Link href={`/suppliers/${offer.supplierSlug}`} />}>View Supplier</Button>
+          <Button size="sm" nativeButton={false} render={<a href={whatsappHref} target="_blank" rel="noreferrer" />}><MessageCircle className="size-3.5" aria-hidden /> WhatsApp</Button>
+        </div>
+      </div>
+    </article>
   );
 }

@@ -1,6 +1,10 @@
+"use client";
+
+import type { KeyboardEvent } from "react";
 import Link from "next/link";
-import { MessageCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { ArrowUpRight, MessageCircle } from "lucide-react";
 import { SupplierLogoTile } from "@/components/ui/supplier-logo-tile";
 import {
   MarketBadge,
@@ -14,6 +18,7 @@ import {
 import type { OfferListItem } from "@/modules/offers/types";
 
 export function MobileOfferCard({ offer }: { offer: OfferListItem }) {
+  const router = useRouter();
   const price = formatPrice(offer);
   const availability = formatAvailability(offer.availabilityStatus);
   const isPriceDown =
@@ -22,8 +27,29 @@ export function MobileOfferCard({ offer }: { offer: OfferListItem }) {
     offer.previousPrice > offer.price;
   const whatsappHref = `https://wa.me/${offer.whatsappNumber.replace(/\D/g, "")}`;
 
+  function openSupplier() {
+    router.push(`/suppliers/${offer.supplierSlug}`);
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openSupplier();
+    }
+  }
+
   return (
-    <div className="border-border bg-card flex flex-col gap-2.5 rounded-2xl border p-3.5">
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 12, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.24, ease: "easeOut" }}
+      role="link"
+      tabIndex={0}
+      onClick={openSupplier}
+      onKeyDown={handleKeyDown}
+      className="border-border bg-card hover:border-primary/40 flex cursor-pointer flex-col gap-2 rounded-2xl border p-3 shadow-sm transition-colors"
+    >
       <div className="flex items-start gap-2.5">
         <SupplierLogoTile initial={offer.supplierName.charAt(0)} size="sm" />
         <div className="min-w-0 flex-1">
@@ -69,7 +95,7 @@ export function MobileOfferCard({ offer }: { offer: OfferListItem }) {
         </p>
       </div>
 
-      <div className="border-border flex items-end justify-between gap-3 border-t pt-2.5">
+      <div className="border-border flex items-end justify-between gap-3 border-t pt-2">
         <div className="text-xs">
           <span className="text-foreground font-semibold tabular-nums">
             {offer.quantity ?? "—"}
@@ -93,26 +119,24 @@ export function MobileOfferCard({ offer }: { offer: OfferListItem }) {
         </div>
       </div>
 
-      <div className="flex gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          nativeButton={false}
-          render={<Link href={`/suppliers/${offer.supplierSlug}`} />}
-          className="flex-1"
+      <div className="flex items-center justify-between gap-3 text-xs font-medium">
+        <Link
+          href={`/suppliers/${offer.supplierSlug}`}
+          onClick={(event) => event.stopPropagation()}
+          className="text-primary inline-flex items-center gap-1"
         >
-          View Supplier
-        </Button>
-        <Button
-          size="sm"
-          nativeButton={false}
-          render={<a href={whatsappHref} target="_blank" rel="noreferrer" />}
-          className="flex-1"
+          View supplier <ArrowUpRight className="size-3.5" aria-hidden />
+        </Link>
+        <a
+          href={whatsappHref}
+          target="_blank"
+          rel="noreferrer"
+          onClick={(event) => event.stopPropagation()}
+          className="text-primary inline-flex items-center gap-1"
         >
-          <MessageCircle className="mr-1 size-3.5" aria-hidden />
-          WhatsApp
-        </Button>
+          <MessageCircle className="size-3.5" aria-hidden /> WhatsApp
+        </a>
       </div>
-    </div>
+    </motion.div>
   );
 }

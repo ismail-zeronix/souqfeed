@@ -3,7 +3,7 @@
 import { type ComponentType } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ClipboardList, Home, Search, User, Users } from "lucide-react";
+import { ClipboardList, Home, Menu, Search, Users } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 import { cn } from "@/lib/utils";
 
@@ -31,7 +31,7 @@ function NavItemShell({
   return (
     <span
       className={cn(
-        "flex min-w-11 flex-1 flex-col items-center justify-center gap-0.5 py-1.5 text-[11px] font-medium",
+        "flex min-w-11 flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors",
         active && "text-primary",
         !active && !disabled && "text-muted-foreground",
         disabled && "text-muted-foreground/50",
@@ -47,12 +47,14 @@ export function MobileBottomNav() {
   const pathname = usePathname();
   const { data: session } = authClient.useSession();
 
+  if (pathname.startsWith("/login")) return null;
+
   const profileActive =
     pathname === "/dashboard" || pathname === "/admin" || pathname === "/login";
 
   return (
     <nav
-      className="border-border bg-card fixed inset-x-0 bottom-0 z-40 flex items-stretch justify-around border-t md:hidden"
+      className="border-border bg-card fixed inset-x-0 bottom-0 z-40 flex items-stretch justify-around border-t shadow-[0_-4px_18px_rgba(40,16,95,0.06)] md:hidden"
       style={{
         paddingBottom: "max(0px, env(safe-area-inset-bottom))",
       }}
@@ -94,7 +96,7 @@ export function MobileBottomNav() {
         href={profileHref(session)}
         aria-current={profileActive ? "page" : undefined}
       >
-        <NavItemShell label="Profile" icon={User} active={profileActive} />
+        <NavItemShell label="More" icon={Menu} active={profileActive} />
       </Link>
     </nav>
   );

@@ -3,6 +3,7 @@
 import type { ReactElement } from "react";
 import Link from "next/link";
 import { Package, ShoppingCart } from "lucide-react";
+import { authRoleContent } from "@/components/auth/auth-content";
 import {
   Dialog,
   DialogContent,
@@ -20,12 +21,12 @@ export function SignupDialog({ trigger }: { trigger: ReactElement }) {
         <DialogHeader>
           <DialogTitle>Join SouqFeed</DialogTitle>
           <DialogDescription>
-            Tell us how you&apos;ll use the platform.
+            Choose the experience that fits your business.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-3 sm:grid-cols-2">
           <Link
-            href="/login?role=buyer"
+            href="/login?mode=signup&role=buyer"
             className="border-border hover:border-primary hover:bg-primary/5 flex flex-col items-start gap-2 rounded-md border p-4 text-left transition-colors"
           >
             <ShoppingCart className="text-primary size-5" aria-hidden />
@@ -33,19 +34,19 @@ export function SignupDialog({ trigger }: { trigger: ReactElement }) {
               I&apos;m a Buyer
             </span>
             <span className="text-muted-foreground text-xs">
-              Search and compare live offers from verified suppliers.
+              {authRoleContent.buyer.description}
             </span>
           </Link>
           <Link
-            href="/login?role=supplier"
+            href="/login?mode=signup&role=seller"
             className="border-border hover:border-primary hover:bg-primary/5 flex flex-col items-start gap-2 rounded-md border p-4 text-left transition-colors"
           >
             <Package className="text-primary size-5" aria-hidden />
             <span className="text-foreground text-sm font-semibold">
-              I&apos;m a Supplier
+              I&apos;m a Seller
             </span>
             <span className="text-muted-foreground text-xs">
-              Broadcast your stock and reach buyers across the UAE.
+              {authRoleContent.seller.description}
             </span>
           </Link>
         </div>

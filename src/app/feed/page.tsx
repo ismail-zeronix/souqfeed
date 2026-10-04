@@ -1,7 +1,12 @@
 import { TradingFloorView } from "@/components/feed/trading-floor-view";
 import { getMockBrands } from "@/modules/brands/mock-data";
 import { getMockCategories } from "@/modules/categories/mock-data";
-import { EMPTY_OFFER_FILTERS } from "@/modules/offers/filter-offers";
+import {
+  EMPTY_OFFER_FILTERS,
+  filterOffers,
+  sortOffers,
+} from "@/modules/offers/filter-offers";
+import { paginateOffers } from "@/modules/offers/pagination";
 import {
   getMockOffers,
   getMockPriceMovements,
@@ -18,9 +23,10 @@ export default async function FeedPage({
     category?: string;
     location?: string;
     q?: string;
+    page?: string;
   }>;
 }) {
-  const { category, location, q } = await searchParams;
+  const { category, location, q, page } = await searchParams;
 
   const brands = getMockBrands();
   const categories = getMockCategories();
@@ -38,12 +44,24 @@ export default async function FeedPage({
     locationNames: location ? [location] : [],
     searchQuery: q ?? "",
   };
+  const requestedPage = Number.parseInt(page ?? "1", 10);
+  const matchingOffers = sortOffers(filterOffers(offers, initialCriteria), "recent");
+  const paginatedOffers = paginateOffers(matchingOffers, requestedPage, 25);
+  const paginationParams = new URLSearchParams();
+  if (category) paginationParams.set("category", category);
+  if (location) paginationParams.set("location", location);
+  if (q) paginationParams.set("q", q);
 
   return (
     <TradingFloorView
       brands={brands}
       categories={categories}
-      offers={offers}
+      offers={paginatedOffers.items}
+      currentPage={paginatedOffers.page}
+      pageSize={paginatedOffers.pageSize}
+      pageCount={paginatedOffers.totalPages}
+      totalOfferCount={paginatedOffers.totalItems}
+      paginationQuery={paginationParams.toString()}
       topSuppliers={topSuppliers}
       priceMovements={priceMovements}
       trendingSearches={trendingSearches}

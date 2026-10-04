@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { FiltersSidebar } from "@/components/market/filters-sidebar";
 import { MarketPulseSidebar } from "@/components/market/market-pulse-sidebar";
 import { LiveTradingFeed } from "@/components/feed/live-trading-feed";
-import { LOCATION_NAMES } from "@/modules/offers/constants";
+import { MobileTradingFeed } from "@/components/feed/mobile-trading-feed";
 import { EMPTY_OFFER_FILTERS } from "@/modules/offers/filter-offers";
+import { LOCATION_NAMES } from "@/modules/offers/constants";
 import type {
   CategoryPriceMovement,
   OfferFilterCriteria,
@@ -26,6 +26,11 @@ export interface TradingFloorViewProps {
   trendingSearches: TrendingSearchTerm[];
   wtbRequests: WtbRequestSnippet[];
   initialCriteria?: OfferFilterCriteria;
+  currentPage: number;
+  pageSize: number;
+  pageCount: number;
+  totalOfferCount: number;
+  paginationQuery: string;
 }
 
 export function TradingFloorView({
@@ -37,28 +42,47 @@ export function TradingFloorView({
   trendingSearches,
   wtbRequests,
   initialCriteria,
+  currentPage,
+  pageSize,
+  pageCount,
+  totalOfferCount,
+  paginationQuery,
 }: TradingFloorViewProps) {
-  const [criteria, setCriteria] = useState<OfferFilterCriteria>(
+  const [criteria, setCriteria] = useState(
     initialCriteria ?? EMPTY_OFFER_FILTERS,
   );
 
   return (
-    <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-6 py-6 lg:flex-row">
-      <FiltersSidebar
-        brands={brands}
+    <>
+      <MobileTradingFeed
+        offers={offers}
         categories={categories}
-        locationNames={LOCATION_NAMES}
-        criteria={criteria}
-        onCriteriaChange={setCriteria}
+        initialCriteria={initialCriteria ?? EMPTY_OFFER_FILTERS}
       />
-      <LiveTradingFeed offers={offers} criteria={criteria} />
-      <MarketPulseSidebar
-        trendingCategories={categories}
-        priceMovements={priceMovements}
-        trendingSearches={trendingSearches}
-        topSuppliers={topSuppliers}
-        wtbRequests={wtbRequests}
-      />
-    </div>
+      <div className="bg-[#f7f8fc] hidden min-h-full w-full md:block">
+        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-3 px-4 py-4 md:flex-row md:px-5 lg:gap-4 lg:px-6">
+        <LiveTradingFeed
+          offers={offers}
+          criteria={criteria}
+          brands={brands}
+          categories={categories}
+          locationNames={LOCATION_NAMES}
+          onCriteriaChange={setCriteria}
+          currentPage={currentPage}
+          pageSize={pageSize}
+          pageCount={pageCount}
+          totalOfferCount={totalOfferCount}
+          paginationQuery={paginationQuery}
+        />
+        <MarketPulseSidebar
+          trendingCategories={categories}
+          priceMovements={priceMovements}
+          trendingSearches={trendingSearches}
+          topSuppliers={topSuppliers}
+          wtbRequests={wtbRequests}
+        />
+        </div>
+      </div>
+    </>
   );
 }

@@ -29,9 +29,10 @@ export const CATEGORY_ICONS: Record<
 export function CategoryShowcase({ categories }: { categories: Category[] }) {
   return (
     <section className="mx-auto w-full max-w-[1440px] px-6 py-10">
-      <h2 className="text-foreground text-sm font-semibold tracking-wide uppercase">
-        Categories
-      </h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-foreground text-xl font-bold tracking-tight">Browse by IT Category</h2>
+        <Link href="/feed" className="text-primary text-xs font-semibold">View all categories →</Link>
+      </div>
       <div className="relative mt-4">
         <div
           className="flex snap-x snap-mandatory [scrollbar-width:none] gap-3 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
@@ -44,9 +45,9 @@ export function CategoryShowcase({ categories }: { categories: Category[] }) {
                 key={category.id}
                 href={`/feed?category=${category.id}`}
                 role="listitem"
-                className="group flex w-20 flex-none snap-start flex-col items-center gap-1.5 px-1 py-2 text-center sm:w-[6.5rem]"
+                className="group flex min-w-[7.5rem] flex-1 snap-start flex-col items-center gap-2 rounded-2xl border border-[#ebe6ff] bg-white px-2 py-4 text-center shadow-[0_5px_18px_rgba(71,42,170,0.04)] transition hover:-translate-y-0.5 hover:border-[#cfc4ff] sm:min-w-0"
               >
-                <span className="bg-primary/10 text-primary group-hover:bg-primary flex size-11 items-center justify-center rounded-full transition-colors group-hover:text-white">
+                <span className="bg-primary/10 text-primary group-hover:bg-primary flex size-11 items-center justify-center rounded-xl transition-colors group-hover:text-white">
                   <Icon className="size-5" aria-hidden />
                 </span>
                 <span className="text-foreground text-sm font-medium">

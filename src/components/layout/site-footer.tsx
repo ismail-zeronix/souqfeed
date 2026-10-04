@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Radio } from "lucide-react";
 
 const PLATFORM_LINKS: { label: string; href: string | null }[] = [
@@ -48,6 +51,8 @@ function FooterLinkColumn({
 }
 
 export function SiteFooter() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/login")) return null;
   return (
     <footer className="bg-brand-dark">
       <div className="mx-auto grid w-full max-w-[1440px] gap-10 px-6 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">

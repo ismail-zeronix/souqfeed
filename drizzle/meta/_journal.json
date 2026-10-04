@@ -15,6 +15,13 @@
       "when": 1790729263008,
       "tag": "0001_remarkable_bill_hollister",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791121800000,
+      "tag": "0002_add_buyer_role",
+      "breakpoints": true
     }
   ]
 }

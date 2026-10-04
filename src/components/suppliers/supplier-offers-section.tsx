@@ -4,6 +4,7 @@ import { Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { LiveMarketCard } from "@/components/market/live-market-card";
+import { MobileOfferCard } from "@/components/home/mobile/mobile-offer-card";
 import {
   EMPTY_OFFER_FILTERS,
   filterOffers,
@@ -44,23 +45,34 @@ export function SupplierOffersSection({
         />
       </div>
 
-      <h2 className="text-foreground flex items-center gap-2 text-sm font-semibold">
-        <span className="bg-live size-2 rounded-full" aria-hidden />
-        Live Offers from {supplierName}
-      </h2>
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-foreground flex items-center gap-2 text-sm font-semibold">
+          <span
+            className="bg-live size-2 animate-pulse rounded-full"
+            aria-hidden
+          />
+          Live Offers from {supplierName}
+        </h2>
+        <span className="text-muted-foreground text-xs tabular-nums">
+          {visibleOffers.length} offers
+        </span>
+      </div>
 
       {visibleOffers.length === 0 ? (
         <div className="border-border text-muted-foreground rounded-md border border-dashed p-12 text-center text-sm">
           No offers match your search.
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           {visibleOffers.map((offer) => (
-            <LiveMarketCard
-              key={offer.id}
-              offer={offer}
-              actionLabel="View Product"
-            />
+            <div key={offer.id}>
+              <div className="md:hidden">
+                <MobileOfferCard offer={offer} />
+              </div>
+              <div className="hidden md:block">
+                <LiveMarketCard offer={offer} actionLabel="View Product" />
+              </div>
+            </div>
           ))}
         </div>
       )}

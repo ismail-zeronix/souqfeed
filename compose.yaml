@@ -44,6 +44,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in .env}
     volumes:
       - souqfeed_postgres_prod_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     networks:
       - souqfeed-net
     healthcheck:
