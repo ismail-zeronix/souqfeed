@@ -14,6 +14,8 @@ import {
   IconDeviceMobile,
   IconShieldLock,
   IconBolt,
+  IconDeviceGamepad2,
+  IconHeadphones,
 } from "@tabler/icons-react";
 import type { Category } from "@/modules/categories/types";
 
@@ -50,10 +52,22 @@ const CATEGORY_ICONS_BY_SLUG = {
   printers: IconPrinter,
   security: IconShieldLock,
   "power-ups": IconBolt,
+  "audio-video": IconHeadphones,
+  gaming: IconDeviceGamepad2,
 } satisfies Record<
   string,
   ComponentType<{ className?: string; "aria-hidden"?: boolean }>
 >;
+
+export function categoryIcon(category: { id: string; slug: string }) {
+  return (
+    CATEGORY_ICONS_BY_SLUG[
+      category.slug as keyof typeof CATEGORY_ICONS_BY_SLUG
+    ] ??
+    CATEGORY_ICONS[category.id] ??
+    IconDeviceLaptop
+  );
+}
 
 export function CategoryShowcase({ categories }: { categories: Category[] }) {
   return (

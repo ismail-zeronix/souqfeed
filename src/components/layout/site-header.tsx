@@ -64,7 +64,7 @@ export function SiteHeader() {
             href="/"
             className="flex shrink-0 items-center gap-2 text-[15px] font-bold tracking-tight"
           >
-            <HeaderMascot showCallout />
+            <HeaderMascot />
             <span className="text-foreground">
               Souq<span className="text-primary">Feed</span>
             </span>

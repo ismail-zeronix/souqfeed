@@ -53,7 +53,7 @@ export function HomeSummary({
         />
       </div>
       <div className="hidden bg-[#fbfaff] md:block">
-        <HomeHero stats={stats} categories={categories} />
+        <HomeHero offers={offers} />
         <HomeStatsStrip stats={stats} />
         <CategoryShowcase categories={categories} />
         <LiveMarketSnapshot offers={offers} />

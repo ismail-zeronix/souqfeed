@@ -1,141 +1,98 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Check,
-  Mail,
-  MessageCircle,
-  Package,
-  Phone,
-  TrendingUp,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight, MessageCircle, Package, Sparkles } from "lucide-react";
 import { SignupDialog } from "@/components/layout/signup-dialog";
-import type { Category } from "@/modules/categories/types";
-import type { MarketStats } from "@/modules/offers/types";
-import { SouqFeedAgent } from "@/components/ui/souqfeed-agent";
+import {
+  FloatingChip,
+  GlassCard,
+  HeroRings,
+  PhoneFeed,
+} from "@/components/home/hero-art";
+import type { OfferListItem } from "@/modules/offers/types";
 
-const HERO_PHRASES = ["Buyers find stock.", "Suppliers find buyers."];
-
-export function HomeHero({}: { stats: MarketStats; categories: Category[] }) {
-  const [typedLine, setTypedLine] = useState("");
-  const [phraseIndex, setPhraseIndex] = useState(0);
-
-  useEffect(() => {
-    const phrase = HERO_PHRASES[phraseIndex];
-    const isComplete = typedLine === phrase;
-    const timer = window.setTimeout(
-      () => {
-        if (isComplete) {
-          setPhraseIndex((current) => (current + 1) % HERO_PHRASES.length);
-          setTypedLine("");
-        } else {
-          setTypedLine(phrase.slice(0, typedLine.length + 1));
-        }
-      },
-      isComplete ? 1800 : 70,
-    );
-
-    return () => window.clearTimeout(timer);
-  }, [phraseIndex, typedLine]);
-
+/** The desktop banner: a big rounded card, the headline on the left, the live feed drawn as a phone on the right. */
+export function HomeHero({ offers }: { offers: OfferListItem[] }) {
   return (
-    <section className="relative overflow-hidden border-b border-[#e7e0ff] bg-[#f7f5ff]">
-      <div className="pointer-events-none absolute inset-0 [background-image:linear-gradient(to_right,rgba(108,66,245,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(108,66,245,0.06)_1px,transparent_1px)] [background-size:42px_42px] opacity-50" />
-      <div className="pointer-events-none absolute -top-24 right-[16%] size-72 rounded-full bg-[#cfc3ff]/45 blur-3xl" />
-      <div className="relative mx-auto max-w-[1180px] px-5 py-6 lg:flex lg:min-h-[300px] lg:items-center lg:justify-between lg:gap-10 lg:py-7">
-        <div className="max-w-[680px]">
-          <div className="text-primary inline-flex items-center gap-2 rounded-full border border-[#d7ccff] bg-white/75 px-3 py-1 text-[11px] font-bold tracking-[0.16em] uppercase shadow-sm">
-            <span className="bg-live size-1.5 rounded-full" />
+    <section className="mx-auto w-full max-w-[1240px] px-5 pt-6">
+      <div className="relative min-h-[440px] overflow-hidden rounded-[2.25rem] bg-[linear-gradient(115deg,#efeaff_0%,#dfd5ff_52%,#c8b8ff_100%)]">
+        <HeroRings className="top-1/2 -right-[6%] w-[640px] -translate-y-1/2" />
+
+        <div className="relative z-10 flex h-full min-h-[440px] flex-col justify-center px-12 py-10 lg:w-[58%]">
+          <span className="text-primary inline-flex w-fit items-center gap-2 rounded-full bg-white/80 px-3.5 py-1.5 text-[13px] font-semibold">
+            <span className="bg-live size-2 rounded-full" />
             Live UAE supplier feed
-          </div>
-          <h1 className="text-foreground mt-3 max-w-xl text-3xl leading-[1.05] font-bold tracking-tight lg:text-5xl">
-            Still searching or broadcasting on WhatsApp?
-            <span className="text-primary mt-2 block min-h-[1.05em]">
-              {typedLine}
-              <span className="text-primary/50 ml-1 inline-block animate-pulse">
-                |
-              </span>
-            </span>
+          </span>
+          <h1 className="font-display text-foreground mt-5 text-[3.4rem] leading-[1.02] font-extrabold tracking-tight">
+            Dubai&apos;s IT stock,
+            <br />
+            <span className="text-primary">one live feed.</span>
           </h1>
-          <p className="text-muted-foreground mt-3 max-w-lg text-sm leading-5 lg:text-[15px]">
-            Search verified IT stock across Dubai&apos;s wholesale market and
-            find the right supplier before the next message lands.
+          <p className="text-foreground/70 mt-4 max-w-md text-base leading-6">
+            Stop scrolling WhatsApp groups. Search verified supplier offers by
+            model or part number and message the seller directly.
           </p>
-          <div className="mt-5 flex flex-wrap gap-2.5">
-            <Button
-              nativeButton={false}
-              render={<Link href="/feed" />}
-              className="bg-primary hover:bg-primary/90"
+          <div className="mt-7 flex flex-wrap items-center gap-3">
+            <Link
+              href="/feed"
+              className="font-display inline-flex h-14 items-center gap-4 rounded-full bg-[#1d1540] py-2 pr-2 pl-7 text-[15px] font-bold text-white transition hover:bg-[#2a1f5c]"
             >
-              View Live Market{" "}
-              <ArrowRight className="ml-1 size-4" aria-hidden />
-            </Button>
+              View live market
+              <span className="flex size-10 items-center justify-center rounded-full bg-white text-[#1d1540]">
+                <ArrowRight className="size-5" aria-hidden />
+              </span>
+            </Link>
             <SignupDialog
               trigger={
-                <Button
-                  variant="outline"
-                  className="text-primary border-[#cfc4ff] bg-white hover:bg-[#f1edff]"
+                <button
+                  type="button"
+                  className="font-display text-primary inline-flex h-14 items-center gap-2 rounded-full border-2 border-[#1d1540]/15 bg-white/60 px-6 text-[15px] font-bold hover:bg-white"
                 >
-                  <Package className="mr-1 size-4" aria-hidden />
+                  <Package className="size-4" aria-hidden />
                   List your stock
-                </Button>
+                </button>
               }
             />
           </div>
-          <div className="text-muted-foreground mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-medium">
-            <span className="inline-flex items-center gap-1.5">
-              <Check className="text-live size-3.5" />
-              Verified suppliers
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <TrendingUp className="text-primary size-3.5" />
-              Real market prices
-            </span>
-          </div>
         </div>
-        <div className="relative mt-6 hidden w-[275px] shrink-0 lg:block">
-          <div className="signal-float absolute -top-5 left-2 z-20 flex items-center gap-1.5 rounded-full border border-[#ddd5ff] bg-white px-2.5 py-1.5 text-[10px] font-semibold text-[#7e7699] shadow-[0_8px_18px_rgba(71,42,170,0.12)]">
-            <MessageCircle className="size-3.5 text-[#25d366]" /> WhatsApp
-          </div>
-          <div className="signal-float absolute top-9 -right-7 z-20 flex items-center gap-1.5 rounded-full border border-[#ddd5ff] bg-white px-2.5 py-1.5 text-[10px] font-semibold text-[#7e7699] shadow-[0_8px_18px_rgba(71,42,170,0.12)] [animation-delay:700ms]">
-            <Mail className="text-primary size-3.5" /> Email
-          </div>
-          <div className="signal-float absolute bottom-7 -left-9 z-20 flex items-center gap-1.5 rounded-full border border-[#ddd5ff] bg-white px-2.5 py-1.5 text-[10px] font-semibold text-[#7e7699] shadow-[0_8px_18px_rgba(71,42,170,0.12)] [animation-delay:1400ms]">
-            <Phone className="size-3.5 text-[#2a8fdb]" /> Calls
-          </div>
-          <div className="relative z-10 rounded-[1.5rem] border border-[#ddd5ff] bg-white/85 p-4 shadow-[0_18px_45px_rgba(71,42,170,0.14)] backdrop-blur-sm">
-            <div className="flex items-center justify-between text-xs font-semibold text-[#5f5581]">
-              <span>SouqFeed signal</span>
-              <span className="text-live">+12.4%</span>
-            </div>
-            <div className="mt-3 flex items-end justify-between gap-3">
-              <div>
-                <p className="text-2xl font-bold text-[#21184e]">One signal</p>
-                <p className="mt-1 text-xs text-[#7e7699]">
-                  Less noise. Better connections.
-                </p>
-              </div>
-              <SouqFeedAgent
-                state="searching"
-                size="md"
-                alt="SouqFeed mascot searching"
-                className="drop-shadow-[0_16px_16px_rgba(72,34,182,0.22)]"
-              />
-            </div>
-            <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#eeeaff]">
-              <div className="bg-primary h-full w-4/5 rounded-full" />
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-center lg:hidden">
-          <SouqFeedAgent
-            state="searching"
-            size="md"
-            alt="SouqFeed mascot searching"
+
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[44%] lg:block">
+          <FloatingChip
+            index={0}
+            className="top-14 left-[-4%] size-16 -rotate-6"
           />
+          <FloatingChip
+            index={1}
+            className="top-[46%] left-[-12%] size-14 rotate-6"
+          />
+          <FloatingChip
+            index={2}
+            className="bottom-14 left-[2%] size-14 -rotate-3"
+          />
+          <PhoneFeed
+            offers={offers}
+            className="absolute top-12 left-[12%] w-[250px] rotate-[7deg]"
+          />
+          <FloatingChip
+            index={3}
+            className="top-10 right-[30%] size-14 rotate-3"
+          />
+        </div>
+
+        <div className="absolute right-6 bottom-6 z-20 hidden w-[230px] space-y-3 xl:block">
+          <GlassCard className="flex items-start gap-3 p-4">
+            <Sparkles className="text-primary mt-0.5 size-5 shrink-0" />
+            <p className="text-[13px] leading-5 font-semibold text-[#21184e]">
+              WhatsApp broadcasts, turned into searchable offers.
+            </p>
+          </GlassCard>
+          <GlassCard className="p-4">
+            <p className="flex items-center gap-2 text-[13px] font-bold text-[#21184e]">
+              <MessageCircle className="size-4 text-[#25d366]" />
+              Talk to suppliers
+            </p>
+            <p className="mt-1 text-xs text-[#6b6390]">
+              Every offer links to the supplier on WhatsApp.
+            </p>
+          </GlassCard>
         </div>
       </div>
     </section>
