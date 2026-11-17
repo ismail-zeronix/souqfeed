@@ -7,7 +7,7 @@ import { BroadcastDetailView } from "@/components/broadcasts/broadcast-detail";
 import { Button } from "@/components/ui/button";
 import { requireAdminPage } from "@/lib/auth/session";
 import { isUuid } from "@/lib/validation/form";
-import { getBroadcast } from "@/modules/broadcasts/queries";
+import { getBroadcast, listBroadcastItems } from "@/modules/broadcasts/queries";
 
 export const metadata: Metadata = { title: "Broadcast" };
 
@@ -21,6 +21,7 @@ export default async function AdminBroadcastPage({
   if (!isUuid(id)) notFound();
   const broadcast = await getBroadcast(id);
   if (!broadcast) notFound();
+  const items = await listBroadcastItems(broadcast.id);
 
   return (
     <>
@@ -44,7 +45,7 @@ export default async function AdminBroadcastPage({
           </Button>
         }
       />
-      <BroadcastDetailView broadcast={broadcast} />
+      <BroadcastDetailView broadcast={broadcast} items={items} />
     </>
   );
 }

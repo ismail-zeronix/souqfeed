@@ -2,3 +2,5 @@ allowBuilds:
   esbuild: true
   sharp: false
   unrs-resolver: false
+  # Optional native speed-up for BullMQ's msgpack; the JS fallback is used.
+  msgpackr-extract: false

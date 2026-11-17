@@ -200,6 +200,21 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   duplicate, blank, cross-supplier access, buyer access, admin views, and a
   direct SQL `UPDATE` of `raw_text` rejected.
 
+- **Phase 5 (broadcast parser) complete** — per
+  `docs/superpowers/plans/2026-11-17-souqfeed-phase5-broadcast-parser.md`.
+  `RuleBasedBroadcastParser` (`src/modules/broadcasts/parser/`): pure,
+  deterministic, reads brand (incl. family names like ThinkPad → Lenovo),
+  model, part number, CPU, RAM, storage, GPU, display, OS, quantity, price,
+  currency, and ask-for-price; joins multi-line blocks; treats brand-only lines
+  as section headers. 45 parser tests built from real Buraqa lines and the
+  documented formats. BullMQ worker (`src/worker/`, Dockerfile stage
+  `worker`, compose service `worker`) moves broadcasts PROCESSING → REVIEW
+  (or FAILED with a reason in the new `status_note`), with 3 retries and a
+  sweeper for stalled broadcasts. Items keep source order (`position`,
+  migration `0006`). Detail pages show the products found. Verified in Docker:
+  a 14-line broadcast gave 6 correct products, a junk one failed with its
+  reason, and a stalled broadcast was picked up by the sweeper.
+
 ## In Progress
 
 - Nothing currently in flight. Phases 2–3 and the admin portal are on
@@ -210,8 +225,7 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
 - **Deploy Phases 2–3 and the admin portal, with the production follow-up in
   Known Issues.** Production needs migrations `0003` and `0004`, the brand and
   category seeds, and the admin seed (to make the account `SUPER_ADMIN`).
-- Phase 5: broadcast parser (`RuleBasedBroadcastParser`), with the BullMQ
-  worker that moves broadcasts out of `PROCESSING`.
+- Phase 6: review + publishing (product matcher, NEEDS_REVIEW UI, publish).
 
 ## Decisions
 
@@ -296,7 +310,6 @@ created_at from "user" where role in ('ADMIN', 'SUPER_ADMIN')` and revoke anythi
   need a database lookup in `proxy.ts`.
 - `corepack pnpm` fails with pnpm 12.8.1 (`pnpm.cjs` not found); install it with
   `npm install -g pnpm@12.8.1`, as the Dockerfile does.
-- `pnpm format:check` fails on 13 files last touched before Phase 2.
 - `docs/data-model.md` is stale relative to what Task 2/3 actually built:
   it calls the auth table `users` (plural) and types `userId`/`user.id` as
   `uuid`; the real table is `user` (singular) with a `text` primary key.

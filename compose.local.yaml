@@ -45,6 +45,21 @@ services:
       retries: 3
       start_period: 10s
 
+  # Parses submitted broadcasts off the Redis queue.
+  worker:
+    build:
+      context: .
+      target: worker
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment: *app-environment
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
   postgres:
     image: postgres:16-alpine
     restart: unless-stopped

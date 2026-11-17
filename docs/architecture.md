@@ -74,7 +74,7 @@ See `docs/broadcast-parsing.md` for the parser/matcher internals and
 ```
 docker compose -f docker-compose.yml up -d   # postgres, redis
 pnpm dev                  # web (Next.js)
-pnpm worker               # worker (BullMQ) -- Phase 1+, not yet implemented
+pnpm worker:dev           # worker (BullMQ): parses submitted broadcasts
 ```
 
 `-f docker-compose.yml` is required because `compose.yaml` (below) also
@@ -92,8 +92,11 @@ postgres | redis
 ```
 
 See `docs/deployment.md` for the full compose/Dockerfile design and the
-exact migration command. A `worker` container (BullMQ) sharing the same
-image with a different start command is planned but not yet built.
+exact migration command. The `worker` container is its own Dockerfile
+stage (full `node_modules`, runs `src/worker/index.ts` with `tsx`), because
+Next's standalone output only covers the web app. It parses broadcasts off
+the `broadcast-parse` queue and, every minute, re-queues any broadcast left in
+`PROCESSING` for 2+ minutes (e.g. submitted while Redis was down).
 
 Deployment target is a VPS, not a serverless platform — chosen specifically
 because a persistent BullMQ worker process and long-lived SSE connections

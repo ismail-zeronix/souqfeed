@@ -64,6 +64,19 @@ COPY . .
 CMD ["pnpm", "db:migrate"]
 
 #######################################################################
+# worker: the BullMQ broadcast-parsing process (src/worker). Like
+# migrator, it runs TypeScript directly with tsx from the full
+# node_modules, since Next's standalone output only covers the web app.
+#######################################################################
+FROM deps AS worker
+COPY . .
+ENV NODE_ENV=production
+USER node
+# tsx directly, not `pnpm worker`: under NODE_ENV=production pnpm first tries
+# to prune dev dependencies (tsx is one), which fails as a non-root user.
+CMD ["./node_modules/.bin/tsx", "src/worker/index.ts"]
+
+#######################################################################
 # runner: minimal image that actually serves traffic. No pnpm, no dev
 # dependencies — only what next build's standalone output traced as
 # actually imported at runtime.

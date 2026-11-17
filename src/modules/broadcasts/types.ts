@@ -19,6 +19,7 @@ export interface AdminBroadcastSummary extends BroadcastSummary {
 export interface BroadcastDetail {
   id: string;
   status: BroadcastStatus;
+  statusNote: string | null;
   source: string;
   rawText: string;
   itemCount: number;
@@ -28,6 +29,26 @@ export interface BroadcastDetail {
   supplierId: string;
   supplierName: string;
   supplierSlug: string;
+}
+
+export interface BroadcastItemRow {
+  id: string;
+  position: number;
+  rawLine: string;
+  rawBlock: string | null;
+  brand: string | null;
+  model: string | null;
+  partNumber: string | null;
+  cpu: string | null;
+  ram: string | null;
+  storage: string | null;
+  gpu: string | null;
+  display: string | null;
+  os: string | null;
+  quantity: number | null;
+  price: string | null;
+  currency: string | null;
+  priceType: string | null;
 }
 
 export interface Paginated<Row> {

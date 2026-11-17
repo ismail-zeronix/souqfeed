@@ -62,6 +62,8 @@ export const broadcasts = pgTable(
     rawText: text("raw_text").notNull(),
     status: broadcastStatusEnum("status").notNull().default("DRAFT"),
     source: broadcastSourceEnum("source").notNull().default("MANUAL"),
+    /** Why a broadcast is FAILED, shown to the supplier. */
+    statusNote: text("status_note"),
     publishedAt: timestamp("published_at"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
@@ -80,6 +82,8 @@ export const broadcastItems = pgTable(
     broadcastId: uuid("broadcast_id")
       .notNull()
       .references(() => broadcasts.id),
+    /** Order within the broadcast, from 0, so items list in source order. */
+    position: integer("position").notNull().default(0),
     rawLine: text("raw_line").notNull(),
     rawBlock: text("raw_block"),
 

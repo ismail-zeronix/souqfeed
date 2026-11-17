@@ -43,6 +43,13 @@
       "when": 1794919007915,
       "tag": "0005_raw_text_immutable",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794919872287,
+      "tag": "0006_known_scourge",
+      "breakpoints": true
     }
   ]
 }

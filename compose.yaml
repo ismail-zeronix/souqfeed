@@ -34,6 +34,23 @@ services:
       retries: 3
       start_period: 10s
 
+  # Parses submitted broadcasts off the Redis queue. No ports.
+  worker:
+    build:
+      context: .
+      target: worker
+    container_name: souqfeed-worker
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - souqfeed-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
   postgres:
     image: postgres:16-alpine
     container_name: souqfeed-postgres

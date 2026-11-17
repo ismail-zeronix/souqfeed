@@ -1,4 +1,4 @@
-import { and, count, desc, eq, sql, type SQL } from "drizzle-orm";
+import { and, asc, count, desc, eq, sql, type SQL } from "drizzle-orm";
 import { db } from "@/lib/database/client";
 import { suppliers } from "@/modules/suppliers/schema";
 import { broadcastItems, broadcasts } from "./schema";
@@ -6,6 +6,7 @@ import type { BroadcastStatus } from "./status";
 import type {
   AdminBroadcastSummary,
   BroadcastDetail,
+  BroadcastItemRow,
   BroadcastSummary,
   Paginated,
 } from "./types";
@@ -120,6 +121,7 @@ export async function getBroadcast(
     .select({
       id: broadcasts.id,
       status: broadcasts.status,
+      statusNote: broadcasts.statusNote,
       source: broadcasts.source,
       rawText: broadcasts.rawText,
       itemCount,
@@ -135,4 +137,33 @@ export async function getBroadcast(
     .where(and(...conditions))
     .limit(1);
   return row;
+}
+
+/** A broadcast's parsed items in source order. Callers check access first. */
+export async function listBroadcastItems(
+  broadcastId: string,
+): Promise<BroadcastItemRow[]> {
+  return db
+    .select({
+      id: broadcastItems.id,
+      position: broadcastItems.position,
+      rawLine: broadcastItems.rawLine,
+      rawBlock: broadcastItems.rawBlock,
+      brand: broadcastItems.detectedBrand,
+      model: broadcastItems.detectedModel,
+      partNumber: broadcastItems.detectedPartNumber,
+      cpu: broadcastItems.detectedCPU,
+      ram: broadcastItems.detectedRAM,
+      storage: broadcastItems.detectedStorage,
+      gpu: broadcastItems.detectedGPU,
+      display: broadcastItems.detectedDisplay,
+      os: broadcastItems.detectedOS,
+      quantity: broadcastItems.detectedQuantity,
+      price: broadcastItems.detectedPrice,
+      currency: broadcastItems.detectedCurrency,
+      priceType: broadcastItems.priceType,
+    })
+    .from(broadcastItems)
+    .where(eq(broadcastItems.broadcastId, broadcastId))
+    .orderBy(asc(broadcastItems.position), asc(broadcastItems.createdAt));
 }

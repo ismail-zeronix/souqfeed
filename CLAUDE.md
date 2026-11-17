@@ -23,6 +23,7 @@ pnpm db:generate      # generate Drizzle migrations from schema changes
 pnpm db:migrate       # apply pending Drizzle migrations
 pnpm db:seed          # seed the admin user
 pnpm db:seed:brands   # add missing reference brands (also db:seed:categories)
+pnpm worker:dev       # broadcast-parsing worker (BullMQ), loads .env
 docker compose -f docker-compose.yml up -d  # postgres + redis, for local dev
 ```
 
@@ -30,9 +31,9 @@ The `-f docker-compose.yml` is required: `compose.yaml` (the production stack)
 now also exists in the repo root, and bare `docker compose` commands prefer
 `compose.yaml` by default when both are present.
 
-Not yet implemented (Phase 1+): `pnpm worker` (BullMQ worker entrypoint). Add
-the script to `package.json` in the phase that creates its target — don't
-add the command here before it exists.
+`pnpm worker` (no `.env` loading) is what the `worker` container runs. BullMQ
+needs `ioredis` installed alongside it (an optional peer dependency since
+BullMQ 6); without it the worker spins at startup until it runs out of memory.
 
 In production, run `db:migrate`/`db:seed` via the one-off `migrate` Compose
 target — never automatically on container start. See `docs/deployment.md`

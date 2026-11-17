@@ -7,7 +7,7 @@
 ```bash
 docker compose -f docker-compose.yml up -d   # postgres, redis
 pnpm dev                # web (Next.js), http://localhost:3000
-pnpm worker              # worker (BullMQ), separate terminal -- Phase 1+, not yet implemented
+pnpm worker:dev          # worker (BullMQ), separate terminal
 ```
 
 `docker-compose.yml` (created in Phase 0) provides only `postgres` and
@@ -64,9 +64,9 @@ souqfeed.com {
 
 `postgres` and `redis` are attached only to `souqfeed-net` — never
 `proxy-net` — and publish no ports to the host. No Kubernetes; Docker
-Compose is sufficient at this scale. A `worker` container (BullMQ) sharing
-the same image with a different start command is planned but not yet
-built — see `pnpm worker` in `CLAUDE.md`.
+Compose is sufficient at this scale. The `worker` service (Dockerfile
+target `worker`) parses broadcasts; it publishes no ports and sits only on
+`souqfeed-net`. `docker compose up -d --build` starts it with the app.
 
 ## Required files
 

@@ -1,3 +1,4 @@
+import { BroadcastItemsTable } from "@/components/broadcasts/broadcast-items-table";
 import { BroadcastRawText } from "@/components/broadcasts/broadcast-raw-text";
 import { BroadcastStatusBadge } from "@/components/broadcasts/broadcast-status-badge";
 import {
@@ -9,7 +10,10 @@ import {
 } from "@/components/ui/card";
 import { formatDateTime } from "@/lib/format";
 import type { BroadcastStatus } from "@/modules/broadcasts/status";
-import type { BroadcastDetail } from "@/modules/broadcasts/types";
+import type {
+  BroadcastDetail,
+  BroadcastItemRow,
+} from "@/modules/broadcasts/types";
 import { countBroadcastLines } from "@/modules/broadcasts/validation";
 
 const STATUS_EXPLANATIONS: Record<BroadcastStatus, string> = {
@@ -35,8 +39,10 @@ function Fact({ label, value }: { label: string; value: string }) {
 /** Status, facts, and original text of one broadcast; shared by supplier and admin. */
 export function BroadcastDetailView({
   broadcast,
+  items,
 }: {
   broadcast: BroadcastDetail;
+  items: BroadcastItemRow[];
 }) {
   const lines = countBroadcastLines(broadcast.rawText);
 
@@ -48,7 +54,9 @@ export function BroadcastDetailView({
             Status <BroadcastStatusBadge status={broadcast.status} />
           </CardTitle>
           <CardDescription>
-            {STATUS_EXPLANATIONS[broadcast.status]}
+            {broadcast.status === "FAILED" && broadcast.statusNote
+              ? broadcast.statusNote
+              : STATUS_EXPLANATIONS[broadcast.status]}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -77,17 +85,33 @@ export function BroadcastDetailView({
         </CardContent>
       </Card>
 
-      <Card className="min-w-0 lg:order-1">
-        <CardHeader>
-          <CardTitle>Original broadcast</CardTitle>
-          <CardDescription>
-            Exactly as it was pasted. It can never be edited.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <BroadcastRawText rawText={broadcast.rawText} />
-        </CardContent>
-      </Card>
+      <div className="grid min-w-0 gap-4 lg:order-1">
+        {items.length > 0 && (
+          <Card className="min-w-0">
+            <CardHeader>
+              <CardTitle>Products found</CardTitle>
+              <CardDescription>
+                What SouqFeed read from each line. A dash means it wasn&apos;t
+                stated, and nothing is guessed.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <BroadcastItemsTable items={items} />
+            </CardContent>
+          </Card>
+        )}
+        <Card className="min-w-0">
+          <CardHeader>
+            <CardTitle>Original broadcast</CardTitle>
+            <CardDescription>
+              Exactly as it was pasted. It can never be edited.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <BroadcastRawText rawText={broadcast.rawText} />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

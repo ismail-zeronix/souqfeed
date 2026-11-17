@@ -5,7 +5,7 @@ import { DashboardPage } from "@/components/dashboard/dashboard-page";
 import { requireSupplierPage } from "@/lib/auth/session";
 import { formatDateTime } from "@/lib/format";
 import { isUuid } from "@/lib/validation/form";
-import { getBroadcast } from "@/modules/broadcasts/queries";
+import { getBroadcast, listBroadcastItems } from "@/modules/broadcasts/queries";
 
 export const metadata: Metadata = {
   title: "Broadcast",
@@ -24,6 +24,7 @@ export default async function SupplierBroadcastPage({
   // Scoped to this supplier, so another supplier's id is simply not found.
   const broadcast = await getBroadcast(id, supplier.id);
   if (!broadcast) notFound();
+  const items = await listBroadcastItems(broadcast.id);
 
   return (
     <DashboardPage
@@ -31,7 +32,7 @@ export default async function SupplierBroadcastPage({
       eyebrow="Broadcast"
       title={`Posted ${formatDateTime(broadcast.createdAt)}`}
     >
-      <BroadcastDetailView broadcast={broadcast} />
+      <BroadcastDetailView broadcast={broadcast} items={items} />
     </DashboardPage>
   );
 }

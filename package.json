@@ -20,16 +20,20 @@
     "db:seed": "tsx --env-file=.env src/lib/database/seed.ts",
     "db:seed:brands": "tsx --env-file=.env src/lib/database/seed-brands.ts",
     "db:seed:categories": "tsx --env-file=.env src/lib/database/seed-categories.ts",
-    "db:seed:buraqa": "tsx --env-file=.env src/lib/database/seed-buraqa.ts"
+    "db:seed:buraqa": "tsx --env-file=.env src/lib/database/seed-buraqa.ts",
+    "worker": "tsx src/worker/index.ts",
+    "worker:dev": "tsx watch --env-file=.env src/worker/index.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
     "@tabler/icons-react": "^3.48.0",
     "better-auth": "^1.7.6",
+    "bullmq": "^6.7.6",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.4.0",
     "drizzle-orm": "^0.45.3",
     "framer-motion": "^13.4.6",
+    "ioredis": "^6.0.0",
     "lucide-react": "^1.48.0",
     "next": "16.3.6",
     "pino": "^10.3.1",

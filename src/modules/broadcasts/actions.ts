@@ -7,6 +7,7 @@ import { logger } from "@/lib/logging/logger";
 import { formText, toFieldErrors } from "@/lib/validation/form";
 import { authorizeRole } from "@/modules/auth/guards";
 import { getSupplierAccount } from "@/modules/suppliers/queries";
+import { tryEnqueueBroadcastParse } from "./queue";
 import { SUBMISSIONS_PER_HOUR, submitBroadcast } from "./service";
 import type { BroadcastFormState } from "./types";
 import { broadcastInputSchema } from "./validation";
@@ -56,6 +57,10 @@ export async function submitBroadcastAction(
       };
     }
     id = result.id;
+    if (result.kind === "created" && !(await tryEnqueueBroadcastParse(id))) {
+      // Saved; the worker's sweeper queues it once Redis is reachable again.
+      logger.warn({ broadcastId: id }, "Could not queue broadcast for parsing");
+    }
   } catch (error) {
     logger.error(
       { err: error, supplierId: supplier.id },
