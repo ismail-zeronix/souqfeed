@@ -9,7 +9,10 @@ import { MobileSupplierCta } from "@/components/home/mobile/mobile-supplier-cta"
 import { Button } from "@/components/ui/button";
 import { filterOffers } from "@/modules/offers/filter-offers";
 import type { Category } from "@/modules/categories/types";
-import type { OfferFilterCriteria, OfferListItem } from "@/modules/offers/types";
+import type {
+  OfferFilterCriteria,
+  OfferListItem,
+} from "@/modules/offers/types";
 import { cn } from "@/lib/utils";
 
 export function MobileTradingFeed({
@@ -37,7 +40,7 @@ export function MobileTradingFeed({
         <Bell className="size-5" aria-hidden />
       </div>
 
-      <div className="flex gap-2 overflow-x-auto px-4 py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex [scrollbar-width:none] gap-2 overflow-x-auto px-4 py-3 [&::-webkit-scrollbar]:hidden">
         <Link
           href="/feed"
           className={cn(

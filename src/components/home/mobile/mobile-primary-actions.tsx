@@ -16,10 +16,7 @@ export function MobilePrimaryActions() {
       </Button>
       <SignupDialog
         trigger={
-          <Button
-            variant="outline"
-            className="h-12 min-w-0 flex-1 rounded-xl"
-          >
+          <Button variant="outline" className="h-12 min-w-0 flex-1 rounded-xl">
             <Package className="size-4 shrink-0" aria-hidden />
             <span className="truncate">List your stock</span>
           </Button>

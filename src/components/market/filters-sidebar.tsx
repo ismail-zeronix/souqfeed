@@ -62,20 +62,25 @@ function FilterControls({
           Category <span className="text-muted-foreground">⌃</span>
         </legend>
         {categories.map((category) => (
-          <Label key={category.id} className="justify-between text-xs font-normal">
+          <Label
+            key={category.id}
+            className="justify-between text-xs font-normal"
+          >
             <span className="flex items-center gap-2">
-            <Checkbox
-              checked={criteria.categoryIds.includes(category.id)}
-              onCheckedChange={() =>
-                onCriteriaChange({
-                  ...criteria,
-                  categoryIds: toggleValue(criteria.categoryIds, category.id),
-                })
-              }
-            />
-            {category.name}
+              <Checkbox
+                checked={criteria.categoryIds.includes(category.id)}
+                onCheckedChange={() =>
+                  onCriteriaChange({
+                    ...criteria,
+                    categoryIds: toggleValue(criteria.categoryIds, category.id),
+                  })
+                }
+              />
+              {category.name}
             </span>
-            <span className="text-muted-foreground text-[11px] tabular-nums">{category.offerCount}</span>
+            <span className="text-muted-foreground text-[11px] tabular-nums">
+              {category.offerCount}
+            </span>
           </Label>
         ))}
       </fieldset>

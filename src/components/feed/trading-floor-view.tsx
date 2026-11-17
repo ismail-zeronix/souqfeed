@@ -59,28 +59,28 @@ export function TradingFloorView({
         categories={categories}
         initialCriteria={initialCriteria ?? EMPTY_OFFER_FILTERS}
       />
-      <div className="bg-[#f7f8fc] hidden min-h-full w-full md:block">
+      <div className="hidden min-h-full w-full bg-[#f7f8fc] md:block">
         <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-3 px-4 py-4 md:flex-row md:px-5 lg:gap-4 lg:px-6">
-        <LiveTradingFeed
-          offers={offers}
-          criteria={criteria}
-          brands={brands}
-          categories={categories}
-          locationNames={LOCATION_NAMES}
-          onCriteriaChange={setCriteria}
-          currentPage={currentPage}
-          pageSize={pageSize}
-          pageCount={pageCount}
-          totalOfferCount={totalOfferCount}
-          paginationQuery={paginationQuery}
-        />
-        <MarketPulseSidebar
-          trendingCategories={categories}
-          priceMovements={priceMovements}
-          trendingSearches={trendingSearches}
-          topSuppliers={topSuppliers}
-          wtbRequests={wtbRequests}
-        />
+          <LiveTradingFeed
+            offers={offers}
+            criteria={criteria}
+            brands={brands}
+            categories={categories}
+            locationNames={LOCATION_NAMES}
+            onCriteriaChange={setCriteria}
+            currentPage={currentPage}
+            pageSize={pageSize}
+            pageCount={pageCount}
+            totalOfferCount={totalOfferCount}
+            paginationQuery={paginationQuery}
+          />
+          <MarketPulseSidebar
+            trendingCategories={categories}
+            priceMovements={priceMovements}
+            trendingSearches={trendingSearches}
+            topSuppliers={topSuppliers}
+            wtbRequests={wtbRequests}
+          />
         </div>
       </div>
     </>

@@ -6,9 +6,11 @@ describe("Buraqa seed data", () => {
     expect(BURAQA_SUPPLIER.slug).toBe("buraqa-star-computer");
     expect(BURAQA_SUPPLIER.website).toBe("https://buraqauae.com/");
     expect(BURAQA_PRODUCTS.length).toBe(27);
-    expect(new Set(BURAQA_PRODUCTS.map((product) => product.recordId)).size).toBe(
-      BURAQA_PRODUCTS.length,
+    expect(
+      new Set(BURAQA_PRODUCTS.map((product) => product.recordId)).size,
+    ).toBe(BURAQA_PRODUCTS.length);
+    expect(BURAQA_PRODUCTS.every((product) => product.brand === "HP")).toBe(
+      true,
     );
-    expect(BURAQA_PRODUCTS.every((product) => product.brand === "HP")).toBe(true);
   });
 });

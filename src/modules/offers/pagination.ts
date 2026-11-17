@@ -15,7 +15,10 @@ export function paginateOffers(
 ): PaginatedOffers {
   const safePageSize = Math.max(1, Math.floor(pageSize));
   const totalPages = Math.max(1, Math.ceil(offers.length / safePageSize));
-  const page = Math.min(Math.max(1, Math.floor(requestedPage) || 1), totalPages);
+  const page = Math.min(
+    Math.max(1, Math.floor(requestedPage) || 1),
+    totalPages,
+  );
   const start = (page - 1) * safePageSize;
 
   return {

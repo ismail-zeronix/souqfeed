@@ -45,7 +45,10 @@ export default async function FeedPage({
     searchQuery: q ?? "",
   };
   const requestedPage = Number.parseInt(page ?? "1", 10);
-  const matchingOffers = sortOffers(filterOffers(offers, initialCriteria), "recent");
+  const matchingOffers = sortOffers(
+    filterOffers(offers, initialCriteria),
+    "recent",
+  );
   const paginatedOffers = paginateOffers(matchingOffers, requestedPage, 25);
   const paginationParams = new URLSearchParams();
   if (category) paginationParams.set("category", category);

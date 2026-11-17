@@ -6,9 +6,7 @@ export interface LiveFeedSummary {
   unitCount: number | null;
 }
 
-export function getLiveFeedSummary(
-  offers: OfferListItem[],
-): LiveFeedSummary {
+export function getLiveFeedSummary(offers: OfferListItem[]): LiveFeedSummary {
   const quantities = offers
     .map((offer) => offer.quantity)
     .filter((quantity): quantity is number => quantity !== null);
