@@ -13,7 +13,7 @@ export const SOUQFEED_AGENT_STATES = [
 ] as const;
 
 export type SouqFeedAgentState = (typeof SOUQFEED_AGENT_STATES)[number];
-export type SouqFeedAgentSize = "sm" | "md" | "lg";
+export type SouqFeedAgentSize = "sm" | "md" | "lg" | "xl";
 
 const AGENT_ASSETS: Record<SouqFeedAgentState, string> = {
   idle: "/brand/mascot/souqfeed_mascot_idle.webp",
@@ -30,12 +30,14 @@ const SIZE_PX: Record<SouqFeedAgentSize, number> = {
   sm: 32,
   md: 64,
   lg: 128,
+  xl: 256,
 };
 
 const SIZE_CLASSES: Record<SouqFeedAgentSize, string> = {
   sm: "size-8",
   md: "size-16",
   lg: "size-24 sm:size-32",
+  xl: "size-40 sm:size-52",
 };
 
 export function getSouqFeedAgentAsset(state: SouqFeedAgentState): string {

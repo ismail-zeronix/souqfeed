@@ -1,3 +1,6 @@
+import { BrandMarquee } from "@/components/home/sections/brand-marquee";
+import { BroadcastToOffers } from "@/components/home/sections/broadcast-to-offers";
+import { FeatureCards } from "@/components/home/sections/feature-cards";
 import { CategoryShowcase } from "@/components/home/category-showcase";
 import { HomeHero } from "@/components/home/home-hero";
 import { HomeStatsStrip } from "@/components/home/home-stats-strip";
@@ -56,7 +59,10 @@ export function HomeSummary({
         <HomeHero offers={offers} />
         <HomeStatsStrip stats={stats} />
         <CategoryShowcase categories={categories} />
+        <BrandMarquee />
+        <FeatureCards offers={offers} />
         <LiveMarketSnapshot offers={offers} />
+        <BroadcastToOffers />
         <WtbRequests requests={wtbRequests} />
         <HowItWorks />
         <SampleFeedback />
