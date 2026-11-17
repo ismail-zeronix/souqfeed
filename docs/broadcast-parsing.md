@@ -77,6 +77,13 @@ number:
 }
 ```
 
+Implemented in `src/modules/broadcasts/matcher/` (Phase 6). Confidence per
+method: part number 0.98, brand + model 0.92, alias 0.90, family + specs
+0.75, fuzzy = similarity × 0.8. `SKU` is skipped (no SKU column; part numbers
+cover it). Several candidates at one level are told apart by specs or left as a
+0.6 suggestion. Spec conflicts (CPU model, RAM, storage) cap confidence at 0.7.
+`AUTO_APPROVED` at ≥ 0.9. A product chosen in review is recorded as `MANUAL`.
+
 **Never fabricate a match.** Below the confidence threshold, the item's
 `reviewStatus` is `NEEDS_REVIEW` and a human resolves it — the matcher does
 not guess to avoid a review step.

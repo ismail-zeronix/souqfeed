@@ -89,8 +89,8 @@ updatedAt          timestamp
 ```
 
 Indexes: index(`brandId`), index(`categoryId`), index(`partNumber`), unique on
-(`brandId`, `partNumber`), and a GIN trigram index on `title` and
-`normalizedTitle` for fuzzy search (planned for Phases 6/9, not yet built).
+(`brandId`, `partNumber`), and a GIN trigram index on `normalizedTitle`
+(migration `0008`, needs `pg_trgm` from `0007`) for fuzzy matching and search.
 
 `specifications` holds only known values, using the keys `cpu`, `ram`, `storage`,
 `gpu`, `display`, `os`; unknown stays absent (Rule 10). Products are deactivated,

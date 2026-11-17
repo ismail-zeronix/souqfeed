@@ -45,7 +45,11 @@ export default async function AdminBroadcastPage({
           </Button>
         }
       />
-      <BroadcastDetailView broadcast={broadcast} items={items} />
+      <BroadcastDetailView
+        broadcast={broadcast}
+        items={items}
+        canCreateProducts
+      />
     </>
   );
 }

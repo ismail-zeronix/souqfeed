@@ -34,6 +34,11 @@ export const products = pgTable(
     index("products_brand_id_idx").on(table.brandId),
     index("products_category_id_idx").on(table.categoryId),
     index("products_part_number_idx").on(table.partNumber),
+    // Fuzzy matching and search (needs pg_trgm, migration 0007).
+    index("products_normalized_title_trgm_idx").using(
+      "gin",
+      table.normalizedTitle.op("gin_trgm_ops"),
+    ),
     // NULL means unknown, and NULLs never collide in a unique index.
     uniqueIndex("products_brand_part_number_unique").on(
       table.brandId,

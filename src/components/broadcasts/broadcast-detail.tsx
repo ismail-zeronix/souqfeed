@@ -1,4 +1,4 @@
-import { BroadcastItemsTable } from "@/components/broadcasts/broadcast-items-table";
+import { BroadcastReview } from "@/components/broadcasts/broadcast-review";
 import { BroadcastRawText } from "@/components/broadcasts/broadcast-raw-text";
 import { BroadcastStatusBadge } from "@/components/broadcasts/broadcast-status-badge";
 import {
@@ -40,9 +40,12 @@ function Fact({ label, value }: { label: string; value: string }) {
 export function BroadcastDetailView({
   broadcast,
   items,
+  canCreateProducts = false,
 }: {
   broadcast: BroadcastDetail;
   items: BroadcastItemRow[];
+  /** Staff can add unmatched items to the catalog. */
+  canCreateProducts?: boolean;
 }) {
   const lines = countBroadcastLines(broadcast.rawText);
 
@@ -87,18 +90,12 @@ export function BroadcastDetailView({
 
       <div className="grid min-w-0 gap-4 lg:order-1">
         {items.length > 0 && (
-          <Card className="min-w-0">
-            <CardHeader>
-              <CardTitle>Products found</CardTitle>
-              <CardDescription>
-                What SouqFeed read from each line. A dash means it wasn&apos;t
-                stated, and nothing is guessed.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <BroadcastItemsTable items={items} />
-            </CardContent>
-          </Card>
+          <BroadcastReview
+            broadcastId={broadcast.id}
+            items={items}
+            editable={broadcast.status === "REVIEW"}
+            canCreateProducts={canCreateProducts}
+          />
         )}
         <Card className="min-w-0">
           <CardHeader>

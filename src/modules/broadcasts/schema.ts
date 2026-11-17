@@ -43,6 +43,8 @@ export const matchMethodEnum = pgEnum("match_method", [
   "FUZZY",
   "AI",
   "NONE",
+  // Chosen by a person during review.
+  "MANUAL",
 ]);
 
 export const reviewStatusEnum = pgEnum("review_status", [

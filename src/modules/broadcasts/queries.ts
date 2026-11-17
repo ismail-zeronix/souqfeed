@@ -1,5 +1,6 @@
 import { and, asc, count, desc, eq, sql, type SQL } from "drizzle-orm";
 import { db } from "@/lib/database/client";
+import { products } from "@/modules/products/schema";
 import { suppliers } from "@/modules/suppliers/schema";
 import { broadcastItems, broadcasts } from "./schema";
 import type { BroadcastStatus } from "./status";
@@ -162,8 +163,15 @@ export async function listBroadcastItems(
       price: broadcastItems.detectedPrice,
       currency: broadcastItems.detectedCurrency,
       priceType: broadcastItems.priceType,
+      matchedProductId: broadcastItems.matchedProductId,
+      matchedProductTitle: products.title,
+      matchConfidence: broadcastItems.matchConfidence,
+      matchMethod: broadcastItems.matchMethod,
+      matchReasons: broadcastItems.matchReasons,
+      reviewStatus: broadcastItems.reviewStatus,
     })
     .from(broadcastItems)
+    .leftJoin(products, eq(broadcastItems.matchedProductId, products.id))
     .where(eq(broadcastItems.broadcastId, broadcastId))
     .orderBy(asc(broadcastItems.position), asc(broadcastItems.createdAt));
 }

@@ -49,6 +49,12 @@ export interface BroadcastItemRow {
   price: string | null;
   currency: string | null;
   priceType: string | null;
+  matchedProductId: string | null;
+  matchedProductTitle: string | null;
+  matchConfidence: string | null;
+  matchMethod: string | null;
+  matchReasons: unknown;
+  reviewStatus: string | null;
 }
 
 export interface Paginated<Row> {

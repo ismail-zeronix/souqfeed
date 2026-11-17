@@ -215,6 +215,19 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   a 14-line broadcast gave 6 correct products, a junk one failed with its
   reason, and a stalled broadcast was picked up by the sweeper.
 
+- **Phase 6 (review + publishing) complete** — per
+  `docs/superpowers/plans/2026-11-17-souqfeed-phase6-review-publishing.md`.
+  The worker now matches each item to the catalog in the documented order
+  (part number 0.98, brand + model 0.92, alias 0.90, family + specs 0.75,
+  `pg_trgm` fuzzy ≤ 0.8), with reasons on every result; spec conflicts cap at
+  0.7; ≥ 0.9 auto-approves. Suppliers (own broadcasts) and staff review items:
+  approve, skip, choose a product through catalog search (`MANUAL`), or skip
+  all unmatched; staff can add an unmatched item to the catalog. Publishing
+  needs every item decided and one approved, under a row lock. Migrations
+  `0007` (`pg_trgm`) and `0008` (`MANUAL` match method, trigram index on
+  `products.normalized_title`). Verified in Docker with a browser: each match
+  path, the review actions, the publish guard, and staff product creation.
+
 ## In Progress
 
 - Nothing currently in flight. Phases 2–3 and the admin portal are on
@@ -225,7 +238,8 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
 - **Deploy Phases 2–3 and the admin portal, with the production follow-up in
   Known Issues.** Production needs migrations `0003` and `0004`, the brand and
   category seeds, and the admin seed (to make the account `SUPER_ADMIN`).
-- Phase 6: review + publishing (product matcher, NEEDS_REVIEW UI, publish).
+- Phase 7: offers — publishing creates/updates offers and appends
+  `offer_observations` in the same transaction as `REVIEW → PUBLISHED`.
 
 ## Decisions
 

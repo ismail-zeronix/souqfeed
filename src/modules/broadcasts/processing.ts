@@ -1,6 +1,8 @@
 import { and, asc, eq, lt, sql } from "drizzle-orm";
 import { db } from "@/lib/database/client";
 import { brands } from "@/modules/brands/schema";
+import { findCandidates } from "./matcher/candidates";
+import { decideMatch, type MatchResult } from "./matcher/decide";
 import { RuleBasedBroadcastParser } from "./parser/rule-based-parser";
 import type { ParsedItem } from "./parser/types";
 import { broadcastItems, broadcasts } from "./schema";
@@ -12,7 +14,12 @@ export const NO_PRODUCTS_NOTE =
 export const PARSE_ERROR_NOTE =
   "Something went wrong while reading this broadcast. The SouqFeed team has been notified.";
 
-function toItemRow(broadcastId: string, item: ParsedItem, position: number) {
+function toItemRow(
+  broadcastId: string,
+  item: ParsedItem,
+  position: number,
+  match: MatchResult,
+) {
   return {
     broadcastId,
     position,
@@ -32,6 +39,11 @@ function toItemRow(broadcastId: string, item: ParsedItem, position: number) {
     // Explicit, so the column's AED default never invents a currency (Rule 10).
     detectedCurrency: item.currency,
     priceType: item.priceType,
+    matchedProductId: match.productId,
+    matchConfidence: String(match.confidence),
+    matchMethod: match.method,
+    matchReasons: match.reasons,
+    reviewStatus: match.reviewStatus,
   };
 }
 
@@ -58,6 +70,12 @@ export async function processBroadcast(id: string): Promise<ProcessResult> {
     brands: brandRows.map((brand) => brand.name),
   });
 
+  // Matching reads the catalog, so it runs before the write transaction.
+  const matches: MatchResult[] = [];
+  for (const item of parsed.items) {
+    matches.push(decideMatch(item, await findCandidates(item)));
+  }
+
   return db.transaction(async (tx) => {
     const [locked] = await tx
       .select({ id: broadcasts.id })
@@ -67,7 +85,9 @@ export async function processBroadcast(id: string): Promise<ProcessResult> {
     if (!locked) return "skipped";
 
     await tx.delete(broadcastItems).where(eq(broadcastItems.broadcastId, id));
-    const rows = parsed.items.map((item, index) => toItemRow(id, item, index));
+    const rows = parsed.items.map((item, index) =>
+      toItemRow(id, item, index, matches[index]),
+    );
     for (let start = 0; start < rows.length; start += 100) {
       await tx.insert(broadcastItems).values(rows.slice(start, start + 100));
     }
