@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDateTime, formatPrice } from "@/lib/format";
+import { conditionLabel } from "@/modules/offers/condition";
 import type { OfferRow } from "@/modules/offers/queries";
 
 const DASH = <span className="text-muted-foreground">—</span>;
@@ -45,6 +46,8 @@ export function OffersTable({
                 {offer.title ?? "Untitled product"}
               </Link>
               <div className="text-muted-foreground text-xs">
+                {conditionLabel(offer.condition) &&
+                  `${conditionLabel(offer.condition)} · `}
                 {offer.observationCount}{" "}
                 {offer.observationCount === 1 ? "update" : "updates"}
               </div>

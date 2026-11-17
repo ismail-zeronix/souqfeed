@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { RefreshCw } from "lucide-react";
 import {
   FreshnessBadge,
   WithdrawOfferButton,
@@ -19,7 +20,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { formatDateTime, formatPrice } from "@/lib/format";
+import { specLabel } from "@/modules/categories/spec-templates";
+import { conditionLabel } from "@/modules/offers/condition";
 import type { OfferDetail } from "@/modules/offers/queries";
 
 const AVAILABILITY_LABELS: Record<string, string> = {
@@ -30,14 +34,8 @@ const AVAILABILITY_LABELS: Record<string, string> = {
   SOLD_OUT: "Sold out",
 };
 
-const SPEC_LABELS: [string, string][] = [
-  ["cpu", "CPU"],
-  ["ram", "RAM"],
-  ["storage", "Storage"],
-  ["gpu", "GPU"],
-  ["display", "Display"],
-  ["os", "OS"],
-];
+/** Always listed for computers, so a gap reads as "not stated". */
+const CORE_SPEC_KEYS = ["cpu", "ram", "storage", "gpu", "display", "os"];
 
 function Fact({ label, value }: { label: string; value: ReactNode }) {
   return (
@@ -52,15 +50,28 @@ function Fact({ label, value }: { label: string; value: ReactNode }) {
 export function OfferDetailView({
   offer,
   broadcastHref,
+  updateHref,
 }: {
   offer: OfferDetail;
   broadcastHref: (broadcastId: string) => string;
+  /** Where the supplier updates price and stock; staff don't get it. */
+  updateHref?: string;
 }) {
   const specs =
     typeof offer.specificationSnapshot === "object" &&
     offer.specificationSnapshot
       ? (offer.specificationSnapshot as Record<string, unknown>)
       : {};
+  const stated = Object.keys(specs).filter(
+    (key) => typeof specs[key] === "string",
+  );
+  // Computer specs always show (gaps as "—"); other categories only what's stated.
+  const specKeys = stated.some((key) => CORE_SPEC_KEYS.includes(key))
+    ? [
+        ...CORE_SPEC_KEYS,
+        ...stated.filter((key) => !CORE_SPEC_KEYS.includes(key)),
+      ]
+    : stated;
 
   return (
     <div className="grid items-start gap-4 lg:grid-cols-[1fr_17rem]">
@@ -89,6 +100,11 @@ export function OfferDetailView({
             />
             <Fact label="Quantity" value={offer.quantity ?? "Not stated"} />
             <Fact
+              label="Condition"
+              value={conditionLabel(offer.condition) ?? "Not stated"}
+            />
+            <Fact label="Warranty" value={offer.warranty ?? "Not stated"} />
+            <Fact
               label="Availability"
               value={
                 AVAILABILITY_LABELS[offer.availabilityStatus ?? ""] ??
@@ -104,11 +120,32 @@ export function OfferDetailView({
               }
             />
           </dl>
+          {offer.active && updateHref && (
+            <Button nativeButton={false} render={<Link href={updateHref} />}>
+              <RefreshCw aria-hidden />
+              Update price &amp; stock
+            </Button>
+          )}
           {offer.active && <WithdrawOfferButton offerId={offer.id} />}
         </CardContent>
       </Card>
 
       <div className="grid min-w-0 gap-4 lg:order-1">
+        {offer.notes && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Description</CardTitle>
+              <CardDescription>
+                In the supplier&apos;s own words.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm leading-6 whitespace-pre-line">
+                {offer.notes}
+              </p>
+            </CardContent>
+          </Card>
+        )}
         <Card>
           <CardHeader>
             <CardTitle>Specifications</CardTitle>
@@ -117,11 +154,16 @@ export function OfferDetailView({
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {specKeys.length === 0 && (
+              <p className="text-muted-foreground text-sm">
+                No specifications stated.
+              </p>
+            )}
             <dl className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-              {SPEC_LABELS.map(([key, label]) => (
+              {specKeys.map((key) => (
                 <Fact
                   key={key}
-                  label={label}
+                  label={specLabel(key)}
                   value={
                     typeof specs[key] === "string"
                       ? (specs[key] as string)

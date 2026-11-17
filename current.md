@@ -265,6 +265,26 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   here. Verified in Docker on desktop and mobile against seeded data, including
   a page past the end (still reports the true total).
 
+- **Phase 9.5 (manual offer entry + IT taxonomy) complete** — per
+  `docs/superpowers/plans/2026-11-17-souqfeed-phase9.5-manual-offers.md`.
+  `/dashboard/offers/new` adds an offer in four steps: category tiles (+
+  optional subcategory) → brand (brands known for that category first, filter
+  box, all brands) → catalog product (search within the brand, popular ones
+  before typing) or "describe the product" with category-specific spec fields
+  → condition, fixed price/ask, quantity, warranty, description. Each
+  submission is a one-item broadcast with `source = 'FORM'` whose immutable
+  text is what the supplier entered, so offers, history, search, and the feed
+  work unchanged. A catalog product publishes at once; a described product is
+  matched first (an exact part number publishes at once, with the matcher's
+  reasons), otherwise it waits in review and publishes itself once staff add it
+  to the catalog ("Add to catalog" now keeps the chosen category and specs).
+  Offer pages get "Update price & stock" (same form, prefilled; adds a history
+  row). Condition is part of an offer's identity (same model new and
+  refurbished = two offers). Migration `0009`; seeds now hold 15 top-level IT
+  categories with subcategories and ~100 brands. Search and the feed treat a
+  category as including its subcategories. Verified in Docker end to end
+  (desktop + mobile), including the staff path.
+
 ## In Progress
 
 - Nothing currently in flight. Everything since Phase 2 is on
@@ -272,10 +292,7 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
 
 ## Next
 
-- **Phase 9.5: manual offer entry + IT catalog taxonomy** — suppliers add an
-  offer through a form (category → brand → catalog product, or describe a new
-  one) as well as by pasting a broadcast.
-- Then Phase 10: supplier public profiles.
+- Phase 10: supplier public profiles (broadcast history, active offers).
 - **Deploy, with the production follow-up in Known Issues.** Production needs
   every migration since `0003`, the brand and category seeds, and the admin
   seed (to make the account `SUPER_ADMIN`).
@@ -354,8 +371,9 @@ created_at from "user" where role in ('ADMIN', 'SUPER_ADMIN')` and revoke anythi
   offers, they now appear on the public feed as a real company's live stock.
   Rewrite it to go through submit → parse → review, or retire it. (Its guessed
   part numbers and double-encoded JSON were fixed in Phase 3.)
-- **Deploying Phase 3 needs seeds as well as the migration:** run the
-  `seed-brands` and `seed-categories` commands in `docs/deployment.md`, or the
+- **Deploying needs seeds as well as migrations:** run the
+  `seed-brands` and `seed-categories` commands (re-run them for the Phase 9.5
+  IT taxonomy) in `docs/deployment.md`, or the
   supplier form may have no options to offer.
 - `db:seed:buraqa` isn't usable in a container, for the same `.env` reason as
   `db:seed`.
@@ -371,6 +389,13 @@ created_at from "user" where role in ('ADMIN', 'SUPER_ADMIN')` and revoke anythi
 - `docs/data-model.md` specifies an index on `categories.parentId` and on
   `suppliers.verified`/`suppliers.active`; Task 3's migration omitted them
   (deferred, not added speculatively). Add if/when query patterns need them.
+
+- A form submission that staff _skip_ stays in review with nothing to publish;
+  the supplier sees it as waiting. Fine at MVP volume; a "rejected" status for
+  form submissions would make it explicit.
+- The parser doesn't detect condition words ("brand new", "refurbished") in
+  pasted broadcasts yet, so pasted offers have no condition unless re-entered
+  through the form.
 
 ## Important Files
 

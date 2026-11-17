@@ -27,6 +27,13 @@ const STATUS_EXPLANATIONS: Record<BroadcastStatus, string> = {
     "SouqFeed couldn't read products from this broadcast. The original is kept below.",
 };
 
+/** Form submissions are one offer, not a pasted list, so they read differently. */
+const FORM_EXPLANATIONS: Partial<Record<BroadcastStatus, string>> = {
+  REVIEW:
+    "This product isn't in the SouqFeed catalog yet. Once SouqFeed adds it, the offer goes live on its own. If it is in the catalog under another name, choose it below.",
+  PUBLISHED: "This offer is live for buyers.",
+};
+
 function Fact({ label, value }: { label: string; value: string }) {
   return (
     <div>
@@ -48,6 +55,7 @@ export function BroadcastDetailView({
   canCreateProducts?: boolean;
 }) {
   const lines = countBroadcastLines(broadcast.rawText);
+  const fromForm = broadcast.source === "FORM";
 
   return (
     <div className="grid items-start gap-4 lg:grid-cols-[1fr_17rem]">
@@ -59,31 +67,40 @@ export function BroadcastDetailView({
           <CardDescription>
             {broadcast.status === "FAILED" && broadcast.statusNote
               ? broadcast.statusNote
-              : STATUS_EXPLANATIONS[broadcast.status]}
+              : ((fromForm && FORM_EXPLANATIONS[broadcast.status]) ??
+                STATUS_EXPLANATIONS[broadcast.status])}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-2 gap-4 lg:grid-cols-1">
-            <Fact label="Posted" value={formatDateTime(broadcast.createdAt)} />
+            <Fact
+              label={fromForm ? "Submitted" : "Posted"}
+              value={formatDateTime(broadcast.createdAt)}
+            />
+            {fromForm && <Fact label="Added with" value="Add-offer form" />}
             {broadcast.publishedAt && (
               <Fact
                 label="Published"
                 value={formatDateTime(broadcast.publishedAt)}
               />
             )}
-            <Fact
-              label="Lines"
-              value={`${lines} ${lines === 1 ? "line" : "lines"}`}
-            />
-            <Fact
-              label="Products found"
-              value={
-                broadcast.status === "PROCESSING" ||
-                broadcast.status === "DRAFT"
-                  ? "Not read yet"
-                  : String(broadcast.itemCount)
-              }
-            />
+            {!fromForm && (
+              <>
+                <Fact
+                  label="Lines"
+                  value={`${lines} ${lines === 1 ? "line" : "lines"}`}
+                />
+                <Fact
+                  label="Products found"
+                  value={
+                    broadcast.status === "PROCESSING" ||
+                    broadcast.status === "DRAFT"
+                      ? "Not read yet"
+                      : String(broadcast.itemCount)
+                  }
+                />
+              </>
+            )}
           </dl>
         </CardContent>
       </Card>
@@ -95,13 +112,18 @@ export function BroadcastDetailView({
             items={items}
             editable={broadcast.status === "REVIEW"}
             canCreateProducts={canCreateProducts}
+            fromForm={fromForm}
           />
         )}
         <Card className="min-w-0">
           <CardHeader>
-            <CardTitle>Original broadcast</CardTitle>
+            <CardTitle>
+              {fromForm ? "What was submitted" : "Original broadcast"}
+            </CardTitle>
             <CardDescription>
-              Exactly as it was pasted. It can never be edited.
+              {fromForm
+                ? "Exactly as entered in the add-offer form. It can never be edited."
+                : "Exactly as it was pasted. It can never be edited."}
             </CardDescription>
           </CardHeader>
           <CardContent>

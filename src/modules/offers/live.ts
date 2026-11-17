@@ -202,9 +202,25 @@ export async function countLiveOffersByCategory(): Promise<
     .innerJoin(products, eq(offers.productId, products.id))
     .where(visible)
     .groupBy(products.categoryId);
-  return new Map(
-    rows
-      .filter((row) => row.categoryId !== null)
-      .map((row) => [row.categoryId as string, row.total]),
-  );
+  // Roll subcategory counts up into their top-level category.
+  const parents = await db
+    .select({ id: categories.id, parentId: categories.parentId })
+    .from(categories);
+  const parentOf = new Map(parents.map((row) => [row.id, row.parentId]));
+  const topOf = (id: string) => {
+    let current = id;
+    for (let depth = 0; depth < 10; depth += 1) {
+      const parent = parentOf.get(current);
+      if (!parent) break;
+      current = parent;
+    }
+    return current;
+  };
+  const totals = new Map<string, number>();
+  for (const row of rows) {
+    if (row.categoryId === null) continue;
+    const top = topOf(row.categoryId);
+    totals.set(top, (totals.get(top) ?? 0) + row.total);
+  }
+  return totals;
 }

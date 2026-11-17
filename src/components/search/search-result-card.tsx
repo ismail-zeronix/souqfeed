@@ -4,6 +4,7 @@ import { FreshnessBadge } from "@/components/offers/offer-bits";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
+import { conditionLabel } from "@/modules/offers/condition";
 import type { SearchGroup } from "@/modules/search/queries";
 
 const TIER_LABELS: Record<number, string> = {
@@ -58,11 +59,15 @@ export function SearchResultCard({ group }: { group: SearchGroup }) {
                   />
                 )}
               </Link>
-              {offer.locationName && (
-                <p className="text-muted-foreground text-xs">
-                  {offer.locationName}
-                </p>
-              )}
+              <p className="text-muted-foreground text-xs">
+                {[
+                  offer.locationName,
+                  conditionLabel(offer.condition),
+                  offer.warranty && `Warranty: ${offer.warranty}`,
+                ]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </p>
             </div>
             <div className="text-right font-semibold tabular-nums sm:w-28">
               {formatPrice(offer.price, offer.currency, offer.priceType) ?? (

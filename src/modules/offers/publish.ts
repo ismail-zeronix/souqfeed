@@ -1,4 +1,4 @@
-import { and, asc, eq, inArray } from "drizzle-orm";
+import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import type { db } from "@/lib/database/client";
 import { broadcastItems, broadcasts } from "@/modules/broadcasts/schema";
 import { products } from "@/modules/products/schema";
@@ -9,9 +9,10 @@ type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 /**
  * Turns a broadcast's approved items into offers. Runs inside the publish
- * transaction. One active offer per supplier + product: updated if it exists,
- * created otherwise. Every item also appends an observation, so price and
- * quantity history is never overwritten. Returns how many offers it touched.
+ * transaction. One active offer per supplier + product + condition: updated if
+ * it exists, created otherwise. Every item also appends an observation, so
+ * price and quantity history is never overwritten. Returns how many offers it
+ * touched.
  */
 export async function upsertOffersFromBroadcast(
   tx: Transaction,
@@ -38,6 +39,10 @@ export async function upsertOffersFromBroadcast(
       price: broadcastItems.detectedPrice,
       currency: broadcastItems.detectedCurrency,
       priceType: broadcastItems.priceType,
+      condition: broadcastItems.condition,
+      warranty: broadcastItems.warranty,
+      notes: broadcastItems.notes,
+      extraSpecs: broadcastItems.extraSpecs,
       productTitle: products.title,
       productSpecs: products.specifications,
     })
@@ -51,12 +56,14 @@ export async function upsertOffersFromBroadcast(
     )
     .orderBy(asc(broadcastItems.position));
 
-  // The first line wins when one broadcast lists a product twice.
+  // The first line wins when one broadcast lists a product twice in the same
+  // condition.
   const seen = new Set<string>();
   let touched = 0;
   for (const item of items) {
-    if (!item.productId || seen.has(item.productId)) continue;
-    seen.add(item.productId);
+    const key = `${item.productId}:${item.condition ?? ""}`;
+    if (!item.productId || seen.has(key)) continue;
+    seen.add(key);
 
     const availabilityStatus = availabilityFor(item);
     const current = {
@@ -68,6 +75,9 @@ export async function upsertOffersFromBroadcast(
       currency: item.price === null ? null : item.currency,
       priceType: item.priceType,
       quantity: item.quantity,
+      condition: item.condition,
+      warranty: item.warranty,
+      notes: item.notes,
       availabilityStatus,
       lastVerifiedAt: now,
       updatedAt: now,
@@ -81,6 +91,7 @@ export async function upsertOffersFromBroadcast(
           eq(offers.supplierId, broadcast.supplierId),
           eq(offers.productId, item.productId),
           eq(offers.active, true),
+          sql`${offers.condition} is not distinct from ${item.condition}::offer_condition`,
         ),
       )
       .for("update");

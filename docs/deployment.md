@@ -105,8 +105,10 @@ target can seed the super admin account ad hoc (it signs in at
 Don't use `pnpm db:seed` in a container: it reads a `.env` file, which images
 deliberately don't contain, so it fails with `node: .env: not found`.
 
-Brands and categories are also seeded explicitly, or the supplier form has none
-to offer. Both are safe to re-run and only add what's missing:
+Brands and categories are also seeded explicitly, or the supplier and add-offer
+forms have none to offer. They hold the IT taxonomy (`src/modules/categories/it-taxonomy.ts`,
+`src/modules/brands/it-brands.ts`): 15 top-level categories with subcategories
+and ~100 brands. Both are safe to re-run and only add what's missing:
 
 ```bash
 docker compose --profile tools run --rm migrate pnpm exec tsx src/lib/database/seed-brands.ts

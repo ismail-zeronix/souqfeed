@@ -34,14 +34,24 @@ describe("specificationSnapshot", () => {
     expect(
       specificationSnapshot(
         { cpu: "Intel Core i5-1235U", ram: "8GB", storage: null },
-        { ram: "16GB", storage: "512GB SSD", os: "Windows 11", extra: "x" },
+        { ram: "16GB", storage: "512GB SSD", os: "Windows 11", panel: "IPS" },
       ),
     ).toEqual({
       cpu: "Intel Core i5-1235U",
       ram: "8GB",
       storage: "512GB SSD",
       os: "Windows 11",
+      panel: "IPS",
     });
+  });
+
+  it("includes category-specific extras over the product's values", () => {
+    expect(
+      specificationSnapshot(
+        { extraSpecs: { capacity: "4TB", interface: " ", rpm: 5400 } },
+        { capacity: "2TB", formFactor: "3.5 inch", nested: { a: 1 } },
+      ),
+    ).toEqual({ capacity: "4TB", formFactor: "3.5 inch" });
   });
 
   it("is null when nothing is known", () => {

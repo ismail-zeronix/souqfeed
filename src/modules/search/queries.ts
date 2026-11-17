@@ -18,6 +18,8 @@ export interface SearchOffer {
   priceType: string | null;
   quantity: number | null;
   availabilityStatus: string | null;
+  condition: string | null;
+  warranty: string | null;
   lastVerifiedAt: Date | null;
 }
 
@@ -75,7 +77,13 @@ export async function searchProducts(
   if (filters.brandId)
     productFilters.push(sql`p.brand_id = ${filters.brandId}`);
   if (filters.categoryId) {
-    productFilters.push(sql`p.category_id = ${filters.categoryId}`);
+    // A category includes everything filed under its subcategories.
+    productFilters.push(sql`p.category_id in (
+      with recursive tree as (
+        select id from categories where id = ${filters.categoryId}
+        union all
+        select c.id from categories c join tree t on c.parent_id = t.id
+      ) select id from tree)`);
   }
 
   const tsQuery = sql`to_tsquery('simple', ${forms.tsQuery ?? ""})`;
@@ -160,7 +168,7 @@ export async function searchProducts(
   const offerRows = (await db.execute(sql`
     select o.id, o.product_id, s.company_name, s.slug, s.verified, s.location_name,
       s.whatsapp_number, o.price, o.currency, o.price_type, o.quantity,
-      o.availability_status, o.last_verified_at
+      o.availability_status, o.condition, o.warranty, o.last_verified_at
     from offers o
     join suppliers s on s.id = o.supplier_id
     where o.product_id in (${sql.join(
@@ -181,6 +189,8 @@ export async function searchProducts(
     price_type: string | null;
     quantity: number | null;
     availability_status: string | null;
+    condition: string | null;
+    warranty: string | null;
     last_verified_at: string | Date | null;
   }[];
 
@@ -199,6 +209,8 @@ export async function searchProducts(
       priceType: row.price_type,
       quantity: row.quantity,
       availabilityStatus: row.availability_status,
+      condition: row.condition,
+      warranty: row.warranty,
       // Raw queries return timestamps without a zone; they are stored in UTC.
       lastVerifiedAt: row.last_verified_at
         ? new Date(

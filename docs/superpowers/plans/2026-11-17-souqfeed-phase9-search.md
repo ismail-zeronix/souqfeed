@@ -17,7 +17,8 @@ qualifies for, in the documented order:
    with `word:*` terms)
 6. Every query word prefix-matches the wider document: brand, family, model,
    part number, category, aliases, and the product's and offers' specs
-7. Trigram similarity of the title ≥ 0.3 (typos)
+7. Trigram `word_similarity` of the query against the title ≥ 0.5 (typos; plain
+   `similarity` ≥ 0.3 missed "thinkpd e14" against a long title)
 
 The `simple` text-search config is used on purpose: no stemming, so part
 numbers and model codes (`i5-1235U`, `21U20063GR`) stay intact, and prefix

@@ -3,7 +3,7 @@ import { getMockBrands } from "@/modules/brands/mock-data";
 import { listBrands } from "@/modules/brands/queries";
 import type { Brand } from "@/modules/brands/types";
 import { getMockCategories } from "@/modules/categories/mock-data";
-import { listCategories } from "@/modules/categories/queries";
+import { listTopLevelCategories } from "@/modules/categories/queries";
 import type { Category } from "@/modules/categories/types";
 import { getMockSuppliers } from "@/modules/suppliers/mock-data";
 import type { SupplierSummary } from "@/modules/suppliers/types";
@@ -91,7 +91,7 @@ export async function loadMarketData(): Promise<MarketData> {
       listLiveOffers(),
       getLiveMarketStats(),
       listBrands(),
-      listCategories(),
+      listTopLevelCategories(),
       countLiveOffersByCategory(),
       listTopSuppliers(),
       getMarketActivity(),

@@ -8,6 +8,7 @@ import { isUuid, type AdminActionResult } from "@/lib/validation/form";
 import { isStaffRole } from "@/modules/auth/guards";
 import { createProduct } from "@/modules/products/service";
 import { productInputSchema } from "@/modules/products/validation";
+import { publishFormBroadcastIfDecided } from "./manual/service";
 import {
   approveItem,
   chooseItemProduct,
@@ -45,7 +46,19 @@ async function authorize(
   return { isStaff };
 }
 
-function refresh(broadcastId: string) {
+/**
+ * Revalidates the broadcast's pages, first publishing a form broadcast whose
+ * item has just been decided.
+ */
+async function refresh(broadcastId: string) {
+  try {
+    if (await publishFormBroadcastIfDecided(broadcastId)) {
+      revalidatePath("/dashboard/offers");
+      revalidatePath("/admin/offers");
+    }
+  } catch (error) {
+    logger.error({ err: error, broadcastId }, "Auto-publishing form failed");
+  }
   revalidatePath(`/dashboard/broadcasts/${broadcastId}`);
   revalidatePath(`/admin/broadcasts/${broadcastId}`);
   revalidatePath("/dashboard/broadcasts");
@@ -67,7 +80,7 @@ async function itemAction(
     logger.error({ err: error, itemId }, "Review action failed");
     return { ok: false, message: "We couldn't save that. Please try again." };
   }
-  refresh(target.broadcastId);
+  await refresh(target.broadcastId);
   return { ok: true };
 }
 
@@ -101,7 +114,7 @@ export async function rejectUnmatchedAction(
   if (!(await authorize(target))) return NOT_AUTHORIZED;
   if (target?.status !== "REVIEW") return NOT_IN_REVIEW;
   await rejectUnmatchedItems(broadcastId);
-  refresh(broadcastId);
+  await refresh(broadcastId);
   return { ok: true };
 }
 
@@ -128,7 +141,7 @@ export async function publishBroadcastAction(
     logger.error({ err: error, broadcastId }, "Publishing broadcast failed");
     return { ok: false, message: "We couldn't publish. Please try again." };
   }
-  refresh(broadcastId);
+  await refresh(broadcastId);
   return { ok: true };
 }
 
@@ -176,7 +189,7 @@ export async function createProductFromItemAction(
   }
   const parsed = productInputSchema.safeParse({
     brandId,
-    categoryId: "",
+    categoryId: item.categoryId ?? "",
     title: [item.brand, item.model].filter(Boolean).join(" "),
     family: "",
     model: item.model ?? "",
@@ -197,7 +210,7 @@ export async function createProductFromItemAction(
   }
 
   try {
-    const productId = await createProduct(parsed.data);
+    const productId = await createProduct(parsed.data, item.extraSpecs);
     await chooseItemProduct(itemId, productId, "SouqFeed staff");
   } catch (error) {
     if (isUniqueViolation(error)) {
@@ -213,7 +226,7 @@ export async function createProductFromItemAction(
       message: "We couldn't add the product. Please try again.",
     };
   }
-  refresh(target.broadcastId);
+  await refresh(target.broadcastId);
   revalidatePath("/admin/products");
   return { ok: true };
 }

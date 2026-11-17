@@ -70,7 +70,7 @@ export function SearchFiltersForm({
 }: {
   filters: SearchFilters;
   brands: Brand[];
-  categories: Category[];
+  categories: (Category & { depth: number })[];
   facets: SearchFacets;
 }) {
   const [open, setOpen] = useState(false);
@@ -120,6 +120,7 @@ export function SearchFiltersForm({
           <option value="">Any category</option>
           {categories.map((category) => (
             <option key={category.id} value={category.id}>
+              {"  ".repeat(category.depth)}
               {category.name}
             </option>
           ))}

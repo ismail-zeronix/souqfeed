@@ -145,36 +145,42 @@ export type PublishResult =
 export async function publishBroadcast(
   broadcastId: string,
 ): Promise<PublishResult> {
-  return db.transaction(async (tx) => {
-    const [locked] = await tx
-      .select({ id: broadcasts.id })
-      .from(broadcasts)
-      .where(
-        and(eq(broadcasts.id, broadcastId), eq(broadcasts.status, "REVIEW")),
-      )
-      .for("update");
-    if (!locked) return { ok: false, reason: "not-in-review" };
+  return db.transaction((tx) => publishInTransaction(tx, broadcastId));
+}
 
-    const counts = await tx
-      .select({ status: broadcastItems.reviewStatus, total: count() })
-      .from(broadcastItems)
-      .where(eq(broadcastItems.broadcastId, broadcastId))
-      .groupBy(broadcastItems.reviewStatus);
-    const of = (status: string) =>
-      counts.find((row) => row.status === status)?.total ?? 0;
-    if (of("NEEDS_REVIEW") > 0) return { ok: false, reason: "needs-review" };
-    if (of("APPROVED") + of("AUTO_APPROVED") === 0) {
-      return { ok: false, reason: "nothing-approved" };
-    }
+type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
-    const now = new Date();
-    await upsertOffersFromBroadcast(tx, broadcastId, now);
-    await tx
-      .update(broadcasts)
-      .set({ status: "PUBLISHED", publishedAt: now, updatedAt: now })
-      .where(eq(broadcasts.id, broadcastId));
-    return { ok: true };
-  });
+/** The publish step, for callers already inside a transaction. */
+export async function publishInTransaction(
+  tx: Transaction,
+  broadcastId: string,
+): Promise<PublishResult> {
+  const [locked] = await tx
+    .select({ id: broadcasts.id })
+    .from(broadcasts)
+    .where(and(eq(broadcasts.id, broadcastId), eq(broadcasts.status, "REVIEW")))
+    .for("update");
+  if (!locked) return { ok: false, reason: "not-in-review" };
+
+  const counts = await tx
+    .select({ status: broadcastItems.reviewStatus, total: count() })
+    .from(broadcastItems)
+    .where(eq(broadcastItems.broadcastId, broadcastId))
+    .groupBy(broadcastItems.reviewStatus);
+  const of = (status: string) =>
+    counts.find((row) => row.status === status)?.total ?? 0;
+  if (of("NEEDS_REVIEW") > 0) return { ok: false, reason: "needs-review" };
+  if (of("APPROVED") + of("AUTO_APPROVED") === 0) {
+    return { ok: false, reason: "nothing-approved" };
+  }
+
+  const now = new Date();
+  await upsertOffersFromBroadcast(tx, broadcastId, now);
+  await tx
+    .update(broadcasts)
+    .set({ status: "PUBLISHED", publishedAt: now, updatedAt: now })
+    .where(eq(broadcasts.id, broadcastId));
+  return { ok: true };
 }
 
 /** Active catalog products for the review picker, by title or part number. */
@@ -238,6 +244,8 @@ export async function getItemForProduct(itemId: string) {
       gpu: broadcastItems.detectedGPU,
       display: broadcastItems.detectedDisplay,
       os: broadcastItems.detectedOS,
+      categoryId: broadcastItems.categoryId,
+      extraSpecs: broadcastItems.extraSpecs,
     })
     .from(broadcastItems)
     .where(eq(broadcastItems.id, itemId))

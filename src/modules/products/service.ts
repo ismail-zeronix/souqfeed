@@ -21,12 +21,19 @@ function toColumns(input: ProductInput) {
   };
 }
 
-export async function createProduct(input: ProductInput): Promise<string> {
+/**
+ * `extraSpecs` carries category-specific specs (e.g. capacity) beyond the six
+ * the form manages; the form's values are applied over them.
+ */
+export async function createProduct(
+  input: ProductInput,
+  extraSpecs: unknown = null,
+): Promise<string> {
   const [row] = await db
     .insert(products)
     .values({
       ...toColumns(input),
-      specifications: mergeSpecifications(null, pickSpecs(input)),
+      specifications: mergeSpecifications(extraSpecs, pickSpecs(input)),
     })
     .returning({ id: products.id });
   return row.id;

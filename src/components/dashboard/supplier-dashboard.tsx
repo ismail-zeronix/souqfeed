@@ -3,6 +3,7 @@ import {
   BadgeDollarSign,
   ExternalLink,
   ListChecks,
+  Plus,
   Radio,
   Send,
 } from "lucide-react";
@@ -58,10 +59,10 @@ function BroadcastsPanel({ canPost }: { canPost: boolean }) {
           <Radio className="size-5" aria-hidden />
         </span>
         <div className="min-w-0">
-          <h2 className="font-semibold">Stock broadcasts</h2>
+          <h2 className="font-semibold">Your stock</h2>
           <p className="text-muted-foreground mt-1 text-sm">
-            Paste the stock message you send on WhatsApp. SouqFeed turns it into
-            products buyers can search.
+            Add products one at a time from the catalog, or paste the stock
+            message you send on WhatsApp. Either way, buyers can search them.
           </p>
         </div>
       </div>
@@ -83,13 +84,23 @@ function BroadcastsPanel({ canPost }: { canPost: boolean }) {
           Your offers
         </Button>
         {canPost && (
-          <Button
-            nativeButton={false}
-            render={<Link href="/dashboard/broadcasts/new" />}
-          >
-            <Send aria-hidden />
-            Post a broadcast
-          </Button>
+          <>
+            <Button
+              variant="outline"
+              nativeButton={false}
+              render={<Link href="/dashboard/broadcasts/new" />}
+            >
+              <Send aria-hidden />
+              Post a broadcast
+            </Button>
+            <Button
+              nativeButton={false}
+              render={<Link href="/dashboard/offers/new" />}
+            >
+              <Plus aria-hidden />
+              Add offer
+            </Button>
+          </>
         )}
       </div>
     </section>

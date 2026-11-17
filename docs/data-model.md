@@ -117,7 +117,7 @@ id           uuid pk
 supplierId   uuid fk -> suppliers.id, not null
 rawText      text not null      -- immutable, never overwritten
 status       enum(DRAFT, PROCESSING, REVIEW, PUBLISHED, FAILED)
-source       enum(MANUAL, WHATSAPP, EMAIL, API) default MANUAL
+source       enum(MANUAL, WHATSAPP, EMAIL, API, FORM) default MANUAL
 publishedAt  timestamp nullable
 createdAt    timestamp
 updatedAt    timestamp
@@ -127,8 +127,10 @@ updatedAt    timestamp
 rejects any `UPDATE` changing it (and the same for `broadcast_items.raw_line`
 and `raw_block`). Status changes follow `src/modules/broadcasts/status.ts`.
 
-Only `MANUAL` is implemented in MVP; the other `source` values exist in the
-enum so ingestion channels can be added later without a schema migration.
+`MANUAL` (pasted) and `FORM` (the add-offer form, Phase 9.5) are implemented;
+a `FORM` broadcast holds one item and its `raw_text` renders exactly what the
+supplier entered. The other `source` values exist so ingestion channels can be
+added later without a schema migration.
 Indexes: index(`supplierId`), index(`createdAt`), index(`status`).
 
 **`broadcast_items`**
@@ -153,10 +155,15 @@ detectedQuantity    integer nullable
 detectedPrice       numeric nullable
 detectedCurrency    text nullable default 'AED'
 priceType           enum(FIXED, ASK, HIDDEN, UNKNOWN)
+condition           enum(NEW, OPEN_BOX, REFURBISHED, USED) nullable
+warranty            text nullable (≤ 80 chars, check constraint)
+notes               text nullable (≤ 1000 chars) -- supplier's description
+categoryId          uuid fk -> categories.id, nullable -- chosen in the form
+extraSpecs          jsonb nullable -- category-specific specs beyond the six columns
 
 matchedProductId    uuid fk -> products.id, nullable
 matchConfidence     numeric nullable    -- 0.0–1.0
-matchMethod         enum(PART_NUMBER, SKU, BRAND_MODEL, ALIAS, BRAND_FAMILY_SPEC, FUZZY, AI, NONE)
+matchMethod         enum(PART_NUMBER, SKU, BRAND_MODEL, ALIAS, BRAND_FAMILY_SPEC, FUZZY, AI, NONE, MANUAL)
 matchReasons        jsonb nullable      -- string[]
 
 reviewStatus        enum(AUTO_APPROVED, NEEDS_REVIEW, APPROVED, REJECTED)
@@ -185,6 +192,9 @@ currency                 text default 'AED'
 priceType                enum(FIXED, ASK, HIDDEN, UNKNOWN)
 quantity                 integer nullable
 availabilityStatus       enum(AVAILABLE, LIMITED, ASK, UNKNOWN, SOLD_OUT)
+condition                enum(NEW, OPEN_BOX, REFURBISHED, USED) nullable
+warranty                 text nullable
+notes                    text nullable
 lastVerifiedAt           timestamp
 publishedAt              timestamp
 expiresAt                timestamp nullable
@@ -194,9 +204,10 @@ updatedAt                timestamp
 ```
 
 Indexes: index(`supplierId`), index(`productId`), index(`publishedAt`),
-index(`active`). Unique partial index on (`supplierId`, `productId`) where
-`active = true` — a supplier re-broadcasting a product updates its existing
-offer rather than creating a duplicate.
+index(`active`). Unique partial index on (`supplierId`, `productId`,
+`condition`) `NULLS NOT DISTINCT` where `active = true` (migration 0009) — a
+supplier re-listing a product updates its existing offer rather than creating a
+duplicate, while the same model new and refurbished are separate offers.
 
 **`offer_observations`** _(addition — see foundation spec §2)_
 

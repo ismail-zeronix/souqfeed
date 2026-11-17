@@ -1,4 +1,4 @@
-import { count, isNotNull } from "drizzle-orm";
+import { count, isNotNull, isNull } from "drizzle-orm";
 import { db } from "@/lib/database/client";
 import { products } from "@/modules/products/schema";
 import { supplierCategories } from "@/modules/suppliers/schema";
@@ -14,6 +14,37 @@ export async function listCategories(): Promise<Category[]> {
   // offerCount stays 0: real counts don't exist until Phase 7, and this list
   // only supplies the id and name for form options.
   return rows.map((row) => ({ ...row, offerCount: 0 }));
+}
+
+/** Top-level categories only, for the public market pages. */
+export async function listTopLevelCategories(): Promise<Category[]> {
+  const rows = await db
+    .select({ id: categories.id, name: categories.name, slug: categories.slug })
+    .from(categories)
+    .where(isNull(categories.parentId))
+    .orderBy(categories.name);
+  return rows.map((row) => ({ ...row, offerCount: 0 }));
+}
+
+/** Every category, parents first, for indented pickers. */
+export async function listCategoryTree(): Promise<
+  (Category & { depth: number })[]
+> {
+  const rows = await db
+    .select({
+      id: categories.id,
+      name: categories.name,
+      slug: categories.slug,
+      parentId: categories.parentId,
+    })
+    .from(categories);
+  return toTreeOrder(rows).map((row) => ({
+    id: row.id,
+    name: row.name,
+    slug: row.slug,
+    depth: row.depth,
+    offerCount: 0,
+  }));
 }
 
 export async function listCategoriesForAdmin(): Promise<AdminCategoryRow[]> {

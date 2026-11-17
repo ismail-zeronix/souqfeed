@@ -14,6 +14,7 @@ export interface OfferRow {
   priceType: string | null;
   quantity: number | null;
   availabilityStatus: string | null;
+  condition: string | null;
   lastVerifiedAt: Date | null;
   publishedAt: Date | null;
   active: boolean;
@@ -37,6 +38,8 @@ export interface OfferDetail extends OfferRow {
   supplierUserId: string;
   productId: string;
   specificationSnapshot: unknown;
+  warranty: string | null;
+  notes: string | null;
   observations: OfferObservationRow[];
 }
 
@@ -48,6 +51,7 @@ const rowColumns = {
   priceType: offers.priceType,
   quantity: offers.quantity,
   availabilityStatus: offers.availabilityStatus,
+  condition: offers.condition,
   lastVerifiedAt: offers.lastVerifiedAt,
   publishedAt: offers.publishedAt,
   active: offers.active,
@@ -115,6 +119,8 @@ export async function getOffer(
       supplierUserId: suppliers.userId,
       productId: offers.productId,
       specificationSnapshot: offers.specificationSnapshot,
+      warranty: offers.warranty,
+      notes: offers.notes,
     })
     .from(offers)
     .innerJoin(suppliers, eq(offers.supplierId, suppliers.id))

@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   pgTable,
   uuid,
@@ -8,8 +9,10 @@ import {
   timestamp,
   pgEnum,
   index,
+  check,
 } from "drizzle-orm/pg-core";
 import { suppliers } from "@/modules/suppliers/schema";
+import { categories } from "@/modules/categories/schema";
 import { products } from "@/modules/products/schema";
 
 export const broadcastStatusEnum = pgEnum("broadcast_status", [
@@ -25,6 +28,8 @@ export const broadcastSourceEnum = pgEnum("broadcast_source", [
   "WHATSAPP",
   "EMAIL",
   "API",
+  // Entered through the add-offer form; raw_text renders what was submitted.
+  "FORM",
 ]);
 
 export const priceTypeEnum = pgEnum("price_type", [
@@ -32,6 +37,13 @@ export const priceTypeEnum = pgEnum("price_type", [
   "ASK",
   "HIDDEN",
   "UNKNOWN",
+]);
+
+export const offerConditionEnum = pgEnum("offer_condition", [
+  "NEW",
+  "OPEN_BOX",
+  "REFURBISHED",
+  "USED",
 ]);
 
 export const matchMethodEnum = pgEnum("match_method", [
@@ -103,6 +115,14 @@ export const broadcastItems = pgTable(
     detectedPrice: numeric("detected_price"),
     detectedCurrency: text("detected_currency").default("AED"),
     priceType: priceTypeEnum("price_type"),
+    condition: offerConditionEnum("condition"),
+    warranty: text("warranty"),
+    /** The supplier's own description of the offer. */
+    notes: text("notes"),
+    /** Category the supplier chose in the form; used when staff add the product. */
+    categoryId: uuid("category_id").references(() => categories.id),
+    /** Category-specific specs beyond the six detected columns. */
+    extraSpecs: jsonb("extra_specs"),
 
     matchedProductId: uuid("matched_product_id").references(() => products.id),
     matchConfidence: numeric("match_confidence"),
@@ -117,5 +137,13 @@ export const broadcastItems = pgTable(
     index("broadcast_items_broadcast_id_idx").on(table.broadcastId),
     index("broadcast_items_matched_product_id_idx").on(table.matchedProductId),
     index("broadcast_items_review_status_idx").on(table.reviewStatus),
+    check(
+      "broadcast_items_warranty_length",
+      sql`char_length(${table.warranty}) <= 80`,
+    ),
+    check(
+      "broadcast_items_notes_length",
+      sql`char_length(${table.notes}) <= 1000`,
+    ),
   ],
 );

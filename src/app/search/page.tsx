@@ -7,7 +7,7 @@ import { SearchResultCard } from "@/components/search/search-result-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { listBrands } from "@/modules/brands/queries";
-import { listCategories } from "@/modules/categories/queries";
+import { listCategoryTree } from "@/modules/categories/queries";
 import {
   parseSearchParams,
   searchUrl,
@@ -51,7 +51,7 @@ export default async function SearchPage({
   const [result, brands, categories, facets] = await Promise.all([
     searchProducts(filters),
     listBrands(),
-    listCategories(),
+    listCategoryTree(),
     listSearchFacets(),
   ]);
 

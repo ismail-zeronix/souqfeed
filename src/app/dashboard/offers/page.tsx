@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Plus } from "lucide-react";
 import {
   PaginationNav,
   parsePage,
@@ -7,6 +8,7 @@ import {
 import { DashboardPage } from "@/components/dashboard/dashboard-page";
 import { OfferTabs } from "@/components/offers/offer-tabs";
 import { OffersTable } from "@/components/offers/offers-table";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { requireSupplierPage } from "@/lib/auth/session";
 import { listSupplierOffers } from "@/modules/offers/queries";
@@ -35,9 +37,18 @@ export default async function SupplierOffersPage({
       back={{ href: "/dashboard", label: "Dashboard" }}
       eyebrow="Offers"
       title="Your offers"
-      description="One offer per product, updated each time you publish a broadcast that lists it. Buyers see how recently each was confirmed."
+      description="One offer per product and condition, updated each time you publish it again. Buyers see how recently each was confirmed."
       actions={
-        <OfferTabs basePath="/dashboard/offers" showingActive={active} />
+        <>
+          <OfferTabs basePath="/dashboard/offers" showingActive={active} />
+          <Button
+            nativeButton={false}
+            render={<Link href="/dashboard/offers/new" />}
+          >
+            <Plus aria-hidden />
+            Add offer
+          </Button>
+        </>
       }
     >
       {result.rows.length === 0 ? (
@@ -46,12 +57,19 @@ export default async function SupplierOffersPage({
             <>
               No live offers yet.{" "}
               <Link
+                href="/dashboard/offers/new"
+                className="text-primary hover:underline"
+              >
+                Add an offer
+              </Link>{" "}
+              from the catalog, or{" "}
+              <Link
                 href="/dashboard/broadcasts/new"
                 className="text-primary hover:underline"
               >
-                Post a broadcast
-              </Link>{" "}
-              and publish it to create them.
+                paste a broadcast
+              </Link>
+              .
             </>
           ) : (
             "No sold-out offers."

@@ -30,7 +30,11 @@ export default async function SupplierBroadcastPage({
     <DashboardPage
       back={{ href: "/dashboard/broadcasts", label: "Your broadcasts" }}
       eyebrow="Broadcast"
-      title={`Posted ${formatDateTime(broadcast.createdAt)}`}
+      title={
+        broadcast.source === "FORM"
+          ? `Offer submitted ${formatDateTime(broadcast.createdAt)}`
+          : `Posted ${formatDateTime(broadcast.createdAt)}`
+      }
     >
       <BroadcastDetailView broadcast={broadcast} items={items} />
     </DashboardPage>

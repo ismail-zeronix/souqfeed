@@ -23,11 +23,14 @@ export function BroadcastReview({
   items,
   editable,
   canCreateProducts,
+  fromForm = false,
 }: {
   broadcastId: string;
   items: BroadcastItemRow[];
   editable: boolean;
   canCreateProducts: boolean;
+  /** A form submission publishes itself once its product is decided. */
+  fromForm?: boolean;
 }) {
   const [pending, startTransition] = useTransition();
   const [message, setMessage] = useState<string | null>(null);
@@ -61,13 +64,15 @@ export function BroadcastReview({
   return (
     <Card className="min-w-0 gap-0 pb-0">
       <CardHeader className="border-b">
-        <CardTitle>Products found</CardTitle>
+        <CardTitle>{fromForm ? "Product" : "Products found"}</CardTitle>
         <CardDescription>
-          {items.length} {items.length === 1 ? "product" : "products"}: {ready}{" "}
-          ready · {needsReview} need review · {skipped} skipped. Unknown details
-          stay blank; nothing is guessed.
+          {fromForm
+            ? editable
+              ? "Goes live as soon as it's matched to a catalog product."
+              : "The catalog product this offer is listed under."
+            : `${items.length} ${items.length === 1 ? "product" : "products"}: ${ready} ready · ${needsReview} need review · ${skipped} skipped. Unknown details stay blank; nothing is guessed.`}
         </CardDescription>
-        {editable && (
+        {editable && !fromForm && (
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <Button
               disabled={pending || needsReview > 0 || ready === 0}
