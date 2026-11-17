@@ -207,6 +207,12 @@ describe("parseLine: real market lines", () => {
 });
 
 describe("parseLine: false positives it must avoid", () => {
+  it("keeps a colour that names a product line, drops a trailing one", () => {
+    expect(line("WD Blue 1TB x50 @180").model).toBe("Blue");
+    expect(line("WD Black SN850X 1TB NVMe").model).toBe("Black SN850X");
+    expect(line("HP 840 G8 i5 16/512 Silver").model).toBe("840 G8");
+  });
+
   it("doesn't read 'X1 Carbon' as a quantity", () => {
     const fields = line("Lenovo ThinkPad X1 Carbon Gen 11 i7 16/1TB @4500");
     expect(fields.quantity).toBeNull();

@@ -24,6 +24,11 @@ import {
   sortOffers,
   type SortOption,
 } from "@/modules/offers/filter-offers";
+import {
+  FEED_TABS,
+  matchesFeedTab,
+  type FeedTab,
+} from "@/modules/offers/feed-tabs";
 import type {
   OfferFilterCriteria,
   OfferListItem,
@@ -42,14 +47,6 @@ const FLASH_RGB: Record<(typeof SIMULATED_BADGES)[number], string> = {
   LIVE: "22, 163, 74",
   PRICE_UPDATED: "42, 92, 138",
 };
-
-const FEED_TABS = [
-  { label: "All Offers", count: 2847 },
-  { label: "New", count: 421 },
-  { label: "Price Updated", count: 632 },
-  { label: "In Stock", count: 1942 },
-  { label: "On Request", count: 386 },
-] as const;
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "recent", label: "Latest First" },
@@ -79,6 +76,8 @@ export function LiveTradingFeed({
   pageCount,
   totalOfferCount,
   paginationQuery,
+  tabCounts,
+  simulateArrivals,
 }: {
   offers: OfferListItem[];
   criteria: OfferFilterCriteria;
@@ -91,13 +90,20 @@ export function LiveTradingFeed({
   pageCount: number;
   totalOfferCount: number;
   paginationQuery: string;
+  /** Offers matching each tab, across every page. */
+  tabCounts: Record<FeedTab, number>;
+  /**
+   * Replays sample offers as fake arrivals to demo the live feed. Only for
+   * sample data: on real offers it would invent price changes.
+   */
+  simulateArrivals: boolean;
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [rawOffers, setRawOffers] = useState<OfferListItem[]>([]);
   const [isManuallyPaused, setIsManuallyPaused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [activeTab, setActiveTab] = useState("All Offers");
+  const [activeTab, setActiveTab] = useState<FeedTab>("All Offers");
   const [isTabTransitioning, setIsTabTransitioning] = useState(false);
   const [sort, setSort] = useState<SortOption>("recent");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -121,7 +127,7 @@ export function LiveTradingFeed({
   }, [offers]);
 
   useEffect(() => {
-    if (isLoading || offers.length === 0) return;
+    if (!simulateArrivals || isLoading || offers.length === 0) return;
 
     let timeoutId: ReturnType<typeof setTimeout>;
     const scheduleNext = () => {
@@ -147,7 +153,7 @@ export function LiveTradingFeed({
     };
     scheduleNext();
     return () => clearTimeout(timeoutId);
-  }, [isLoading, offers]);
+  }, [isLoading, offers, simulateArrivals]);
 
   useEffect(() => {
     return () => {
@@ -155,7 +161,7 @@ export function LiveTradingFeed({
     };
   }, []);
 
-  function handleTabChange(label: string) {
+  function handleTabChange(label: FeedTab) {
     if (label === activeTab) return;
     setActiveTab(label);
     setIsTabTransitioning(true);
@@ -167,16 +173,9 @@ export function LiveTradingFeed({
 
   const displayedOffers = useMemo(() => {
     const filtered = filterOffers(rawOffers, criteria);
-    const tabFiltered =
-      activeTab === "In Stock"
-        ? filtered.filter((offer) => offer.availabilityStatus === "AVAILABLE")
-        : activeTab === "On Request"
-          ? filtered.filter((offer) => offer.priceType === "ASK")
-          : activeTab === "New"
-            ? filtered.filter((offer) => offer.badge === "NEW")
-            : activeTab === "Price Updated"
-              ? filtered.filter((offer) => offer.badge === "PRICE_UPDATED")
-              : filtered;
+    const tabFiltered = filtered.filter((offer) =>
+      matchesFeedTab(offer, activeTab),
+    );
     return sortOffers(tabFiltered, sort);
   }, [rawOffers, criteria, activeTab, sort]);
   const liveSummary = getLiveFeedSummary(offers);
@@ -220,18 +219,18 @@ export function LiveTradingFeed({
             <div className="flex min-w-0 [scrollbar-width:none] items-center gap-2 overflow-x-auto pb-0.5 [&::-webkit-scrollbar]:hidden">
               {FEED_TABS.map((tab) => (
                 <button
-                  key={tab.label}
+                  key={tab}
                   type="button"
-                  onClick={() => handleTabChange(tab.label)}
+                  onClick={() => handleTabChange(tab)}
                   className={
-                    activeTab === tab.label
+                    activeTab === tab
                       ? "bg-primary text-primary-foreground rounded-full px-4 py-2 text-xs font-semibold whitespace-nowrap shadow-sm"
                       : "bg-card hover:text-primary rounded-full border border-slate-200 px-4 py-2 text-xs font-medium whitespace-nowrap text-slate-600 transition-colors"
                   }
                 >
-                  {tab.label}{" "}
+                  {tab}{" "}
                   <span className="opacity-70">
-                    ({tab.count.toLocaleString()})
+                    ({tabCounts[tab].toLocaleString()})
                   </span>
                 </button>
               ))}
@@ -398,26 +397,32 @@ export function LiveTradingFeed({
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="text-muted-foreground flex items-center gap-2 text-xs">
-              <span className="bg-live size-1.5 rounded-full" aria-hidden />
-              Updating live
-              <Button
-                variant="ghost"
-                size="xs"
-                className="text-muted-foreground ml-1"
-                onClick={() => setIsManuallyPaused((prev) => !prev)}
-              >
-                {isManuallyPaused ? (
-                  <>
-                    <Play className="size-3" aria-hidden /> Resume
-                  </>
-                ) : (
-                  <>
-                    <Pause className="size-3" aria-hidden /> Pause
-                  </>
-                )}
-              </Button>
-            </div>
+            {simulateArrivals ? (
+              <div className="text-muted-foreground flex items-center gap-2 text-xs">
+                <span className="bg-live size-1.5 rounded-full" aria-hidden />
+                Updating live
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  className="text-muted-foreground ml-1"
+                  onClick={() => setIsManuallyPaused((prev) => !prev)}
+                >
+                  {isManuallyPaused ? (
+                    <>
+                      <Play className="size-3" aria-hidden /> Resume
+                    </>
+                  ) : (
+                    <>
+                      <Pause className="size-3" aria-hidden /> Pause
+                    </>
+                  )}
+                </Button>
+              </div>
+            ) : (
+              <span className="text-muted-foreground text-xs">
+                Newest confirmed first
+              </span>
+            )}
             <div className="flex items-center gap-2">
               <div className="border-border bg-card flex h-8 items-center gap-1 rounded-lg border px-1">
                 <ArrowDownUp

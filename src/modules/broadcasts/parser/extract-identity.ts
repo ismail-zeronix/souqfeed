@@ -156,8 +156,11 @@ const NOISE = new RegExp(
 
 /** The model is whatever the extractors left, minus noise and separators. */
 export function extractModel(remainder: string): string | null {
-  const model = remainder
-    .replace(NOISE, " ")
+  // A colour straight after the brand is a product line ("WD Blue",
+  // "WD Black SN850X"), so the first word is never treated as noise.
+  const [, lead = "", rest = remainder] =
+    /^(\s*[A-Za-z]+)([\s\S]*)$/.exec(remainder) ?? [];
+  const model = (lead + rest.replace(NOISE, " "))
     .replace(/[|,;:()[\]{}<>!?=*_~•▪►➡→—–]+/g, " ")
     // A hyphen or slash only survives between two word characters (840-G8).
     .replace(/(?<![A-Za-z0-9])[-/]+|[-/]+(?![A-Za-z0-9])/g, " ")

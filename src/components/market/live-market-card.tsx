@@ -116,8 +116,9 @@ export function LiveMarketCard({
             )}
           </div>
           <div className="text-muted-foreground text-xs">
-            {offer.locationName} · {offer.supplierPositiveScorePercent}%
-            Positive
+            {offer.locationName}
+            {offer.supplierPositiveScorePercent > 0 &&
+              ` · ${offer.supplierPositiveScorePercent}% Positive`}
           </div>
           <h3 className="text-foreground mt-1 truncate text-base font-semibold">
             {offer.title}

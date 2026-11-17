@@ -5,6 +5,8 @@ import type { WtbRequestSnippet } from "@/modules/offers/types";
 export const WTB_SECTION_TITLE = "Latest WTB Requests";
 
 export function WtbRequests({ requests }: { requests: WtbRequestSnippet[] }) {
+  // Nothing to show until want-to-buy requests exist (planned after launch).
+  if (requests.length === 0) return null;
   return (
     <section className="mx-auto w-full max-w-[1180px] px-5 py-7 lg:py-8">
       <div className="flex items-end justify-between gap-4">

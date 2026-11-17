@@ -9,6 +9,7 @@ import { MobileHome } from "@/components/home/mobile/mobile-home";
 import { SampleFeedback } from "@/components/home/sample-feedback";
 import { SupplierCta } from "@/components/home/supplier-cta";
 import { WtbRequests } from "@/components/home/wtb-requests";
+import { SampleDataNotice } from "@/components/market/sample-data-notice";
 import type { Category } from "@/modules/categories/types";
 import type {
   MarketStats,
@@ -31,14 +32,18 @@ export function HomeSummary({
   offers,
   categories,
   wtbRequests,
+  sample = false,
 }: {
   stats: MarketStats;
   offers: OfferListItem[];
   categories: Category[];
   wtbRequests: WtbRequestSnippet[];
+  /** True while the page shows illustrative listings, not real offers. */
+  sample?: boolean;
 }) {
   return (
     <>
+      {sample && <SampleDataNotice />}
       <div className="md:hidden">
         <MobileHome
           stats={stats}

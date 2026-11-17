@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { MarketPulseSidebar } from "@/components/market/market-pulse-sidebar";
+import {
+  MarketPulseSidebar,
+  type MarketPulse,
+} from "@/components/market/market-pulse-sidebar";
+import { SampleDataNotice } from "@/components/market/sample-data-notice";
+import type { FeedTab } from "@/modules/offers/feed-tabs";
 import { LiveTradingFeed } from "@/components/feed/live-trading-feed";
 import { MobileTradingFeed } from "@/components/feed/mobile-trading-feed";
 import { EMPTY_OFFER_FILTERS } from "@/modules/offers/filter-offers";
@@ -31,6 +36,10 @@ export interface TradingFloorViewProps {
   pageCount: number;
   totalOfferCount: number;
   paginationQuery: string;
+  /** Real market activity; absent while the feed shows sample listings. */
+  pulse?: MarketPulse;
+  sample?: boolean;
+  tabCounts: Record<FeedTab, number>;
 }
 
 export function TradingFloorView({
@@ -47,6 +56,9 @@ export function TradingFloorView({
   pageCount,
   totalOfferCount,
   paginationQuery,
+  pulse,
+  sample = false,
+  tabCounts,
 }: TradingFloorViewProps) {
   const [criteria, setCriteria] = useState(
     initialCriteria ?? EMPTY_OFFER_FILTERS,
@@ -54,6 +66,7 @@ export function TradingFloorView({
 
   return (
     <>
+      {sample && <SampleDataNotice />}
       <MobileTradingFeed
         offers={offers}
         categories={categories}
@@ -73,6 +86,8 @@ export function TradingFloorView({
             pageCount={pageCount}
             totalOfferCount={totalOfferCount}
             paginationQuery={paginationQuery}
+            tabCounts={tabCounts}
+            simulateArrivals={sample}
           />
           <MarketPulseSidebar
             trendingCategories={categories}
@@ -80,6 +95,7 @@ export function TradingFloorView({
             trendingSearches={trendingSearches}
             topSuppliers={topSuppliers}
             wtbRequests={wtbRequests}
+            pulse={pulse}
           />
         </div>
       </div>

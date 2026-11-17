@@ -240,6 +240,19 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   withdraw. Staff: `/admin/offers`. Verified in Docker: two publishes update one
   offer with two history rows; withdrawing then republishing starts a new offer.
 
+- **Phase 8 (public live feed) complete** — `src/modules/offers/market-data.ts`
+  loads `/` and `/feed`: **live mode** once any visible offer exists (real
+  offers, badges from history, real stats with day-over-day trends, real
+  category counts, top suppliers, a 7-day activity chart), otherwise **sample
+  mode** with the demo data under a "Sample listings" notice (also the fallback
+  if the database is unreachable). In live mode, widgets with no real source yet
+  (price movements, trending searches, WTB requests) are hidden, the fake
+  "% Positive" score is hidden, the feed tab counts are computed, and the
+  desktop feed's simulated "arrivals" (which re-posted offers with invented
+  badges every few seconds) are off; they only run on sample data. Parser fix
+  found here: a colour straight after the brand is a product line ("WD Blue").
+  Verified in Docker in both modes.
+
 ## In Progress
 
 - Nothing currently in flight. Phases 2–3 and the admin portal are on
@@ -250,8 +263,8 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
 - **Deploy Phases 2–3 and the admin portal, with the production follow-up in
   Known Issues.** Production needs migrations `0003` and `0004`, the brand and
   category seeds, and the admin seed (to make the account `SUPER_ADMIN`).
-- Phase 8: public live feed — `/` and `/feed` read real offers (with the
-  demo data as a fallback only while there are none).
+- Phase 9: search — `/search` with Postgres full-text + trigram, filters, and
+  results grouped by product.
 
 ## Decisions
 
@@ -317,18 +330,19 @@ created_at from "user" where role in ('ADMIN', 'SUPER_ADMIN')` and revoke anythi
 - **`compose.yaml` publishes Postgres as `5432:5432`**, on all host interfaces,
   while `docs/deployment.md` says it publishes no ports. Check whether the server
   exposes it, then remove the mapping unless something needs it.
-- **Public pages still show mock data.** `/`, `/feed`, demo supplier pages, and
-  the buyer dashboard (including its hard-coded "120+" suppliers) stay mock
-  until Phases 7–8. Real supplier profiles don't appear in those listings yet.
+- **Sample mode.** `/` and `/feed` show real offers once any exist; until then
+  they show the illustrative demo listings under a "Sample listings" notice.
+  Demo supplier pages and the buyer dashboard (with its hard-coded "120+"
+  suppliers) are still mock until Phase 10.
 - `src/lib/database/seed-buraqa.ts` stores synthetic text as a raw broadcast and
   marks items `AUTO_APPROVED` at confidence 1.0, with no parsing or review.
-  That conflicts with rules 8 and 9; revisit it in Phases 4–6. (Its guessed part
-  numbers and double-encoded JSON were fixed in Phase 3.)
+  That conflicts with rules 8 and 9. Don't run it in production: if it creates
+  offers, they now appear on the public feed as a real company's live stock.
+  Rewrite it to go through submit → parse → review, or retire it. (Its guessed
+  part numbers and double-encoded JSON were fixed in Phase 3.)
 - **Deploying Phase 3 needs seeds as well as the migration:** run the
   `seed-brands` and `seed-categories` commands in `docs/deployment.md`, or the
   supplier form may have no options to offer.
-- The homepage's category tiles come from a fixed mock list, so categories added
-  by an admin don't appear there, and deleted ones still do, until Phases 7–9.
 - `db:seed:buraqa` isn't usable in a container, for the same `.env` reason as
   `db:seed`.
 - Missing and inactive supplier pages return HTTP 200 with `noindex` rather than

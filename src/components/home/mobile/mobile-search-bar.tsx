@@ -197,7 +197,7 @@ export function MobileSearchBar({
           </div>
           <div className="mt-auto border-t border-[#ebe6ff] bg-white px-5 py-4">
             <Button className="h-12 w-full rounded-xl" onClick={apply}>
-              Show 2,847 Offers <Search className="ml-1 size-4" />
+              Show offers <Search className="ml-1 size-4" />
             </Button>
           </div>
         </SheetContent>
