@@ -19,7 +19,7 @@ Search queries (e.g. `21U20063GR`, `Lenovo E14`, `E14 U7 16 512`, `V15 G4`,
 4. Brand
 5. Product title
 6. Specifications (JSONB fields)
-7. Fuzzy text (trigram similarity)
+7. Fuzzy text (trigram `word_similarity` ≥ 0.5 against the normalized title, so typos like "thinkpd" still match)
 
 ## Result shape
 

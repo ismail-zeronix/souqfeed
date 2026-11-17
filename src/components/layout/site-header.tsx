@@ -48,7 +48,9 @@ export function SiteHeader() {
   function handleSearchSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const trimmed = query.trim();
-    router.push(trimmed ? `/feed?q=${encodeURIComponent(trimmed)}` : "/feed");
+    router.push(
+      trimmed ? `/search?q=${encodeURIComponent(trimmed)}` : "/search",
+    );
   }
 
   return (

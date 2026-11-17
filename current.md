@@ -253,18 +253,32 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   found here: a colour straight after the brand is a product line ("WD Blue").
   Verified in Docker in both modes.
 
+- **Phase 9 (search) complete** — per
+  `docs/superpowers/plans/2026-11-17-souqfeed-phase9-search.md`. `/search`
+  ranks products with live offers in one SQL statement by the seven tiers in
+  `docs/search.md` (part number → model → alias → brand → title FTS → spec FTS
+  → fuzzy `word_similarity` ≥ 0.5, which catches typos like "thinkpd"), and
+  groups each product's matching offers under it with a WhatsApp link. Filters
+  (brand, category, supplier, location, price, availability, freshness) are a
+  plain GET form, so every search is a shareable URL; empty filters stay out of
+  the URL and the panel folds behind a button on phones. Header search goes
+  here. Verified in Docker on desktop and mobile against seeded data, including
+  a page past the end (still reports the true total).
+
 ## In Progress
 
-- Nothing currently in flight. Phases 2–3 and the admin portal are on
+- Nothing currently in flight. Everything since Phase 2 is on
   `phase2-implementation`, not deployed.
 
 ## Next
 
-- **Deploy Phases 2–3 and the admin portal, with the production follow-up in
-  Known Issues.** Production needs migrations `0003` and `0004`, the brand and
-  category seeds, and the admin seed (to make the account `SUPER_ADMIN`).
-- Phase 9: search — `/search` with Postgres full-text + trigram, filters, and
-  results grouped by product.
+- **Phase 9.5: manual offer entry + IT catalog taxonomy** — suppliers add an
+  offer through a form (category → brand → catalog product, or describe a new
+  one) as well as by pasting a broadcast.
+- Then Phase 10: supplier public profiles.
+- **Deploy, with the production follow-up in Known Issues.** Production needs
+  every migration since `0003`, the brand and category seeds, and the admin
+  seed (to make the account `SUPER_ADMIN`).
 
 ## Decisions
 
