@@ -35,3 +35,16 @@ export function firstLine(text: string): string {
       ?.trim() ?? ""
   );
 }
+
+/** "AED 1,850", "Ask for price", or null when no price was stated. */
+export function formatPrice(
+  price: string | number | null,
+  currency: string | null,
+  priceType: string | null,
+): string | null {
+  if (price !== null && price !== "") {
+    const amount = Number(price).toLocaleString("en-AE");
+    return currency ? `${currency} ${amount}` : amount;
+  }
+  return priceType === "ASK" ? "Ask for price" : null;
+}

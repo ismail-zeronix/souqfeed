@@ -1,4 +1,5 @@
 import {
+  BadgeDollarSign,
   FolderTree,
   LayoutDashboard,
   Package,
@@ -20,6 +21,7 @@ export const ADMIN_NAV: { label: string; items: AdminNavItem[] }[] = [
     items: [
       { title: "Suppliers", href: "/admin/suppliers", icon: Store },
       { title: "Broadcasts", href: "/admin/broadcasts", icon: Radio },
+      { title: "Offers", href: "/admin/offers", icon: BadgeDollarSign },
     ],
   },
   {

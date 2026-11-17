@@ -1,6 +1,7 @@
 import { and, count, eq, isNull, sql } from "drizzle-orm";
 import { db } from "@/lib/database/client";
 import { brands } from "@/modules/brands/schema";
+import { upsertOffersFromBroadcast } from "@/modules/offers/publish";
 import { products } from "@/modules/products/schema";
 import { suppliers } from "@/modules/suppliers/schema";
 import { broadcastItems, broadcasts } from "./schema";
@@ -137,8 +138,9 @@ export type PublishResult =
     };
 
 /**
- * REVIEW → PUBLISHED once every item is decided and at least one is approved.
- * The broadcast row is locked, so two clicks can't publish twice.
+ * REVIEW → PUBLISHED once every item is decided and at least one is approved,
+ * creating or updating offers in the same transaction. The broadcast row is
+ * locked, so two clicks can't publish twice.
  */
 export async function publishBroadcast(
   broadcastId: string,
@@ -166,6 +168,7 @@ export async function publishBroadcast(
     }
 
     const now = new Date();
+    await upsertOffersFromBroadcast(tx, broadcastId, now);
     await tx
       .update(broadcasts)
       .set({ status: "PUBLISHED", publishedAt: now, updatedAt: now })

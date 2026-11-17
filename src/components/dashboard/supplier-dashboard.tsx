@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { ExternalLink, ListChecks, Radio, Send } from "lucide-react";
+import {
+  BadgeDollarSign,
+  ExternalLink,
+  ListChecks,
+  Radio,
+  Send,
+} from "lucide-react";
 import { getDashboardCopy } from "@/components/dashboard/dashboard-view";
 import { SupplierProfileForm } from "@/components/suppliers/supplier-profile-form";
 import { Badge } from "@/components/ui/badge";
@@ -67,6 +73,14 @@ function BroadcastsPanel({ canPost }: { canPost: boolean }) {
         >
           <ListChecks aria-hidden />
           Your broadcasts
+        </Button>
+        <Button
+          variant="outline"
+          nativeButton={false}
+          render={<Link href="/dashboard/offers" />}
+        >
+          <BadgeDollarSign aria-hidden />
+          Your offers
         </Button>
         {canPost && (
           <Button

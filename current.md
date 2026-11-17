@@ -228,6 +228,18 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   `products.normalized_title`). Verified in Docker with a browser: each match
   path, the review actions, the publish guard, and staff product creation.
 
+- **Phase 7 (offers) complete** — per
+  `docs/superpowers/plans/2026-11-17-souqfeed-phase7-offers.md`. Publishing
+  creates or updates one active offer per supplier + product and appends an
+  `offer_observations` row per item, in the same transaction as
+  `REVIEW → PUBLISHED` (`src/modules/offers/publish.ts`). Availability is never
+  guessed (`AVAILABLE` only with a stated quantity, `ASK`, else `UNKNOWN`);
+  the spec snapshot is what the supplier stated, filled from the catalog.
+  Freshness (LIVE/RECENT/STALE/VERY_STALE) is derived from `lastVerifiedAt`.
+  Suppliers: `/dashboard/offers` and offer history pages, with "Sold out" to
+  withdraw. Staff: `/admin/offers`. Verified in Docker: two publishes update one
+  offer with two history rows; withdrawing then republishing starts a new offer.
+
 ## In Progress
 
 - Nothing currently in flight. Phases 2–3 and the admin portal are on
@@ -238,8 +250,8 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
 - **Deploy Phases 2–3 and the admin portal, with the production follow-up in
   Known Issues.** Production needs migrations `0003` and `0004`, the brand and
   category seeds, and the admin seed (to make the account `SUPER_ADMIN`).
-- Phase 7: offers — publishing creates/updates offers and appends
-  `offer_observations` in the same transaction as `REVIEW → PUBLISHED`.
+- Phase 8: public live feed — `/` and `/feed` read real offers (with the
+  demo data as a fallback only while there are none).
 
 ## Decisions
 
