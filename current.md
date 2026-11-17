@@ -174,6 +174,18 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   its own accounts, wrong-portal and unknown-email errors are identical,
   role redirects and anonymous 307s all correct.
 
+- **Admin UI redesign complete** — shadcn Sidebar layout (collapsible icon
+  rail on desktop, drawer on phones, collapse state remembered in the
+  `sidebar_state` cookie), breadcrumb header, user menu with sign-out, and
+  shared `AdminPageHeader`/`AdminEmptyState` + shadcn `Card` on every page.
+  `/admin` is now an overview dashboard with real counts (`src/modules/admin/queries.ts`);
+  the supplier list moved to `/admin/suppliers`. Sidebar tokens use the brand
+  purple. shadcn's generated `use-mobile` hook was rewritten with
+  `useSyncExternalStore` (the generated one failed the React Compiler lint),
+  and `SidebarInset` renders a `div` because the root layout already has
+  `<main>`. Checked in a headless browser at desktop and phone widths: no
+  console errors, no horizontal overflow.
+
 ## In Progress
 
 - Nothing currently in flight. Phases 2–3 and the admin portal are on

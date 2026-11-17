@@ -145,6 +145,7 @@ async function runAdminToggle(
       return { ok: false, message: "That supplier no longer exists." };
     }
     revalidatePath("/admin");
+    revalidatePath("/admin/suppliers");
     revalidatePath(`/suppliers/${slug}`);
     return { ok: true };
   } catch (error) {

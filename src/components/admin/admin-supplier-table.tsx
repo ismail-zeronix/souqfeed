@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { AdminEmptyState } from "@/components/admin/admin-page";
 import {
   Table,
   TableBody,
@@ -98,29 +100,31 @@ export function AdminSupplierTable({
 }) {
   if (suppliers.length === 0) {
     return (
-      <div className="border-border text-muted-foreground rounded-2xl border border-dashed p-12 text-center text-sm">
+      <AdminEmptyState>
         No suppliers have created a profile yet.
-      </div>
+      </AdminEmptyState>
     );
   }
 
   return (
-    <div className="bg-card rounded-2xl border p-2 sm:p-4">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Company</TableHead>
-            <TableHead>Verification</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {suppliers.map((supplier) => (
-            <SupplierRow key={supplier.id} supplier={supplier} />
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <Card className="py-0">
+      <CardContent className="px-2 sm:px-3">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Company</TableHead>
+              <TableHead>Verification</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {suppliers.map((supplier) => (
+              <SupplierRow key={supplier.id} supplier={supplier} />
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
   );
 }

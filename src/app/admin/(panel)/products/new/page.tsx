@@ -1,9 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import {
+  AdminEmptyState,
+  AdminPageHeader,
+} from "@/components/admin/admin-page";
+import { Card, CardContent } from "@/components/ui/card";
 import { ProductForm } from "@/components/admin/product-form";
 import { requireAdminPage } from "@/lib/auth/session";
 import { listBrands } from "@/modules/brands/queries";
 import { listCategoriesForAdmin } from "@/modules/categories/queries";
 import { EMPTY_PRODUCT_VALUES } from "@/modules/products/queries";
+
+export const metadata: Metadata = { title: "Add product" };
 
 export default async function AdminNewProductPage() {
   await requireAdminPage();
@@ -14,30 +22,27 @@ export default async function AdminNewProductPage() {
 
   return (
     <>
-      <Link
-        href="/admin/products"
-        className="text-muted-foreground hover:text-foreground text-sm"
-      >
-        ← All products
-      </Link>
-      <h1 className="mt-2 mb-6 text-3xl font-semibold tracking-tight">
-        Add product
-      </h1>
+      <AdminPageHeader
+        title="Add product"
+        description="Add a canonical product that supplier broadcasts can be matched against."
+      />
       {brands.length === 0 ? (
-        <div className="border-border text-muted-foreground rounded-2xl border border-dashed p-12 text-center text-sm">
+        <AdminEmptyState>
           Every product needs a brand.{" "}
           <Link href="/admin/brands" className="text-primary hover:underline">
             Add a brand first.
           </Link>
-        </div>
+        </AdminEmptyState>
       ) : (
-        <section className="bg-card rounded-2xl border p-5 sm:p-6">
-          <ProductForm
-            initialValues={EMPTY_PRODUCT_VALUES}
-            brands={brands}
-            categories={categories}
-          />
-        </section>
+        <Card>
+          <CardContent>
+            <ProductForm
+              initialValues={EMPTY_PRODUCT_VALUES}
+              brands={brands}
+              categories={categories}
+            />
+          </CardContent>
+        </Card>
       )}
     </>
   );

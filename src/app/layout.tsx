@@ -57,7 +57,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="bg-background text-foreground flex min-h-full flex-col">
         <JsonLd />
         <SiteHeader />
-        <main className="flex flex-1 flex-col pb-16 md:pb-0">{children}</main>
+        {/* The admin shell has no mobile bottom nav, so it drops that padding. */}
+        <main className="flex flex-1 flex-col pb-16 has-data-[slot=sidebar-wrapper]:pb-0 md:pb-0">
+          {children}
+        </main>
         <SiteFooter />
         <MobileBottomNav />
       </body>

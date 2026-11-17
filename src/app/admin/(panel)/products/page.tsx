@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { Plus, Search } from "lucide-react";
 import { AdminActionButton } from "@/components/admin/admin-action-button";
+import {
+  AdminEmptyState,
+  AdminPageHeader,
+} from "@/components/admin/admin-page";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NativeSelect } from "@/components/ui/form-field";
@@ -22,6 +29,8 @@ import {
 } from "@/modules/products/filters";
 import { listProductsForAdmin } from "@/modules/products/queries";
 
+export const metadata: Metadata = { title: "Products" };
+
 export default async function AdminProductsPage({
   searchParams,
 }: {
@@ -40,25 +49,24 @@ export default async function AdminProductsPage({
 
   return (
     <>
-      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-semibold tracking-tight">Products</h1>
-          <p className="text-muted-foreground mt-3 text-sm">
-            The canonical catalog that supplier broadcasts get matched against.
-          </p>
-        </div>
-        <Button
-          nativeButton={false}
-          render={<Link href="/admin/products/new" />}
-        >
-          Add product
-        </Button>
-      </div>
+      <AdminPageHeader
+        title="Products"
+        description="The canonical catalog that supplier broadcasts get matched against."
+        actions={
+          <Button
+            nativeButton={false}
+            render={<Link href="/admin/products/new" />}
+          >
+            <Plus aria-hidden />
+            Add product
+          </Button>
+        }
+      />
 
       <form
         method="get"
         action="/admin/products"
-        className="bg-card mb-6 grid gap-3 rounded-2xl border p-4 sm:grid-cols-[1fr_11rem_11rem_auto]"
+        className="bg-card mb-4 grid gap-3 rounded-xl border p-3 sm:grid-cols-[1fr_11rem_11rem_auto]"
       >
         <Input
           name="q"
@@ -92,75 +100,82 @@ export default async function AdminProductsPage({
           ))}
         </NativeSelect>
         <Button type="submit" variant="outline">
+          <Search aria-hidden />
           Search
         </Button>
       </form>
 
       {result.rows.length === 0 ? (
-        <div className="border-border text-muted-foreground rounded-2xl border border-dashed p-12 text-center text-sm">
+        <AdminEmptyState>
           {isFiltered
             ? "No products match this search."
             : "No products yet. Add the first one."}
-        </div>
+        </AdminEmptyState>
       ) : (
-        <div className="bg-card rounded-2xl border p-2 sm:p-4">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Product</TableHead>
-                <TableHead>Brand</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Part number</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {result.rows.map((product) => (
-                <TableRow key={product.id}>
-                  <TableCell className="max-w-72 font-medium whitespace-normal">
-                    <Link
-                      href={`/admin/products/${product.id}`}
-                      className="hover:underline"
-                    >
-                      {product.title}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{product.brandName}</TableCell>
-                  <TableCell>{product.categoryName ?? "—"}</TableCell>
-                  <TableCell className="tabular-nums">
-                    {product.partNumber ?? "—"}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={product.active ? "default" : "destructive"}>
-                      {product.active ? "Active" : "Inactive"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-start justify-end gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        nativeButton={false}
-                        render={<Link href={`/admin/products/${product.id}`} />}
-                      >
-                        Edit
-                      </Button>
-                      <AdminActionButton
-                        label={product.active ? "Deactivate" : "Reactivate"}
-                        action={setProductActiveAction.bind(
-                          null,
-                          product.id,
-                          !product.active,
-                        )}
-                      />
-                    </div>
-                  </TableCell>
+        <Card className="py-0">
+          <CardContent className="px-2 sm:px-3">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Product</TableHead>
+                  <TableHead>Brand</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Part number</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {result.rows.map((product) => (
+                  <TableRow key={product.id}>
+                    <TableCell className="max-w-72 font-medium whitespace-normal">
+                      <Link
+                        href={`/admin/products/${product.id}`}
+                        className="hover:underline"
+                      >
+                        {product.title}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{product.brandName}</TableCell>
+                    <TableCell>{product.categoryName ?? "—"}</TableCell>
+                    <TableCell className="tabular-nums">
+                      {product.partNumber ?? "—"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={product.active ? "default" : "destructive"}
+                      >
+                        {product.active ? "Active" : "Inactive"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-start justify-end gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          nativeButton={false}
+                          render={
+                            <Link href={`/admin/products/${product.id}`} />
+                          }
+                        >
+                          Edit
+                        </Button>
+                        <AdminActionButton
+                          label={product.active ? "Deactivate" : "Reactivate"}
+                          action={setProductActiveAction.bind(
+                            null,
+                            product.id,
+                            !product.active,
+                          )}
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       )}
 
       <nav

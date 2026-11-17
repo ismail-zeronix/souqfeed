@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { AdminActionButton } from "@/components/admin/admin-action-button";
 import { CategoryForm } from "@/components/admin/category-form";
+import {
+  AdminEmptyState,
+  AdminPageHeader,
+} from "@/components/admin/admin-page";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -14,6 +20,8 @@ import { requireAdminPage } from "@/lib/auth/session";
 import { deleteCategoryAction } from "@/modules/categories/actions";
 import { listCategoriesForAdmin } from "@/modules/categories/queries";
 
+export const metadata: Metadata = { title: "Categories" };
+
 export default async function AdminCategoriesPage({
   searchParams,
 }: {
@@ -26,84 +34,87 @@ export default async function AdminCategoriesPage({
 
   return (
     <>
-      <h1 className="text-3xl font-semibold tracking-tight">Categories</h1>
-      <p className="text-muted-foreground mt-3 mb-6 text-sm">
-        A category can only be deleted when it has no subcategories, products,
-        or suppliers.
-      </p>
+      <AdminPageHeader
+        title="Categories"
+        description="A category can only be deleted when it has no subcategories, products, or suppliers."
+      />
 
-      <section className="bg-card mb-6 rounded-2xl border p-5 sm:p-6">
-        <h2 className="mb-4 font-semibold">
-          {editing ? `Edit ${editing.name}` : "Add a category"}
-        </h2>
-        <CategoryForm
-          key={editing?.id ?? "new"}
-          category={editing}
-          allCategories={categories}
-        />
-      </section>
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>
+            {editing ? `Edit ${editing.name}` : "Add a category"}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CategoryForm
+            key={editing?.id ?? "new"}
+            category={editing}
+            allCategories={categories}
+          />
+        </CardContent>
+      </Card>
 
       {categories.length === 0 ? (
-        <div className="border-border text-muted-foreground rounded-2xl border border-dashed p-12 text-center text-sm">
-          No categories yet.
-        </div>
+        <AdminEmptyState>No categories yet.</AdminEmptyState>
       ) : (
-        <div className="bg-card rounded-2xl border p-2 sm:p-4">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Category</TableHead>
-                <TableHead>Subcategories</TableHead>
-                <TableHead>Products</TableHead>
-                <TableHead>Suppliers</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {categories.map((category) => (
-                <TableRow key={category.id}>
-                  <TableCell className="font-medium">
-                    <span
-                      style={{ paddingLeft: `${category.depth * 1.25}rem` }}
-                    >
-                      {category.name}
-                    </span>
-                  </TableCell>
-                  <TableCell className="tabular-nums">
-                    {category.childCount}
-                  </TableCell>
-                  <TableCell className="tabular-nums">
-                    {category.productCount}
-                  </TableCell>
-                  <TableCell className="tabular-nums">
-                    {category.supplierCount}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-start justify-end gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        nativeButton={false}
-                        render={
-                          <Link
-                            href={`/admin/categories?edit=${category.id}`}
-                          />
-                        }
-                      >
-                        Edit
-                      </Button>
-                      <AdminActionButton
-                        label="Delete"
-                        confirmMessage={`Delete ${category.name}? This can't be undone.`}
-                        action={deleteCategoryAction.bind(null, category.id)}
-                      />
-                    </div>
-                  </TableCell>
+        <Card className="py-0">
+          <CardContent className="px-2 sm:px-3">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Subcategories</TableHead>
+                  <TableHead>Products</TableHead>
+                  <TableHead>Suppliers</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {categories.map((category) => (
+                  <TableRow key={category.id}>
+                    <TableCell className="font-medium">
+                      <span
+                        style={{ paddingLeft: `${category.depth * 1.25}rem` }}
+                      >
+                        {category.name}
+                      </span>
+                    </TableCell>
+                    <TableCell className="tabular-nums">
+                      {category.childCount}
+                    </TableCell>
+                    <TableCell className="tabular-nums">
+                      {category.productCount}
+                    </TableCell>
+                    <TableCell className="tabular-nums">
+                      {category.supplierCount}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-start justify-end gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          nativeButton={false}
+                          render={
+                            <Link
+                              href={`/admin/categories?edit=${category.id}`}
+                            />
+                          }
+                        >
+                          Edit
+                        </Button>
+                        <AdminActionButton
+                          label="Delete"
+                          confirmMessage={`Delete ${category.name}? This can't be undone.`}
+                          action={deleteCategoryAction.bind(null, category.id)}
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       )}
     </>
   );
