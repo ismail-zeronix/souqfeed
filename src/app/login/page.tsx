@@ -53,9 +53,8 @@ export default function LoginPage() {
         setToast(message);
         return;
       }
-      const accountRole = (result.data?.user as { role?: string } | undefined)
-        ?.role;
-      router.push(accountRole === "ADMIN" ? "/admin" : "/dashboard");
+      // Staff accounts are refused here; they sign in at /admin/login.
+      router.push("/dashboard");
     } catch {
       const message =
         "We couldn’t reach the account service. Please check your connection and try again.";

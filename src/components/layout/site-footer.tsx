@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight, Mail, Radio } from "lucide-react";
+import { hidesSiteChrome } from "@/components/layout/site-chrome";
 
 const PLATFORM_LINKS: { label: string; href: string | null }[] = [
   { label: "Live Market", href: "/feed" },
@@ -52,7 +53,7 @@ function FooterLinkColumn({
 
 export function SiteFooter() {
   const pathname = usePathname();
-  if (pathname.startsWith("/login")) return null;
+  if (hidesSiteChrome(pathname)) return null;
   return (
     <footer className="bg-[#21184e]">
       <div className="mx-auto grid w-full max-w-[1180px] gap-10 px-5 py-12 sm:grid-cols-2 lg:grid-cols-[1.5fr_0.8fr_0.8fr_0.8fr]">

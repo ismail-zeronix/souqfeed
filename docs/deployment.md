@@ -99,7 +99,8 @@ docker compose --profile tools run --rm migrate
 This builds and runs the `migrator` Dockerfile stage (full `node_modules`
 including `drizzle-kit`, not the slim runtime image), executes
 `drizzle-kit migrate` once, and removes the container on exit. The same
-target can seed the admin user ad hoc:
+target can seed the super admin account ad hoc (it signs in at
+`/admin/login`, not `/login`):
 `docker compose --profile tools run --rm migrate pnpm exec tsx src/lib/database/seed.ts`.
 Don't use `pnpm db:seed` in a container: it reads a `.env` file, which images
 deliberately don't contain, so it fails with `node: .env: not found`.

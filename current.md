@@ -156,16 +156,34 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   and repairs the Buraqa seeder's data. Brands and categories no longer seed on
   read. Verified in a browser on a production build, with non-admin replays of
   admin actions, and with the migration run against old-format rows.
-- `compose.local.yaml` runs the full app in Docker on `http://localhost:3400`.
+- `compose.local.yaml` runs the full app in Docker on `http://localhost:3400`
+  (set `SOUQFEED_LOCAL_PORT`, e.g. `3410`, when another project holds 3400).
+- Phases 2–3 committed (`05fee5c`).
+
+- **Admin portal separation + super admin role complete** — done ahead of
+  Phase 4 at the owner's request, per
+  `docs/superpowers/plans/2026-11-17-souqfeed-admin-portal.md`. Staff sign in
+  at `/admin/login`, buyers and suppliers at `/login`; a Better Auth hook
+  refuses each account at the other login with the normal invalid-credentials
+  error, and Better Auth's rate limiting still applies to both. New
+  `SUPER_ADMIN` role (migration `0004`); the seeded account is now
+  `SUPER_ADMIN`. Admin pages moved into `src/app/admin/(panel)/` (same URLs)
+  with their own top bar instead of the public header. Also fixed: `proxy.ts`
+  sat in the repo root, which Next.js ignores in a `src/` project, so it never
+  ran; it is now `src/proxy.ts`. Verified in Docker: each portal accepts only
+  its own accounts, wrong-portal and unknown-email errors are identical,
+  role redirects and anonymous 307s all correct.
 
 ## In Progress
 
-- Nothing currently in flight. Phases 2 and 3 are uncommitted on
-  `phase2-implementation` and not deployed.
+- Nothing currently in flight. Phases 2–3 and the admin portal are on
+  `phase2-implementation`, not deployed.
 
 ## Next
 
-- **Commit and deploy Phases 2–3, with the production follow-up in Known Issues.**
+- **Deploy Phases 2–3 and the admin portal, with the production follow-up in
+  Known Issues.** Production needs migrations `0003` and `0004`, the brand and
+  category seeds, and the admin seed (to make the account `SUPER_ADMIN`).
 - Phase 4: broadcast submission (paste, store raw text immutably, status
   lifecycle).
 
@@ -212,6 +230,9 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   was added after Phase 1 and is kept.
 - Products are deactivated, never deleted, because broadcast items and offers
   reference them (Rule 9). Brands and categories can only be deleted when unused.
+- Admin portal is a separate path (`/admin/login`), not a subdomain. RFQs /
+  WTB requests come after launch (first post-launch phase). Phase 12 now covers
+  per-user event tracking, IP-based location, and the super admin dashboard.
 - Phase 13 now also covers user management, admin management with a last-admin
   safeguard, and an audit log, so an admin can run the system without database
   access.
@@ -225,7 +246,7 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
 
 - **Production may hold self-made admins.** Until the role fix is deployed, any
   visitor can become `ADMIN`. After deploying, audit `select id, email,
-created_at from "user" where role = 'ADMIN'` and revoke anything unexpected
+created_at from "user" where role in ('ADMIN', 'SUPER_ADMIN')` and revoke anything unexpected
   (also check for accounts that changed role).
 - **`compose.yaml` publishes Postgres as `5432:5432`**, on all host interfaces,
   while `docs/deployment.md` says it publishes no ports. Check whether the server
@@ -273,7 +294,8 @@ created_at from "user" where role = 'ADMIN'` and revoke anything unexpected
 - `src/components/{market,suppliers,layout,ui}/` — shared UI components from Phase 0.5 (`LiveMarketCard`, `StatTile`, `SupplierLogoTile`, `SidebarWidget`, `SiteHeader`, etc.)
 - `src/lib/database/client.ts`, `src/lib/database/schema.ts`, `drizzle.config.ts` — Drizzle client and schema barrel
 - `src/lib/auth/config.ts`, `src/lib/auth/client.ts`, `src/lib/auth/session.ts`, `src/modules/auth/schema.ts` — Better Auth server/client config and user schema
-- `src/modules/auth/guards.ts`, `proxy.ts` — role-guard logic (pure, no client import) and route proxy (formerly `middleware.ts`)
+- `src/modules/auth/guards.ts`, `src/proxy.ts` — role and portal guard logic (pure, no client import) and route proxy (formerly `middleware.ts`)
+- `src/app/admin/login/page.tsx`, `src/app/admin/(panel)/`, `src/components/admin/{admin-login-form,admin-top-bar}.tsx` — separate admin login and admin chrome
 - `src/modules/{suppliers,brands,categories,products,broadcasts,offers,analytics}/schema.ts` — full domain schema (12 tables); the same `suppliers`/`offers`/`brands`/`categories` modules also hold Phase 0.5's mock-data fixtures
 - `src/modules/suppliers/{validation,profile,queries,service,actions}.ts` — Phase 2's supplier module; the first real instance of the module shape in `docs/architecture.md`
 - `src/modules/{brands,categories,products}/{validation,queries,service,actions}.ts`, `src/app/admin/*`, `src/components/admin/*` — Phase 3's catalog and admin screens

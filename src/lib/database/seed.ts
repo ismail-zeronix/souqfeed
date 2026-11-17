@@ -14,14 +14,14 @@ async function seed() {
     .limit(1);
 
   if (existing.length > 0) {
-    if (existing[0].role !== "ADMIN") {
+    if (existing[0].role !== "SUPER_ADMIN") {
       await db
         .update(user)
-        .set({ role: "ADMIN" })
+        .set({ role: "SUPER_ADMIN" })
         .where(eq(user.email, env.ADMIN_EMAIL));
-      console.log(`Repaired admin role: ${env.ADMIN_EMAIL}`);
+      console.log(`Set super admin role: ${env.ADMIN_EMAIL}`);
     } else {
-      console.log(`Admin already exists: ${env.ADMIN_EMAIL}`);
+      console.log(`Super admin already exists: ${env.ADMIN_EMAIL}`);
     }
     return;
   }
@@ -36,10 +36,10 @@ async function seed() {
 
   await db
     .update(user)
-    .set({ role: "ADMIN" })
+    .set({ role: "SUPER_ADMIN" })
     .where(eq(user.email, env.ADMIN_EMAIL));
 
-  console.log(`Seeded admin: ${env.ADMIN_EMAIL}`);
+  console.log(`Seeded super admin: ${env.ADMIN_EMAIL}`);
 }
 
 seed()

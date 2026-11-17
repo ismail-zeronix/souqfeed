@@ -31,7 +31,22 @@ clients.
 ## Auth
 
 Better Auth (Drizzle adapter), email/password, server-side sessions. A
-`role` column on the user record is `ADMIN` or `SUPPLIER`. No social login.
+`role` column on the user record is `SUPER_ADMIN`, `ADMIN`, `SUPPLIER`, or
+`BUYER`. No social login.
+
+Two separate logins. Buyers and suppliers sign in at `/login`; staff
+(`ADMIN`, `SUPER_ADMIN`) sign in at `/admin/login`. A Better Auth
+`hooks.before` on `/sign-in/email` (`src/lib/auth/config.ts`) refuses an
+account at the wrong login with the normal "Invalid email or password" error.
+The admin form marks itself with the `x-souqfeed-portal: admin` header. Sign-in
+stays on Better Auth's HTTP endpoint so its rate limiting applies to both.
+
+Access is checked in two layers: `src/proxy.ts` sends visitors with no session
+cookie to the right login, and every admin page and action checks the role on
+the server (`requireAdminPage`, `isAdminRequest`). The admin pages live in
+the `src/app/admin/(panel)/` route group so `/admin/login` sits outside the
+guarded layout. The admin area has its own top bar instead of the public
+header and footer.
 
 ## Broadcast processing flow
 

@@ -13,7 +13,7 @@ import {
   toFieldErrors,
   type AdminActionResult,
 } from "@/lib/validation/form";
-import { authorizeRole } from "@/modules/auth/guards";
+import { authorizeRole, isStaffRole } from "@/modules/auth/guards";
 import {
   createOwnProfile,
   setActive,
@@ -130,7 +130,7 @@ async function runAdminToggle(
   apply: (id: string, next: boolean) => Promise<string | undefined>,
 ): Promise<AdminActionResult> {
   const session = await getCurrentSession();
-  if (!session || !authorizeRole(session.user.role, "ADMIN")) {
+  if (!session || !isStaffRole(session.user.role)) {
     return { ok: false, message: "Not authorized." };
   }
 

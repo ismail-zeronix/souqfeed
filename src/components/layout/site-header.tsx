@@ -11,7 +11,9 @@ import { SignupDialog } from "@/components/layout/signup-dialog";
 import { MobileHeader } from "@/components/layout/mobile-header";
 import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth/client";
+import { isStaffRole } from "@/modules/auth/guards";
 import { HeaderMascot } from "@/components/layout/header-mascot";
+import { hidesSiteChrome } from "@/components/layout/site-chrome";
 
 export const NAV_ITEMS: { label: string; href: string | null }[] = [
   { label: "Market", href: "/feed" },
@@ -29,7 +31,7 @@ export function SiteHeader() {
   const [query, setQuery] = useState("");
   const { data: session } = authClient.useSession();
 
-  if (pathname.startsWith("/login")) return null;
+  if (hidesSiteChrome(pathname)) return null;
 
   const user = session?.user as
     | { name?: string; email?: string; image?: string | null; role?: string }
@@ -151,7 +153,7 @@ export function SiteHeader() {
                   <div className="text-muted-foreground text-[10px]">
                     {user?.role === "SUPPLIER"
                       ? "Seller"
-                      : user?.role === "ADMIN"
+                      : isStaffRole(user?.role)
                         ? "Admin"
                         : "Buyer"}
                   </div>

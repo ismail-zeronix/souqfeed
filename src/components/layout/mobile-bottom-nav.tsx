@@ -5,10 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ClipboardList, Home, Menu, Search, Users } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
+import { isStaffRole } from "@/modules/auth/guards";
 import { cn } from "@/lib/utils";
 import { MobileSearchBar } from "@/components/home/mobile/mobile-search-bar";
 import { getMockCategories } from "@/modules/categories/mock-data";
 import { getMockBrands } from "@/modules/brands/mock-data";
+import { hidesSiteChrome } from "@/components/layout/site-chrome";
 
 type IconType = ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
 
@@ -17,7 +19,7 @@ function profileHref(
 ): string {
   if (!session?.user) return "/login";
   const role = (session.user as { role?: string }).role;
-  return role === "ADMIN" ? "/admin" : "/dashboard";
+  return isStaffRole(role) ? "/admin" : "/dashboard";
 }
 
 function NavItemShell({
@@ -50,7 +52,7 @@ export function MobileBottomNav() {
   const pathname = usePathname();
   const { data: session } = authClient.useSession();
 
-  if (pathname.startsWith("/login")) return null;
+  if (hidesSiteChrome(pathname)) return null;
 
   const profileActive =
     pathname === "/dashboard" || pathname === "/admin" || pathname === "/login";

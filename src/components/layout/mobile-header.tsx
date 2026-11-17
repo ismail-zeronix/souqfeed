@@ -17,11 +17,12 @@ import { SignupDialog } from "@/components/layout/signup-dialog";
 import { NAV_ITEMS } from "@/components/layout/site-header";
 import { cn } from "@/lib/utils";
 import { HeaderMascot } from "@/components/layout/header-mascot";
+import { hidesSiteChrome } from "@/components/layout/site-chrome";
 
 export function MobileHeader() {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/login")) return null;
+  if (hidesSiteChrome(pathname)) return null;
 
   return (
     <header className="border-border bg-card flex h-16 items-center gap-2 border-b px-4 md:hidden">
