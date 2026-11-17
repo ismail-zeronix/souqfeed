@@ -123,6 +123,10 @@ createdAt    timestamp
 updatedAt    timestamp
 ```
 
+`raw_text` is immutable in the database: migration `0005` adds a trigger that
+rejects any `UPDATE` changing it (and the same for `broadcast_items.raw_line`
+and `raw_block`). Status changes follow `src/modules/broadcasts/status.ts`.
+
 Only `MANUAL` is implemented in MVP; the other `source` values exist in the
 enum so ingestion channels can be added later without a schema migration.
 Indexes: index(`supplierId`), index(`createdAt`), index(`status`).

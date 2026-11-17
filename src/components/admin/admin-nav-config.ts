@@ -2,6 +2,7 @@ import {
   FolderTree,
   LayoutDashboard,
   Package,
+  Radio,
   Store,
   Tags,
   type LucideIcon,
@@ -16,7 +17,10 @@ export const ADMIN_NAV: { label: string; items: AdminNavItem[] }[] = [
   },
   {
     label: "Marketplace",
-    items: [{ title: "Suppliers", href: "/admin/suppliers", icon: Store }],
+    items: [
+      { title: "Suppliers", href: "/admin/suppliers", icon: Store },
+      { title: "Broadcasts", href: "/admin/broadcasts", icon: Radio },
+    ],
   },
   {
     label: "Catalog",
@@ -41,6 +45,9 @@ const SECTION_TITLES: Record<string, string> = Object.fromEntries(
   ]),
 );
 
+/** What an /admin/<section>/<id> page is called in the breadcrumb. */
+const CHILD_TITLES: Record<string, string> = { products: "Edit" };
+
 /** Breadcrumb trail for an admin path, e.g. Products › New product. */
 export function adminBreadcrumbs(
   pathname: string,
@@ -54,6 +61,6 @@ export function adminBreadcrumbs(
 
   return [
     { title: sectionTitle, href: sectionHref },
-    { title: child === "new" ? "New" : "Edit" },
+    { title: child === "new" ? "New" : (CHILD_TITLES[section] ?? "Details") },
   ];
 }

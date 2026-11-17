@@ -36,5 +36,9 @@ describe("adminBreadcrumbs", () => {
       { title: "Products", href: "/admin/products" },
       { title: "Edit" },
     ]);
+    expect(adminBreadcrumbs("/admin/broadcasts/0b1c")).toEqual([
+      { title: "Broadcasts", href: "/admin/broadcasts" },
+      { title: "Details" },
+    ]);
   });
 });

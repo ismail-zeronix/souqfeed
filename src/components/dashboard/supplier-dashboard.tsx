@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ListChecks, Radio, Send } from "lucide-react";
 import { getDashboardCopy } from "@/components/dashboard/dashboard-view";
 import { SupplierProfileForm } from "@/components/suppliers/supplier-profile-form";
 import { Badge } from "@/components/ui/badge";
@@ -44,6 +44,44 @@ function ProfileStatus({
   );
 }
 
+function BroadcastsPanel({ canPost }: { canPost: boolean }) {
+  return (
+    <section className="bg-card flex flex-col justify-between gap-4 rounded-2xl border p-5 sm:flex-row sm:items-center sm:p-6">
+      <div className="flex min-w-0 gap-3">
+        <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-xl">
+          <Radio className="size-5" aria-hidden />
+        </span>
+        <div className="min-w-0">
+          <h2 className="font-semibold">Stock broadcasts</h2>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Paste the stock message you send on WhatsApp. SouqFeed turns it into
+            products buyers can search.
+          </p>
+        </div>
+      </div>
+      <div className="flex shrink-0 flex-wrap gap-2">
+        <Button
+          variant="outline"
+          nativeButton={false}
+          render={<Link href="/dashboard/broadcasts" />}
+        >
+          <ListChecks aria-hidden />
+          Your broadcasts
+        </Button>
+        {canPost && (
+          <Button
+            nativeButton={false}
+            render={<Link href="/dashboard/broadcasts/new" />}
+          >
+            <Send aria-hidden />
+            Post a broadcast
+          </Button>
+        )}
+      </div>
+    </section>
+  );
+}
+
 export function SupplierDashboard({
   displayName,
   supplier,
@@ -77,6 +115,7 @@ export function SupplierDashboard({
         </div>
 
         {supplier && <ProfileStatus supplier={supplier} />}
+        {supplier && <BroadcastsPanel canPost={supplier.active} />}
 
         <section className="bg-card rounded-2xl border p-5 sm:p-6">
           <h2 className="mb-5 font-semibold">Company profile</h2>

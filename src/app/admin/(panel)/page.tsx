@@ -31,6 +31,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { requireAdminPage } from "@/lib/auth/session";
+import { formatDate } from "@/lib/format";
 import { getAdminOverview } from "@/modules/admin/queries";
 
 export const metadata: Metadata = { title: "Dashboard" };
@@ -41,12 +42,6 @@ const ROLE_LABELS: Record<string, string> = {
   ADMIN: "Admin",
   SUPER_ADMIN: "Super admin",
 };
-
-const dateFormat = new Intl.DateTimeFormat("en-AE", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-});
 
 function StatCard({
   title,
@@ -172,7 +167,7 @@ export default async function AdminDashboardPage() {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-muted-foreground hidden text-right tabular-nums sm:table-cell">
-                        {dateFormat.format(account.createdAt)}
+                        {formatDate(account.createdAt)}
                       </TableCell>
                     </TableRow>
                   ))}

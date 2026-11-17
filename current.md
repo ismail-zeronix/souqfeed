@@ -186,6 +186,20 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   `<main>`. Checked in a headless browser at desktop and phone widths: no
   console errors, no horizontal overflow.
 
+- **Phase 4 (broadcast submission) complete** — per
+  `docs/superpowers/plans/2026-11-17-souqfeed-phase4-broadcast-submission.md`.
+  Suppliers post broadcasts at `/dashboard/broadcasts/new`; text is stored
+  exactly as pasted with status `PROCESSING`. History and detail pages for
+  suppliers (scoped to their own broadcasts), `/admin/broadcasts` with status
+  filters for staff. Lifecycle rules in `src/modules/broadcasts/status.ts`;
+  `transitionBroadcastStatus` is ready for the Phase 5 worker. Migration
+  `0005` adds triggers that make `broadcasts.raw_text` and
+  `broadcast_items.raw_line`/`raw_block` immutable in the database. Guards:
+  30 broadcasts per supplier per hour; the same text within 2 minutes reuses
+  the existing broadcast. Verified in Docker with a browser: submit,
+  duplicate, blank, cross-supplier access, buyer access, admin views, and a
+  direct SQL `UPDATE` of `raw_text` rejected.
+
 ## In Progress
 
 - Nothing currently in flight. Phases 2–3 and the admin portal are on
@@ -196,8 +210,8 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
 - **Deploy Phases 2–3 and the admin portal, with the production follow-up in
   Known Issues.** Production needs migrations `0003` and `0004`, the brand and
   category seeds, and the admin seed (to make the account `SUPER_ADMIN`).
-- Phase 4: broadcast submission (paste, store raw text immutably, status
-  lifecycle).
+- Phase 5: broadcast parser (`RuleBasedBroadcastParser`), with the BullMQ
+  worker that moves broadcasts out of `PROCESSING`.
 
 ## Decisions
 

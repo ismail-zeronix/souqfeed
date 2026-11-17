@@ -1,7 +1,8 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/config";
-import { isStaffRole } from "@/modules/auth/guards";
+import { authorizeRole, isStaffRole } from "@/modules/auth/guards";
+import { getSupplierAccount } from "@/modules/suppliers/queries";
 
 export async function getCurrentSession() {
   return auth.api.getSession({ headers: await headers() });
@@ -23,4 +24,17 @@ export async function requireAdminPage() {
 export async function isAdminRequest(): Promise<boolean> {
   const session = await getCurrentSession();
   return Boolean(session && isStaffRole(session.user.role));
+}
+
+/**
+ * For supplier-only pages under /dashboard. Anyone else, or a supplier who
+ * hasn't created a profile yet, goes back to /dashboard, which routes them.
+ */
+export async function requireSupplierPage() {
+  const session = await getCurrentSession();
+  if (!session) redirect("/login");
+  if (!authorizeRole(session.user.role, "SUPPLIER")) redirect("/dashboard");
+  const supplier = await getSupplierAccount(session.user.id);
+  if (!supplier) redirect("/dashboard");
+  return { session, supplier };
 }

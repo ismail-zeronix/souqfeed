@@ -95,3 +95,22 @@ export async function listSuppliersForAdmin(): Promise<AdminSupplierRow[]> {
     .from(suppliers)
     .orderBy(suppliers.companyName);
 }
+
+/** The few supplier fields access checks need, without the associations. */
+export async function getSupplierAccount(
+  userId: string,
+): Promise<
+  { id: string; active: boolean; companyName: string; slug: string } | undefined
+> {
+  const [row] = await db
+    .select({
+      id: suppliers.id,
+      active: suppliers.active,
+      companyName: suppliers.companyName,
+      slug: suppliers.slug,
+    })
+    .from(suppliers)
+    .where(eq(suppliers.userId, userId))
+    .limit(1);
+  return row;
+}
