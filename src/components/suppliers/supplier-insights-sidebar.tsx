@@ -2,18 +2,30 @@ import { BadgeCheck, Calendar, ThumbsUp, Zap } from "lucide-react";
 import { SidebarWidget } from "@/components/ui/sidebar-widget";
 import { CategoryMixDonut } from "@/components/suppliers/category-mix-donut";
 import { BroadcastActivityBars } from "@/components/suppliers/broadcast-activity-bars";
+import { formatTenure } from "@/components/suppliers/supplier-metrics";
 import type { SupplierProfile } from "@/modules/suppliers/types";
+
+function NoDataYet() {
+  return <p className="text-muted-foreground text-sm">No data yet.</p>;
+}
 
 export function SupplierInsightsSidebar({
   supplier,
 }: {
   supplier: SupplierProfile;
 }) {
-  const yearsActive = new Date().getFullYear() - supplier.memberSinceYear;
+  const tenure = formatTenure(
+    supplier.memberSinceYear,
+    new Date().getFullYear(),
+  );
 
   return (
     <div className="flex flex-col gap-4">
-      <SidebarWidget title="Top Brands Supplied" showViewAll>
+      <SidebarWidget
+        title="Top Brands Supplied"
+        showViewAll={supplier.topBrands.length > 0}
+      >
+        {supplier.topBrands.length === 0 && <NoDataYet />}
         {supplier.topBrands.map((brand) => (
           <div
             key={brand.brandId}
@@ -28,14 +40,22 @@ export function SupplierInsightsSidebar({
       </SidebarWidget>
 
       <SidebarWidget title="Category Mix">
-        <CategoryMixDonut
-          slices={supplier.categoryMix}
-          totalLabel={`${supplier.activeOfferCount} Active Offers`}
-        />
+        {supplier.categoryMix.length === 0 ? (
+          <NoDataYet />
+        ) : (
+          <CategoryMixDonut
+            slices={supplier.categoryMix}
+            totalLabel={`${supplier.activeOfferCount} Active Offers`}
+          />
+        )}
       </SidebarWidget>
 
       <SidebarWidget title="Broadcast Activity (Last 7 Days)">
-        <BroadcastActivityBars days={supplier.broadcastActivity} />
+        {supplier.broadcastActivity.length === 0 ? (
+          <NoDataYet />
+        ) : (
+          <BroadcastActivityBars days={supplier.broadcastActivity} />
+        )}
       </SidebarWidget>
 
       <SidebarWidget title="Market Trust Signals">
@@ -56,33 +76,37 @@ export function SupplierInsightsSidebar({
               </div>
             </div>
           )}
-          <div className="flex items-start gap-2">
-            <ThumbsUp className="text-primary size-4 shrink-0" aria-hidden />
-            <div>
-              <div className="text-foreground font-medium">
-                {supplier.positiveScorePercent}% Positive Score
-              </div>
-              <div className="text-muted-foreground text-xs">
-                Based on buyer feedback
-              </div>
-            </div>
-          </div>
-          <div className="flex items-start gap-2">
-            <Zap className="text-primary size-4 shrink-0" aria-hidden />
-            <div>
-              <div className="text-foreground font-medium">
-                {supplier.avgResponseTimeLabel} Response Speed
-              </div>
-              <div className="text-muted-foreground text-xs">
-                Average time to respond to inquiries
+          {supplier.positiveScorePercent > 0 && (
+            <div className="flex items-start gap-2">
+              <ThumbsUp className="text-primary size-4 shrink-0" aria-hidden />
+              <div>
+                <div className="text-foreground font-medium">
+                  {supplier.positiveScorePercent}% Positive Score
+                </div>
+                <div className="text-muted-foreground text-xs">
+                  Based on buyer feedback
+                </div>
               </div>
             </div>
-          </div>
+          )}
+          {supplier.avgResponseTimeLabel !== "—" && (
+            <div className="flex items-start gap-2">
+              <Zap className="text-primary size-4 shrink-0" aria-hidden />
+              <div>
+                <div className="text-foreground font-medium">
+                  {supplier.avgResponseTimeLabel} Response Speed
+                </div>
+                <div className="text-muted-foreground text-xs">
+                  Average time to respond to inquiries
+                </div>
+              </div>
+            </div>
+          )}
           <div className="flex items-start gap-2">
             <Calendar className="text-primary size-4 shrink-0" aria-hidden />
             <div>
               <div className="text-foreground font-medium">
-                {yearsActive}+ years on SouqFeed
+                {tenure === "New" ? "New on SouqFeed" : `${tenure} on SouqFeed`}
               </div>
               <div className="text-muted-foreground text-xs">
                 Active since {supplier.memberSinceYear}

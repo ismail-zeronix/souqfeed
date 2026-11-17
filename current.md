@@ -136,22 +136,38 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   current-state audit, and a future-pages roadmap written up in
   `docs/seo.md`.
 
+- **Phase 2 (supplier profiles) complete** — implemented on branch
+  `phase2-implementation`, with the deviations listed at the top of
+  `docs/superpowers/plans/2026-10-04-souqfeed-phase2-supplier-profiles.md`.
+  Suppliers create and edit their own profile from `/dashboard`, admins verify
+  and activate suppliers from `/admin`, and `/suppliers/[slug]` reads real rows.
+  Verified end to end in a real browser from an empty database.
+- **Role escalation fixed.** `role` was `input: true` in Better Auth, so anyone
+  could sign up as `ADMIN` or promote themselves through `/update-user` —
+  reproduced locally, then closed (`src/lib/auth/config.ts`,
+  `resolveSignupRole` in `src/modules/auth/guards.ts`). No schema change.
+- **Drizzle snapshot repaired.** `drizzle/meta/0002_snapshot.json` added;
+  `db:generate` now reports no changes. No new migration.
+
+- **Phase 3 (brands, categories, products) complete** — on the same branch, per
+  `docs/superpowers/plans/2026-11-07-souqfeed-phase3-catalog.md`. Admin tabs at
+  `/admin`; brand and category management; product search, filters, pagination,
+  specifications, and aliases. Migration `0003` adds the catalog's unique rules
+  and repairs the Buraqa seeder's data. Brands and categories no longer seed on
+  read. Verified in a browser on a production build, with non-admin replays of
+  admin actions, and with the migration run against old-format rows.
+- `compose.local.yaml` runs the full app in Docker on `http://localhost:3400`.
+
 ## In Progress
 
-- Nothing currently in flight — Phase 0, 0.5, and 1 are all merged to
-  `master`.
+- Nothing currently in flight. Phases 2 and 3 are uncommitted on
+  `phase2-implementation` and not deployed.
 
 ## Next
 
-- Wire Phase 0.5's mock-data modules (`src/modules/{suppliers,offers,brands,
-categories}/`) to real `queries.ts` against the now-real database, per the
-  DB-first/seed-fallback pattern in `docs/architecture.md` — Phase 0.5's UI
-  already assumes this shape, so this is largely plumbing, not redesign.
-- Phase 2: the remaining write-side work — supplier CRUD (self-service
-  profile editing from `/dashboard`) and admin verification — per
-  `project_plan.md`'s phase table. Phase 0.5 already built the public
-  `/suppliers/[slug]` read side against mock data; Phase 2 is what makes it
-  real and adds the parts Phase 0.5 didn't (editing, verification).
+- **Commit and deploy Phases 2–3, with the production follow-up in Known Issues.**
+- Phase 4: broadcast submission (paste, store raw text immutably, status
+  lifecycle).
 
 ## Decisions
 
@@ -190,16 +206,50 @@ categories}/`) to real `queries.ts` against the now-real database, per the
   from-scratch verification: a plain `pnpm install` fails non-interactively
   (`ERR_PNPM_IGNORED_BUILDS`) until esbuild's postinstall (needed by
   vitest/drizzle-kit/tsx to fetch their native binary) is approved.
-- Public self-signup via email/password is intentionally left open in
-  Phase 1 — any signup gets SUPPLIER role with `/dashboard` access. No
-  admin-approval gate exists yet. Phase 2 (Supplier Profiles) is expected
-  to add real verification workflow against the existing
-  `suppliers.verified` column before this matters in practice.
+- Public self-signup via email/password is intentionally open, as `SUPPLIER`
+  or `BUYER`, with no approval gate. `verified` is a trust badge, not a
+  visibility gate; `active = false` is what hides a supplier. The `BUYER` role
+  was added after Phase 1 and is kept.
+- Products are deactivated, never deleted, because broadcast items and offers
+  reference them (Rule 9). Brands and categories can only be deleted when unused.
+- Phase 13 now also covers user management, admin management with a last-admin
+  safeguard, and an audit log, so an admin can run the system without database
+  access.
+- Demo supplier pages stay public as a read-only fallback until mock offers are
+  replaced (Phase 7), so existing links don't break. They are never written to
+  the database, and real suppliers can't take their slugs.
 - `proxy.ts` replaces `middleware.ts` — Next.js 16 deprecated and renamed
   the file convention; same logic and `matcher`, new name only.
 
 ## Known Issues
 
+- **Production may hold self-made admins.** Until the role fix is deployed, any
+  visitor can become `ADMIN`. After deploying, audit `select id, email,
+created_at from "user" where role = 'ADMIN'` and revoke anything unexpected
+  (also check for accounts that changed role).
+- **`compose.yaml` publishes Postgres as `5432:5432`**, on all host interfaces,
+  while `docs/deployment.md` says it publishes no ports. Check whether the server
+  exposes it, then remove the mapping unless something needs it.
+- **Public pages still show mock data.** `/`, `/feed`, demo supplier pages, and
+  the buyer dashboard (including its hard-coded "120+" suppliers) stay mock
+  until Phases 7–8. Real supplier profiles don't appear in those listings yet.
+- `src/lib/database/seed-buraqa.ts` stores synthetic text as a raw broadcast and
+  marks items `AUTO_APPROVED` at confidence 1.0, with no parsing or review.
+  That conflicts with rules 8 and 9; revisit it in Phases 4–6. (Its guessed part
+  numbers and double-encoded JSON were fixed in Phase 3.)
+- **Deploying Phase 3 needs seeds as well as the migration:** run the
+  `seed-brands` and `seed-categories` commands in `docs/deployment.md`, or the
+  supplier form may have no options to offer.
+- The homepage's category tiles come from a fixed mock list, so categories added
+  by an admin don't appear there, and deleted ones still do, until Phases 7–9.
+- `db:seed:buraqa` isn't usable in a container, for the same `.env` reason as
+  `db:seed`.
+- Missing and inactive supplier pages return HTTP 200 with `noindex` rather than
+  404, because the root `loading.tsx` starts streaming first. A real 404 would
+  need a database lookup in `proxy.ts`.
+- `corepack pnpm` fails with pnpm 12.8.1 (`pnpm.cjs` not found); install it with
+  `npm install -g pnpm@12.8.1`, as the Dockerfile does.
+- `pnpm format:check` fails on 13 files last touched before Phase 2.
 - `docs/data-model.md` is stale relative to what Task 2/3 actually built:
   it calls the auth table `users` (plural) and types `userId`/`user.id` as
   `uuid`; the real table is `user` (singular) with a `text` primary key.
@@ -224,7 +274,11 @@ categories}/`) to real `queries.ts` against the now-real database, per the
 - `src/lib/database/client.ts`, `src/lib/database/schema.ts`, `drizzle.config.ts` — Drizzle client and schema barrel
 - `src/lib/auth/config.ts`, `src/lib/auth/client.ts`, `src/lib/auth/session.ts`, `src/modules/auth/schema.ts` — Better Auth server/client config and user schema
 - `src/modules/auth/guards.ts`, `proxy.ts` — role-guard logic (pure, no client import) and route proxy (formerly `middleware.ts`)
-- `src/modules/{suppliers,brands,categories,products,broadcasts,offers,analytics}/schema.ts` — full domain schema (12 tables); the same `suppliers`/`offers`/`brands`/`categories` modules also hold Phase 0.5's mock-data fixtures pending the `queries.ts` wiring in Next
+- `src/modules/{suppliers,brands,categories,products,broadcasts,offers,analytics}/schema.ts` — full domain schema (12 tables); the same `suppliers`/`offers`/`brands`/`categories` modules also hold Phase 0.5's mock-data fixtures
+- `src/modules/suppliers/{validation,profile,queries,service,actions}.ts` — Phase 2's supplier module; the first real instance of the module shape in `docs/architecture.md`
+- `src/modules/{brands,categories,products}/{validation,queries,service,actions}.ts`, `src/app/admin/*`, `src/components/admin/*` — Phase 3's catalog and admin screens
+- `src/lib/validation/form.ts`, `src/lib/slug.ts`, `src/components/ui/form-field.tsx` — helpers shared by every form
+- `src/components/dashboard/{buyer,supplier}-dashboard.tsx`, `src/components/suppliers/supplier-profile-form.tsx`, `src/components/admin/admin-supplier-table.tsx` — Phase 2's screens
 - `src/lib/database/seed.ts` — idempotent, self-healing admin-user seed script
 - `src/app/login/page.tsx`, `src/app/dashboard/page.tsx`, `src/app/admin/page.tsx` — auth flow + role-gated placeholder pages
 - `src/app/page.tsx`, `src/app/suppliers/[slug]/page.tsx` — Phase 0.5's Live Market homepage and Supplier profile page (mock data)

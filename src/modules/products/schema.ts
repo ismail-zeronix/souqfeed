@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   pgTable,
   uuid,
@@ -6,6 +7,7 @@ import {
   boolean,
   timestamp,
   index,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { brands } from "@/modules/brands/schema";
 import { categories } from "@/modules/categories/schema";
@@ -32,6 +34,11 @@ export const products = pgTable(
     index("products_brand_id_idx").on(table.brandId),
     index("products_category_id_idx").on(table.categoryId),
     index("products_part_number_idx").on(table.partNumber),
+    // NULL means unknown, and NULLs never collide in a unique index.
+    uniqueIndex("products_brand_part_number_unique").on(
+      table.brandId,
+      table.partNumber,
+    ),
   ],
 );
 
@@ -48,5 +55,9 @@ export const productAliases = pgTable(
   (table) => [
     index("product_aliases_product_id_idx").on(table.productId),
     index("product_aliases_alias_idx").on(table.alias),
+    uniqueIndex("product_aliases_product_alias_lower_unique").on(
+      table.productId,
+      sql`lower(${table.alias})`,
+    ),
   ],
 );

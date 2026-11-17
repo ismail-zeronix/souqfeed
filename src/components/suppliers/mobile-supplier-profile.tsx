@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { MobileOfferCard } from "@/components/home/mobile/mobile-offer-card";
 import { SupplierLogoTile } from "@/components/ui/supplier-logo-tile";
+import { formatPositiveScore } from "@/components/suppliers/supplier-metrics";
 import { Button } from "@/components/ui/button";
 import { SouqFeedAgent } from "@/components/ui/souqfeed-agent";
 import type { OfferListItem } from "@/modules/offers/types";
@@ -102,7 +103,10 @@ export function MobileSupplierProfile({
         </div>
       </div>
       <div className="grid grid-cols-4 border-b bg-white px-2 py-4 text-center">
-        <Metric value={`${supplier.positiveScorePercent}%`} label="Positive" />
+        <Metric
+          value={formatPositiveScore(supplier.positiveScorePercent)}
+          label="Positive"
+        />
         <Metric
           value={String(supplier.activeOfferCount)}
           label="Total Offers"
@@ -139,9 +143,11 @@ export function MobileSupplierProfile({
             <h2 className="font-semibold">{activeTab}</h2>
             <p className="text-muted-foreground mt-2">
               {activeTab === "About"
-                ? supplier.description
+                ? supplier.description || "No description yet."
                 : activeTab === "Reviews"
-                  ? `${supplier.positiveScorePercent}% positive buyer feedback.`
+                  ? supplier.positiveScorePercent > 0
+                    ? `${supplier.positiveScorePercent}% positive buyer feedback.`
+                    : "No buyer feedback yet."
                   : "Recent supplier activity will appear here."}
             </p>
           </div>
@@ -167,6 +173,11 @@ export function MobileSupplierProfile({
             ))}
           </div>
           <div className="flex flex-col gap-2.5">
+            {offers.length === 0 && (
+              <p className="border-border text-muted-foreground rounded-2xl border border-dashed p-8 text-center text-sm">
+                No live offers yet.
+              </p>
+            )}
             {offers.slice(0, 8).map((offer) => (
               <MobileOfferCard key={offer.id} offer={offer} />
             ))}

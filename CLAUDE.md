@@ -22,6 +22,7 @@ pnpm test             # Vitest
 pnpm db:generate      # generate Drizzle migrations from schema changes
 pnpm db:migrate       # apply pending Drizzle migrations
 pnpm db:seed          # seed the admin user
+pnpm db:seed:brands   # add missing reference brands (also db:seed:categories)
 docker compose -f docker-compose.yml up -d  # postgres + redis, for local dev
 ```
 

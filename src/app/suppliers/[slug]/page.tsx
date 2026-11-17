@@ -6,7 +6,7 @@ import { SupplierInsightsSidebar } from "@/components/suppliers/supplier-insight
 import { SupplierContactPanel } from "@/components/suppliers/supplier-contact-panel";
 import { SupplierOffersSection } from "@/components/suppliers/supplier-offers-section";
 import { MobileSupplierProfile } from "@/components/suppliers/mobile-supplier-profile";
-import { getMockSupplierBySlug } from "@/modules/suppliers/mock-data";
+import { getSupplierBySlug } from "@/modules/suppliers/queries";
 import { getMockOffers } from "@/modules/offers/mock-data";
 
 export default async function SupplierProfilePage({
@@ -15,7 +15,7 @@ export default async function SupplierProfilePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const supplier = getMockSupplierBySlug(slug);
+  const supplier = await getSupplierBySlug(slug);
 
   if (!supplier) {
     notFound();

@@ -123,3 +123,13 @@ This means the `src/modules/*/mock-data.ts` files added in Phase 0.5
 (`docs/superpowers/specs/2026-09-30-souqfeed-ui-foundation-design.md`)
 are not deleted once a module's real `queries.ts` lands — they become that
 module's seed source, reused by both `pnpm db:seed` and this fallback path.
+
+**Exception — anything representing a real company or person is never
+auto-seeded.** Reads must not create fake accounts or suppliers, because the
+same code runs in production and those rows would look real. `suppliers` reads
+therefore never write: a real row wins, an inactive row is not-found, and a slug
+with no row falls back to the in-memory mock profile.
+
+**`brands` and `categories` don't seed on read either.** Admins can delete them,
+and seeding on read would bring deleted rows back. Run `db:seed:brands` and
+`db:seed:categories` instead; both only add what's missing.

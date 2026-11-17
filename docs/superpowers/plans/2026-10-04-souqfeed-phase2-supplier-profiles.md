@@ -1,5 +1,39 @@
 # Phase 2: Supplier Profiles Implementation Plan
 
+> **Status: implemented 2026-11-07, with deliberate deviations.** The code is
+> the source of truth where it differs from the task text below. The unticked
+> checkboxes are historical; verification is recorded in `current.md`.
+>
+> - **No auto-seeded demo suppliers (Task 4).** Creating fake accounts and
+>   companies during a page read would also run in production and make them
+>   indistinguishable from real suppliers. A real row always wins, an inactive
+>   row is not-found, and a slug with no row falls back to the read-only mock
+>   profile so mock offer links keep working until Phase 7. Demo slugs are
+>   reserved so a real supplier can't take one.
+> - **Real suppliers get no mock metrics (Task 3).** `toSupplierProfile` lives
+>   in `profile.ts` and never reads mock data; `lastBroadcastAt` is `null` rather
+>   than `createdAt`; `tags` come from the supplier's own selections. The public
+>   page hides or dashes metrics with no data, and only claims "Verified
+>   Supplier" when `verified` is true.
+> - **Stricter validation (Task 2).** `website`/`googleMapsUrl` are http(s) only
+>   (they render as `href`s), email and phone are checked, WhatsApp needs a
+>   country code, and `brandIds`/`categoryIds` must be UUIDs. `logo` is left out
+>   because no form field or UI uses it yet, so saving can't erase it.
+> - **Writes are transactional (Task 6)**, and actions return friendly errors
+>   for constraint failures (Task 7). Admin actions take no client-supplied slug.
+> - **The redesigned dashboard is kept (Task 9).** The plan predates it. Buyers
+>   keep their view in `buyer-dashboard.tsx`; suppliers get
+>   `supplier-dashboard.tsx`. `SignOutButton` was dropped (Task 8) because the
+>   site header already has sign-out.
+> - **Forms use native checkboxes (Task 8)** so they submit and reset with the
+>   form, and rejected submissions keep what the supplier typed.
+> - **Missing/inactive profiles return HTTP 200 with `noindex` (Task 11), not 404.** The root `loading.tsx` starts streaming before `notFound()` runs. See
+>   Next's `loading` docs, "Status Codes".
+> - **Added: role escalation fix.** `role` was client-settable, so anyone could
+>   become ADMIN at signup or through `/update-user`. See `current.md`.
+> - **Added: migration snapshot repair.** `0002_add_buyer_role` had no snapshot,
+>   so the next `db:generate` would have re-added `BUYER`.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Make supplier profiles real — self-service CRUD from `/dashboard`,

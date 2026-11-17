@@ -13,6 +13,7 @@ node_modules
 
 # local/dev-only compose file and anything build-context-irrelevant
 docker-compose.yml
+compose.local.yaml
 
 coverage
 *.tsbuildinfo

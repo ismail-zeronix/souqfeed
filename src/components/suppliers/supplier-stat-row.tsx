@@ -1,4 +1,8 @@
 import { Calendar, Clock, ThumbsUp, Users, Zap } from "lucide-react";
+import {
+  formatPositiveScore,
+  formatTenure,
+} from "@/components/suppliers/supplier-metrics";
 import { StatTile } from "@/components/ui/stat-tile";
 import type { SupplierProfile } from "@/modules/suppliers/types";
 
@@ -12,8 +16,6 @@ function formatRelativeTime(iso: string): string {
 }
 
 export function SupplierStatRow({ supplier }: { supplier: SupplierProfile }) {
-  const yearsActive = new Date().getFullYear() - supplier.memberSinceYear;
-
   return (
     <div className="mx-auto grid max-w-[1440px] grid-cols-2 gap-2 px-4 py-3 sm:grid-cols-4 sm:gap-3 sm:px-6 sm:py-4">
       <StatTile
@@ -23,13 +25,17 @@ export function SupplierStatRow({ supplier }: { supplier: SupplierProfile }) {
       />
       <StatTile
         icon={<Clock className="text-muted-foreground size-5" aria-hidden />}
-        value={formatRelativeTime(supplier.lastBroadcastAt)}
+        value={
+          supplier.lastBroadcastAt
+            ? formatRelativeTime(supplier.lastBroadcastAt)
+            : "—"
+        }
         label="Last Broadcast"
         suppressValueHydrationWarning
       />
       <StatTile
         icon={<ThumbsUp className="text-muted-foreground size-5" aria-hidden />}
-        value={`${supplier.positiveScorePercent}%`}
+        value={formatPositiveScore(supplier.positiveScorePercent)}
         label="Positive Score"
       />
       <StatTile
@@ -39,7 +45,7 @@ export function SupplierStatRow({ supplier }: { supplier: SupplierProfile }) {
       />
       <StatTile
         icon={<Calendar className="text-muted-foreground size-5" aria-hidden />}
-        value={`${yearsActive}+ years`}
+        value={formatTenure(supplier.memberSinceYear, new Date().getFullYear())}
         label="Active on SouqFeed"
       />
     </div>

@@ -1,3 +1,35 @@
+import type { FormState } from "@/lib/validation/form";
+import type { suppliers } from "./schema";
+
+export type SupplierRecord = typeof suppliers.$inferSelect;
+
+export interface SupplierRecordWithAssociations extends SupplierRecord {
+  brandIds: string[];
+  categoryIds: string[];
+}
+
+export type AdminSupplierRow = Pick<
+  SupplierRecord,
+  "id" | "slug" | "companyName" | "verified" | "active"
+>;
+
+/** Raw form text, so a failed submission can be shown back to the supplier. */
+export interface SupplierFormValues {
+  companyName: string;
+  whatsappNumber: string;
+  description: string;
+  phone: string;
+  email: string;
+  website: string;
+  locationName: string;
+  address: string;
+  googleMapsUrl: string;
+  brandIds: string[];
+  categoryIds: string[];
+}
+
+export type SupplierFormState = FormState<SupplierFormValues>;
+
 export interface SupplierSummary {
   id: string;
   slug: string;
@@ -31,10 +63,11 @@ export interface SupplierProfile extends SupplierSummary {
   whatsappNumber: string;
   phone: string | null;
   email: string | null;
+  website?: string | null;
   address: string | null;
   googleMapsUrl: string | null;
   tags: string[];
-  lastBroadcastAt: string;
+  lastBroadcastAt: string | null; // null until the supplier has really broadcast (Phase 4)
   memberSinceYear: number;
   avgResponseTimeLabel: string; // placeholder — no backing schema field yet
   topBrands: TopBrandShare[];

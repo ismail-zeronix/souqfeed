@@ -1,24 +1,19 @@
-import type { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { getCurrentSession } from "@/lib/auth/session";
-import { authorizeRole } from "@/modules/auth/guards";
+import { AdminSupplierTable } from "@/components/admin/admin-supplier-table";
+import { requireAdminPage } from "@/lib/auth/session";
+import { listSuppliersForAdmin } from "@/modules/suppliers/queries";
 
-export const metadata: Metadata = {
-  robots: { index: false, follow: false },
-};
+export default async function AdminSuppliersPage() {
+  await requireAdminPage();
+  const suppliers = await listSuppliersForAdmin();
 
-export default async function AdminPage() {
-  const session = await getCurrentSession();
-  if (!session) {
-    redirect("/login");
-  }
-  if (!authorizeRole(session.user.role, "ADMIN")) {
-    redirect(session.user.role === "ADMIN" ? "/admin" : "/dashboard");
-  }
   return (
-    <main>
-      <h1>Admin Panel</h1>
-      <p>Signed in as {session.user.email}</p>
-    </main>
+    <>
+      <h1 className="text-3xl font-semibold tracking-tight">Suppliers</h1>
+      <p className="text-muted-foreground mt-3 mb-6 text-sm">
+        Deactivating a supplier hides their public profile. Verifying adds the
+        verified badge.
+      </p>
+      <AdminSupplierTable suppliers={suppliers} />
+    </>
   );
 }

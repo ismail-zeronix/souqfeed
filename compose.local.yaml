@@ -1,0 +1,91 @@
+# Runs the whole app in Docker on this machine, as a production build.
+# Local only: production uses compose.yaml. See docs/deployment.md.
+#
+# Only the app publishes a port, so this can't clash with other projects'
+# databases. To use another port, set SOUQFEED_LOCAL_PORT in .env.
+name: souqfeed-local
+
+x-app-environment: &app-environment
+  DATABASE_URL: postgresql://souqfeed:souqfeed@postgres:5432/souqfeed
+  REDIS_URL: redis://redis:6379
+  BETTER_AUTH_URL: http://localhost:${SOUQFEED_LOCAL_PORT:-3400}
+  NEXT_PUBLIC_APP_URL: http://localhost:${SOUQFEED_LOCAL_PORT:-3400}
+
+services:
+  app:
+    build:
+      context: .
+      target: runner
+      args:
+        # Built into the browser bundle, so changing the port needs a rebuild.
+        NEXT_PUBLIC_APP_URL: http://localhost:${SOUQFEED_LOCAL_PORT:-3400}
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment: *app-environment
+    ports:
+      - "127.0.0.1:${SOUQFEED_LOCAL_PORT:-3400}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://127.0.0.1:3000/api/health",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: souqfeed
+      POSTGRES_PASSWORD: souqfeed
+      POSTGRES_DB: souqfeed
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U souqfeed -d souqfeed"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # One-off migrate and seed runner; never starts with `up`.
+  migrate:
+    build:
+      context: .
+      target: migrator
+    env_file:
+      - .env
+    environment: *app-environment
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: ["tools"]
+    restart: "no"
+
+volumes:
+  postgres_data:
+  redis_data:

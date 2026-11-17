@@ -60,7 +60,9 @@ export function SupplierOffersSection({
 
       {visibleOffers.length === 0 ? (
         <div className="border-border text-muted-foreground rounded-md border border-dashed p-12 text-center text-sm">
-          No offers match your search.
+          {offers.length === 0
+            ? "No live offers yet."
+            : "No offers match your search."}
         </div>
       ) : (
         <div className="flex flex-col gap-3">

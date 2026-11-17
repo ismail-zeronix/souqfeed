@@ -17,12 +17,10 @@ const CATEGORY_SEED = [
   ["Power & UPS", "power-ups"],
 ] as const;
 
+// Safe to re-run: adds only missing categories, so it never undoes an admin's rename.
 async function seedCategories() {
   for (const [name, slug] of CATEGORY_SEED) {
-    await db
-      .insert(categories)
-      .values({ name, slug })
-      .onConflictDoUpdate({ target: categories.slug, set: { name } });
+    await db.insert(categories).values({ name, slug }).onConflictDoNothing();
   }
 
   console.log(`Seeded ${CATEGORY_SEED.length} categories.`);

@@ -38,14 +38,22 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
                   <MapPin className="size-3.5" aria-hidden />
                   {supplier.locationName}
                 </span>
-                <span>·</span>
-                <span>{supplier.positiveScorePercent}% Positive</span>
+                {supplier.positiveScorePercent > 0 && (
+                  <>
+                    <span>·</span>
+                    <span>{supplier.positiveScorePercent}% Positive</span>
+                  </>
+                )}
                 <span>·</span>
                 <span>Active since {supplier.memberSinceYear}</span>
-                <span>·</span>
-                <span className="text-primary font-medium">
-                  Verified Supplier
-                </span>
+                {supplier.verified && (
+                  <>
+                    <span>·</span>
+                    <span className="text-primary font-medium">
+                      Verified Supplier
+                    </span>
+                  </>
+                )}
               </div>
               {supplier.description && (
                 <p className="text-muted-foreground mt-3 max-w-2xl text-sm">

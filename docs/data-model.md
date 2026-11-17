@@ -52,7 +52,7 @@ Indexes: unique(`slug`), index(`verified`), index(`active`).
 
 ## Brands & Categories
 
-**`brands`**: `id, name (unique), slug (unique), logoUrl (nullable), createdAt, updatedAt`
+**`brands`**: `id, name (unique, also case-insensitively), slug (unique), logoUrl (nullable), createdAt, updatedAt`
 
 **`categories`** (self-referencing hierarchy):
 
@@ -65,7 +65,9 @@ createdAt   timestamp
 updatedAt   timestamp
 ```
 
-Index: index(`parentId`).
+Indexes: index(`parentId`) (planned, not yet built), and unique on (`parentId`,
+lowercased `name`), which treats all top-level categories as one parent. Cycles
+are rejected by the service, since a constraint can't express them simply.
 
 ## Canonical Products
 
@@ -77,7 +79,7 @@ brandId            uuid fk -> brands.id, not null
 categoryId         uuid fk -> categories.id, nullable
 family             text nullable      -- e.g. "ThinkPad E14 Gen 7"
 model              text nullable      -- e.g. "E14 Gen 7"
-partNumber         text nullable      -- e.g. "21U20063GR"
+partNumber         text nullable      -- e.g. "21U20063GR"; uppercase, no spaces
 title              text not null
 normalizedTitle    text not null      -- lowercased/stripped, for matching
 specifications     jsonb nullable
@@ -86,8 +88,13 @@ createdAt          timestamp
 updatedAt          timestamp
 ```
 
-Indexes: index(`brandId`), index(`categoryId`), index(`partNumber`) where not
-null, GIN trigram index on `title` and `normalizedTitle` for fuzzy search.
+Indexes: index(`brandId`), index(`categoryId`), index(`partNumber`), unique on
+(`brandId`, `partNumber`), and a GIN trigram index on `title` and
+`normalizedTitle` for fuzzy search (planned for Phases 6/9, not yet built).
+
+`specifications` holds only known values, using the keys `cpu`, `ram`, `storage`,
+`gpu`, `display`, `os`; unknown stays absent (Rule 10). Products are deactivated,
+never deleted, because broadcast items and offers reference them.
 
 **`product_aliases`** _(addition — see foundation spec §2)_
 
@@ -98,7 +105,8 @@ alias       text not null   -- e.g. "U7", "Ultra 7", "Core Ultra 7"
 createdAt   timestamp
 ```
 
-Indexes: index(`productId`), index(`alias`).
+Indexes: index(`productId`), index(`alias`), unique on (`productId`, lowercased
+`alias`).
 
 ## Broadcasts
 

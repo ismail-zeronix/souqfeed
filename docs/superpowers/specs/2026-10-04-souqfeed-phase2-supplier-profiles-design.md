@@ -1,5 +1,10 @@
 # SouqFeed — Phase 2: Supplier Profiles Design
 
+> **Superseded in part (2026-11-07).** "Placeholder fields stay seed-sourced" and
+> "Seeding wrinkle" were not implemented: real suppliers never receive mock
+> metrics, and no demo suppliers are written to the database. See the status note
+> at the top of `docs/superpowers/plans/2026-10-04-souqfeed-phase2-supplier-profiles.md`.
+
 ## Problem
 
 Phase 0.5 built the public Live Market homepage and `/suppliers/[slug]` page

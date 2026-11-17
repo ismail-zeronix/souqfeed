@@ -32,7 +32,9 @@ Full reasoning: `docs/superpowers/specs/2026-09-30-souqfeed-foundation-design.md
   importing shared `src/modules/*/service.ts` logic.
 - PostgreSQL + Drizzle ORM; search via native FTS + `pg_trgm`, no Elasticsearch.
 - Redis: BullMQ queue + pub/sub relay for realtime SSE.
-- Better Auth (Drizzle adapter), email/password, `ADMIN`/`SUPPLIER` roles.
+- Better Auth (Drizzle adapter), email/password, `ADMIN`/`SUPPLIER`/`BUYER`
+  roles. Signup may choose `SUPPLIER` or `BUYER`; `ADMIN` is never
+  self-assignable, and nobody can change their own role.
 - Deployment: VPS via Docker Compose + Caddy, not serverless.
 - Brand name: **SouqFeed**. Branding/theme: `docs/branding.md`, `docs/theme.md`.
 
@@ -62,7 +64,7 @@ Finish and verify each phase before starting the next.
 | 10    | Supplier public profiles (broadcast history, active offers)                                                                                                                                                                                   |
 | 11    | Realtime (Redis pub/sub → SSE → live feed updates)                                                                                                                                                                                            |
 | 12    | Analytics (`analytics_events`, profile views, WhatsApp clicks)                                                                                                                                                                                |
-| 13    | Admin panel (verification, review queue, brand/category/product management)                                                                                                                                                                   |
+| 13    | Admin panel (verification, review queue, brand/category/product management, user management, admin management with a last-admin safeguard, audit log of admin actions)                                                                        |
 | 14    | Deployment (Docker Compose prod, Caddy, VPS)                                                                                                                                                                                                  |
 | 15    | Supplier Community / Announcements (post-MVP) — public `/community` feed, supplier-only posting, admin pre-approval review queue, new `announcements` module (`docs/superpowers/specs/2026-10-04-souqfeed-community-announcements-design.md`) |
 

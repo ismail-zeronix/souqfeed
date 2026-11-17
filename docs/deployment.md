@@ -18,6 +18,28 @@ also exists in the repo root — Docker Compose prefers `compose.yaml` by
 default when both files are present, so a bare `docker compose up -d`
 would try to start the production stack instead.
 
+## Full app in Docker, locally
+
+To try a production build on this machine, use `compose.local.yaml`. It needs
+no `proxy-net` network, and publishes only the app, on
+`http://localhost:3400`, so it won't clash with other projects:
+
+```bash
+docker compose -f compose.local.yaml --profile tools build
+docker compose -f compose.local.yaml up -d --wait postgres redis
+docker compose -f compose.local.yaml --profile tools run --rm migrate
+docker compose -f compose.local.yaml --profile tools run --rm migrate pnpm exec tsx src/lib/database/seed.ts
+docker compose -f compose.local.yaml --profile tools run --rm migrate pnpm exec tsx src/lib/database/seed-brands.ts
+docker compose -f compose.local.yaml --profile tools run --rm migrate pnpm exec tsx src/lib/database/seed-categories.ts
+docker compose -f compose.local.yaml up -d --wait app
+```
+
+Requires a `.env` copied from `.env.example`, with `BETTER_AUTH_SECRET` and
+`ADMIN_PASSWORD` set. Its database settings are overridden. To change the port,
+set `SOUQFEED_LOCAL_PORT` in `.env` and rebuild `app`, because the URL is built
+into the browser bundle. Stop it with
+`docker compose -f compose.local.yaml down`; adding `-v` also deletes its data.
+
 ## Production (VPS)
 
 ```
@@ -77,7 +99,18 @@ docker compose --profile tools run --rm migrate
 This builds and runs the `migrator` Dockerfile stage (full `node_modules`
 including `drizzle-kit`, not the slim runtime image), executes
 `drizzle-kit migrate` once, and removes the container on exit. The same
-target can run `pnpm db:seed` ad hoc: `docker compose --profile tools run --rm migrate pnpm db:seed`.
+target can seed the admin user ad hoc:
+`docker compose --profile tools run --rm migrate pnpm exec tsx src/lib/database/seed.ts`.
+Don't use `pnpm db:seed` in a container: it reads a `.env` file, which images
+deliberately don't contain, so it fails with `node: .env: not found`.
+
+Brands and categories are also seeded explicitly, or the supplier form has none
+to offer. Both are safe to re-run and only add what's missing:
+
+```bash
+docker compose --profile tools run --rm migrate pnpm exec tsx src/lib/database/seed-brands.ts
+docker compose --profile tools run --rm migrate pnpm exec tsx src/lib/database/seed-categories.ts
+```
 
 ## Environment variables (grows as modules are added)
 
