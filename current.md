@@ -376,9 +376,9 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   visitor can become `ADMIN`. After deploying, audit `select id, email,
 created_at from "user" where role in ('ADMIN', 'SUPER_ADMIN')` and revoke anything unexpected
   (also check for accounts that changed role).
-- **`compose.yaml` publishes Postgres as `5432:5432`**, on all host interfaces,
-  while `docs/deployment.md` says it publishes no ports. Check whether the server
-  exposes it, then remove the mapping unless something needs it.
+- **Postgres port (fixed 2026-11-18).** `compose.yaml` used to publish
+  `5432:5432` on all host interfaces. The production server had that mapping
+  removed by hand; the repo now matches, so a deploy keeps it private.
 - **Sample mode.** `/` and `/feed` show real offers once any exist; until then
   they show the illustrative demo listings under a "Sample listings" notice.
   Demo supplier pages and the buyer dashboard (with its hard-coded "120+"
