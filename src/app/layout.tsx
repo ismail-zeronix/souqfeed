@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { ChatWidget } from "@/components/layout/chat-widget";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -13,10 +14,15 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const displaySans = Plus_Jakarta_Sans({
+// Plus Jakarta Sans (SIL Open Font License), latin subset, one variable file.
+// It is bundled instead of fetched from Google at build time: on the production
+// server Google returned font URLs this Next.js version could not read, and
+// the build failed.
+const displaySans = localFont({
+  src: "./fonts/PlusJakartaSans-latin-variable.woff2",
   variable: "--font-display-sans",
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: "200 800",
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
