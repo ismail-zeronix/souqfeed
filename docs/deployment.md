@@ -84,6 +84,19 @@ target `worker`) parses broadcasts; it publishes no ports and sits only on
 There is no `Caddyfile` in this repo — Caddy is managed separately on the
 VPS (see above).
 
+## Deploying with deploy.sh
+
+On the server, `bash /srv/docker/souqfeed/deploy.sh` backs up the database, pulls
+`main` (fast-forward only), builds every image, applies migrations, restarts the
+stack and waits for the app to be healthy. It only touches this project's
+containers. Seeds stay explicit (below).
+
+Gotcha it handles: `docker compose build` skips services behind the `tools`
+profile, so the `migrate` image went stale and the migration step quietly applied
+nothing. The script builds with `--profile tools`. After a deploy, check
+`select count(*) from drizzle.__drizzle_migrations` matches the number of files
+in `drizzle/`.
+
 ## Running database migrations in production
 
 Migrations are pre-generated ahead of time via `pnpm db:generate` and
