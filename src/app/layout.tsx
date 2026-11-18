@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { ChatWidget } from "@/components/layout/chat-widget";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
@@ -71,6 +72,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <SiteFooter />
         <MobileBottomNav />
+        <ChatWidget />
       </body>
     </html>
   );

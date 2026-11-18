@@ -301,6 +301,8 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   (with a notice) until the market has live offers, then every active
   supplier.
 
+- **Live chat widget added** — the Zeronix chat widget (`zeronixos.online`) loads on every public page via `src/components/layout/chat-widget.tsx`, in SouqFeed purple, titled "SouqFeed Support" with its own greeting and quick replies. The SouqFeed team answers from the Zeronix portal. Not shown in the admin area; on phones the button is lifted above the bottom tab bar. Planned later: premium suppliers add their own team to a chat once a buyer picks their stock and starts a chat. **The portal rejects origins it doesn't know (CORS), so the button stays hidden on localhost until the SouqFeed domain is allowed there.**
+
 ## In Progress
 
 - Nothing currently in flight. Everything since Phase 2 is on
