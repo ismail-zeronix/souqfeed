@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ChatLink } from "@/components/chat/chat-link";
 import { BadgeCheck, MapPin, MessageCircle } from "lucide-react";
 import type { DirectorySupplier } from "@/modules/suppliers/directory-filter";
 
@@ -98,15 +99,20 @@ export function SupplierDirectoryCard({
           View profile
         </Link>
         {whatsapp && (
-          <a
+          <ChatLink
             href={`https://wa.me/${whatsapp}`}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`WhatsApp ${supplier.companyName}`}
-            className="flex size-9 items-center justify-center rounded-full bg-[#25d366] text-white"
+            aria-label={`Live chat about ${supplier.companyName}`}
+            title="Live chat"
+            className="bg-primary flex size-9 items-center justify-center rounded-full text-white"
+            request={{
+              supplierName: supplier.companyName,
+              source: "Supplier directory",
+            }}
           >
             <MessageCircle className="size-4.5" aria-hidden />
-          </a>
+          </ChatLink>
         )}
       </div>
     </article>

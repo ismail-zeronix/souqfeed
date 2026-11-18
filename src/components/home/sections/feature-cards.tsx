@@ -67,10 +67,11 @@ export function FeatureCards({ offers }: { offers: OfferListItem[] }) {
             <MessageCircle className="size-5 text-[#25d366]" aria-hidden />
           </span>
           <h3 className="font-display mt-4 text-xl font-extrabold">
-            Message the supplier directly
+            Chat before you buy
           </h3>
           <p className="mt-1.5 text-sm leading-5 text-white/70">
-            Every offer links straight to the seller on WhatsApp.
+            Every offer has a live chat. Our sales team connects you with the
+            supplier and helps you get the best price.
           </p>
           <div className="mt-5 space-y-2">
             <div className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-[#25d366] px-3.5 py-2 text-[13px] font-medium text-[#06361a]">

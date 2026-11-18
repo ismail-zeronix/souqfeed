@@ -1,6 +1,7 @@
 "use client";
 
 import type { KeyboardEvent } from "react";
+import { ChatLink } from "@/components/chat/chat-link";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -135,15 +136,21 @@ export function MobileOfferCard({
         >
           View supplier <ArrowUpRight className="size-3.5" aria-hidden />
         </Link>
-        <a
+        <ChatLink
           href={whatsappHref}
           target="_blank"
           rel="noreferrer"
           onClick={(event) => event.stopPropagation()}
           className="text-primary inline-flex items-center gap-1"
+          request={{
+            supplierName: offer.supplierName,
+            productTitle: offer.title,
+            categoryName: offer.categoryName,
+            source: "Offer card",
+          }}
         >
-          <MessageCircle className="size-3.5" aria-hidden /> WhatsApp
-        </a>
+          <MessageCircle className="size-3.5" aria-hidden /> Live chat
+        </ChatLink>
       </div>
     </motion.div>
   );

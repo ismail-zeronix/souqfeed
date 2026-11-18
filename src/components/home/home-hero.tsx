@@ -87,10 +87,10 @@ export function HomeHero({ offers }: { offers: OfferListItem[] }) {
           <GlassCard className="p-4">
             <p className="flex items-center gap-2 text-[13px] font-bold text-[#21184e]">
               <MessageCircle className="size-4 text-[#25d366]" />
-              Talk to suppliers
+              Chat before you buy
             </p>
             <p className="mt-1 text-xs text-[#6b6390]">
-              Every offer links to the supplier on WhatsApp.
+              Every offer has a live chat with our sales team.
             </p>
           </GlassCard>
         </div>

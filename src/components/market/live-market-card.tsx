@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ChatLink } from "@/components/chat/chat-link";
 import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SupplierLogoTile } from "@/components/ui/supplier-logo-tile";
@@ -179,11 +180,21 @@ export function LiveMarketCard({
               size="sm"
               nativeButton={false}
               render={
-                <a href={whatsappHref} target="_blank" rel="noreferrer" />
+                <ChatLink
+                  href={whatsappHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  request={{
+                    supplierName: offer.supplierName,
+                    productTitle: offer.title,
+                    categoryName: offer.categoryName,
+                    source: "Offer card",
+                  }}
+                />
               }
             >
               <MessageCircle className="mr-1 size-4" aria-hidden />
-              WhatsApp
+              Live chat
             </Button>
           </div>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ChatLink } from "@/components/chat/chat-link";
 import {
   Bookmark,
   Check,
@@ -198,9 +199,21 @@ export function TickerCard({ offer, className }: TickerCardProps) {
           <Button
             size="sm"
             nativeButton={false}
-            render={<a href={whatsappHref} target="_blank" rel="noreferrer" />}
+            render={
+              <ChatLink
+                href={whatsappHref}
+                target="_blank"
+                rel="noreferrer"
+                request={{
+                  supplierName: offer.supplierName,
+                  productTitle: offer.title,
+                  categoryName: offer.categoryName,
+                  source: "Offer card",
+                }}
+              />
+            }
           >
-            <MessageCircle className="size-3.5" aria-hidden /> WhatsApp
+            <MessageCircle className="size-3.5" aria-hidden /> Live chat
           </Button>
         </div>
       </div>

@@ -43,9 +43,9 @@ export function ChatWidget() {
       onLoad={liftAboveTabBar}
       data-color="#6c42f5"
       data-dark="#1d1540"
-      data-title="SouqFeed Support"
-      data-greeting="Hi there 👋 Welcome to SouqFeed. Looking for IT stock or a supplier in Dubai? Ask us anything and our team will reply in minutes."
-      data-quick="Find a product|I want to become a supplier|Talk to the SouqFeed team"
+      data-title="SouqFeed Sales Desk"
+      data-greeting="Hi there 👋 Buying IT stock in Dubai? Tell us the model and quantity and we will get you the best price from verified suppliers, usually within minutes."
+      data-quick="Get a quote for my order|Is this product in stock?|Best price for a bulk quantity|Connect me with a supplier"
       data-position="right"
     />
   );

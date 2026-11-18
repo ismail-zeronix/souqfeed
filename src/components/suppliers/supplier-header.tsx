@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ChatLink } from "@/components/chat/chat-link";
 import { BadgeCheck, Mail, MapPin, Phone, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SupplierLogoTile } from "@/components/ui/supplier-logo-tile";
@@ -73,56 +74,70 @@ export function SupplierHeader({ supplier }: { supplier: SupplierProfile }) {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 lg:shrink-0">
-            <Button
-              size="sm"
-              nativeButton={false}
-              render={
-                <a href={whatsappHref} target="_blank" rel="noreferrer" />
-              }
-            >
-              <MessageCircle className="mr-1 size-4" aria-hidden />
-              WhatsApp
-            </Button>
-            {supplier.phone && (
+          <div className="lg:max-w-sm lg:shrink-0">
+            <div className="flex flex-wrap gap-2">
               <Button
                 size="sm"
-                variant="outline"
-                nativeButton={false}
-                render={<a href={`tel:${supplier.phone}`} />}
-              >
-                <Phone className="mr-1 size-4" aria-hidden />
-                Call
-              </Button>
-            )}
-            {supplier.email && (
-              <Button
-                size="sm"
-                variant="outline"
-                nativeButton={false}
-                render={<a href={`mailto:${supplier.email}`} />}
-              >
-                <Mail className="mr-1 size-4" aria-hidden />
-                Email
-              </Button>
-            )}
-            {supplier.googleMapsUrl && (
-              <Button
-                size="sm"
-                variant="outline"
                 nativeButton={false}
                 render={
-                  <a
-                    href={supplier.googleMapsUrl}
+                  <ChatLink
+                    href={whatsappHref}
                     target="_blank"
                     rel="noreferrer"
+                    request={{
+                      supplierName: supplier.companyName,
+                      source: "Supplier page",
+                    }}
                   />
                 }
               >
-                <MapPin className="mr-1 size-4" aria-hidden />
-                Visit Location
+                <MessageCircle className="mr-1 size-4" aria-hidden />
+                Live chat
               </Button>
-            )}
+              {supplier.phone && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  nativeButton={false}
+                  render={<a href={`tel:${supplier.phone}`} />}
+                >
+                  <Phone className="mr-1 size-4" aria-hidden />
+                  Call
+                </Button>
+              )}
+              {supplier.email && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  nativeButton={false}
+                  render={<a href={`mailto:${supplier.email}`} />}
+                >
+                  <Mail className="mr-1 size-4" aria-hidden />
+                  Email
+                </Button>
+              )}
+              {supplier.googleMapsUrl && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  nativeButton={false}
+                  render={
+                    <a
+                      href={supplier.googleMapsUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                    />
+                  }
+                >
+                  <MapPin className="mr-1 size-4" aria-hidden />
+                  Visit Location
+                </Button>
+              )}
+            </div>
+            <p className="text-muted-foreground mt-2 text-xs leading-5">
+              SouqFeed&apos;s sales team will connect you with{" "}
+              {supplier.companyName} and help you get the best price.
+            </p>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BadgeCheck, MessageCircle } from "lucide-react";
 import { FreshnessBadge } from "@/components/offers/offer-bits";
 import { Badge } from "@/components/ui/badge";
+import { ChatLink } from "@/components/chat/chat-link";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
 import { conditionLabel } from "@/modules/offers/condition";
@@ -87,15 +88,20 @@ export function SearchResultCard({ group }: { group: SearchGroup }) {
               className="ml-auto sm:ml-0"
               nativeButton={false}
               render={
-                <a
+                <ChatLink
                   href={`https://wa.me/${offer.whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(`Hi, I saw ${group.title} on SouqFeed. Is it available?`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  request={{
+                    supplierName: offer.supplierName,
+                    productTitle: group.title,
+                    source: "Search result",
+                  }}
                 />
               }
             >
               <MessageCircle aria-hidden />
-              WhatsApp
+              Live chat
             </Button>
           </li>
         ))}

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ChatLink } from "@/components/chat/chat-link";
 import { useEffect, useState } from "react";
 import {
   ArrowLeft,
@@ -85,9 +86,19 @@ export function MobileSupplierProfile({
             className="flex-1"
             size="sm"
             nativeButton={false}
-            render={<a href={whatsappHref} target="_blank" rel="noreferrer" />}
+            render={
+              <ChatLink
+                href={whatsappHref}
+                target="_blank"
+                rel="noreferrer"
+                request={{
+                  supplierName: supplier.companyName,
+                  source: "Supplier page",
+                }}
+              />
+            }
           >
-            <MessageCircle className="mr-1 size-4" aria-hidden /> WhatsApp
+            <MessageCircle className="mr-1 size-4" aria-hidden /> Live chat
           </Button>
           {supplier.phone && (
             <Button
@@ -101,6 +112,10 @@ export function MobileSupplierProfile({
             </Button>
           )}
         </div>
+        <p className="text-muted-foreground mt-2 text-[11px] leading-4">
+          SouqFeed&apos;s sales team will connect you with{" "}
+          {supplier.companyName} and help you get the best price.
+        </p>
       </div>
       <div className="grid grid-cols-4 border-b bg-white px-2 py-4 text-center">
         <Metric
