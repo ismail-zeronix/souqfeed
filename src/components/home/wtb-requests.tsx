@@ -19,7 +19,7 @@ export function WtbRequests({ requests }: { requests: WtbRequestSnippet[] }) {
           </p>
         </div>
         <Link
-          href="/feed"
+          href="/wtb"
           className="text-primary flex items-center gap-1 text-xs font-semibold"
         >
           View all WTB requests <ArrowRight className="size-3.5" aria-hidden />
@@ -54,7 +54,7 @@ export function WtbRequests({ requests }: { requests: WtbRequestSnippet[] }) {
               </span>
             </div>
             <Link
-              href="/feed"
+              href={`/search?q=${encodeURIComponent(request.title.replace(/^WTB\s+/i, ""))}`}
               className="text-primary mt-4 inline-flex items-center gap-1 text-xs font-semibold"
             >
               Find a match{" "}

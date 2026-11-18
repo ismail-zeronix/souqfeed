@@ -8,9 +8,10 @@ import { hidesSiteChrome } from "@/components/layout/site-chrome";
 
 const PLATFORM_LINKS: { label: string; href: string | null }[] = [
   { label: "Live Market", href: "/feed" },
-  { label: "Suppliers", href: null },
-  { label: "Search", href: null },
-  { label: "WTB", href: null },
+  { label: "Categories", href: "/categories" },
+  { label: "Suppliers", href: "/suppliers" },
+  { label: "Search", href: "/search" },
+  { label: "WTB Requests", href: "/wtb" },
 ];
 
 const COMPANY_LINKS: string[] = ["About", "Careers", "Contact"];
@@ -56,7 +57,7 @@ export function SiteFooter() {
   if (hidesSiteChrome(pathname)) return null;
   return (
     <footer className="bg-[#21184e]">
-      <div className="mx-auto grid w-full max-w-[1180px] gap-10 px-5 py-12 sm:grid-cols-2 lg:grid-cols-[1.5fr_0.8fr_0.8fr_0.8fr]">
+      <div className="mx-auto grid w-full max-w-[1240px] gap-10 px-5 py-12 sm:grid-cols-2 lg:grid-cols-[1.5fr_0.8fr_0.8fr_0.8fr]">
         <div className="max-w-sm">
           <div className="flex items-center gap-2 text-lg font-bold tracking-tight text-white">
             <Image
@@ -90,7 +91,7 @@ export function SiteFooter() {
         />
       </div>
 
-      <div className="mx-auto flex w-full max-w-[1180px] flex-wrap items-center justify-between gap-3 px-5 pb-8 text-xs text-white/45">
+      <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center justify-between gap-3 px-5 pb-8 text-xs text-white/45">
         <span className="inline-flex items-center gap-1.5">
           <Mail className="size-3.5" /> Built for UAE IT trade
         </span>

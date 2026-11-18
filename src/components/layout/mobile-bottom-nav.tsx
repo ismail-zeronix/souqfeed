@@ -84,25 +84,28 @@ export function MobileBottomNav() {
           />
         }
       />
-      <span
-        className="flex flex-1 cursor-not-allowed"
-        aria-disabled
-        title="WTB — Coming soon"
+      <Link
+        className="flex flex-1"
+        href="/wtb"
+        aria-current={pathname.startsWith("/wtb") ? "page" : undefined}
       >
         <NavItemShell
           label="WTB"
           icon={ClipboardList}
-          active={false}
-          disabled
+          active={pathname.startsWith("/wtb")}
         />
-      </span>
-      <span
-        className="flex flex-1 cursor-not-allowed"
-        aria-disabled
-        title="Suppliers — Coming soon"
+      </Link>
+      <Link
+        className="flex flex-1"
+        href="/suppliers"
+        aria-current={pathname.startsWith("/suppliers") ? "page" : undefined}
       >
-        <NavItemShell label="Suppliers" icon={Users} active={false} disabled />
-      </span>
+        <NavItemShell
+          label="Suppliers"
+          icon={Users}
+          active={pathname.startsWith("/suppliers")}
+        />
+      </Link>
       <Link
         className="flex flex-1"
         href={profileHref(session)}

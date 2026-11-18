@@ -12,19 +12,24 @@ import { MobileHeader } from "@/components/layout/mobile-header";
 import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth/client";
 import { isStaffRole } from "@/modules/auth/guards";
+import { CategoryMegaMenu } from "@/components/layout/category-mega-menu";
+import type { MenuCategory } from "@/modules/categories/menu-shared";
 import { HeaderMascot } from "@/components/layout/header-mascot";
 import { hidesSiteChrome } from "@/components/layout/site-chrome";
 
-export const NAV_ITEMS: { label: string; href: string | null }[] = [
+export const NAV_LINKS: { label: string; href: string }[] = [
   { label: "Market", href: "/feed" },
-  { label: "WTB Requests", href: null },
-  { label: "Suppliers", href: null },
-  { label: "Categories", href: null },
-  { label: "Insights", href: null },
-  { label: "How It Works", href: null },
+  { label: "Suppliers", href: "/suppliers" },
+  { label: "WTB Requests", href: "/wtb" },
+  { label: "How It Works", href: "/#how-it-works" },
 ];
 
-export function SiteHeader() {
+function isActiveLink(pathname: string, href: string) {
+  if (href.startsWith("/#")) return false;
+  return pathname === href || pathname.startsWith(href + "/");
+}
+
+export function SiteHeader({ categories }: { categories: MenuCategory[] }) {
   const pathname = usePathname();
   const router = useRouter();
   const searchId = useId();
@@ -56,7 +61,7 @@ export function SiteHeader() {
   return (
     <>
       {!pathname.startsWith("/feed") && !pathname.startsWith("/suppliers/") && (
-        <MobileHeader />
+        <MobileHeader categories={categories} />
       )}
       <header className="border-border bg-card sticky top-0 z-50 hidden border-b md:block">
         <div className="mx-auto flex h-16 max-w-[1440px] items-center gap-6 px-6">
@@ -70,42 +75,19 @@ export function SiteHeader() {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-1 text-[13px] font-semibold xl:flex">
-            {NAV_ITEMS.map((item) => {
-              if (!item.href) {
-                return (
-                  <span
-                    key={item.label}
-                    className="text-muted-foreground/55 cursor-not-allowed rounded-lg px-3 py-2"
-                    aria-disabled
-                    title="Coming soon"
-                  >
-                    {item.label}
-                  </span>
-                );
-              }
-
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={cn(
-                    "rounded-lg px-3 py-2 transition-colors",
-                    isActive
-                      ? "bg-primary/10 text-primary"
-                      : "hover:bg-primary/5 hover:text-primary text-slate-600",
-                  )}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
+          <nav className="hidden items-center gap-1 text-[13px] font-semibold lg:flex">
+            {NAV_LINKS.slice(0, 1).map((item) => (
+              <NavLink key={item.label} item={item} pathname={pathname} />
+            ))}
+            <CategoryMegaMenu categories={categories} />
+            {NAV_LINKS.slice(1).map((item) => (
+              <NavLink key={item.label} item={item} pathname={pathname} />
+            ))}
           </nav>
 
           <form
             onSubmit={handleSearchSubmit}
-            className="hidden flex-1 justify-center lg:flex"
+            className="hidden flex-1 justify-center xl:flex"
           >
             <div className="relative w-full max-w-sm">
               <Search
@@ -126,6 +108,13 @@ export function SiteHeader() {
           </form>
 
           <div className="ml-auto flex shrink-0 items-center gap-3">
+            <Link
+              href="/search"
+              aria-label="Search the market"
+              className="hover:text-primary text-slate-600 xl:hidden"
+            >
+              <Search className="size-5" aria-hidden />
+            </Link>
             <div className="relative hidden sm:block">
               <Bell className="size-5 text-slate-600" aria-hidden />
               <span
@@ -196,5 +185,27 @@ export function SiteHeader() {
         </div>
       </header>
     </>
+  );
+}
+
+function NavLink({
+  item,
+  pathname,
+}: {
+  item: { label: string; href: string };
+  pathname: string;
+}) {
+  return (
+    <Link
+      href={item.href}
+      className={cn(
+        "rounded-lg px-3 py-2 transition-colors",
+        isActiveLink(pathname, item.href)
+          ? "bg-primary/10 text-primary"
+          : "hover:bg-primary/5 hover:text-primary text-slate-600",
+      )}
+    >
+      {item.label}
+    </Link>
   );
 }

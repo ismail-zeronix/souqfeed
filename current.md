@@ -285,6 +285,22 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
   category as including its subcategories. Verified in Docker end to end
   (desktop + mobile), including the staff path.
 
+- **Home redesign and public navigation (between 9.5 and 10) complete** — plan
+  `docs/superpowers/plans/2026-11-18-souqfeed-public-navigation.md`. The home
+  page has a rounded hero banner with the live feed drawn as a phone, feature
+  cards, a broadcast-to-offers section, a brand strip and mascot moments (new
+  display font, Plus Jakarta Sans, home and list pages only); mobile gets a
+  4-column category grid whose last slot opens a bottom sheet. The header has a
+  Categories mega menu (top-level list, subcategories, WTB card; hover or
+  click; Esc/outside click closes) and real links for Suppliers, WTB Requests
+  and How It Works; the mobile menu and bottom nav link to the same pages.
+  New pages: `/categories`, `/suppliers` (directory with search, category,
+  area, verified and sort filters) and `/wtb`. The WTB page shows **sample**
+  requests with a notice, since real buyer requests are still post-launch;
+  "Post a request" opens the sign-up dialog. The directory shows demo suppliers
+  (with a notice) until the market has live offers, then every active
+  supplier.
+
 ## In Progress
 
 - Nothing currently in flight. Everything since Phase 2 is on

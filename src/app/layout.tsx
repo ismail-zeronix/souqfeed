@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
+import { getCategoryMenu } from "@/modules/categories/menu";
 import { JsonLd } from "@/components/seo/json-ld";
 import "./globals.css";
 
@@ -54,7 +55,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const categoryMenu = await getCategoryMenu();
   return (
     <html
       lang="en"
@@ -62,7 +64,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="bg-background text-foreground flex min-h-full flex-col">
         <JsonLd />
-        <SiteHeader />
+        <SiteHeader categories={categoryMenu} />
         {/* The admin shell has no mobile bottom nav, so it drops that padding. */}
         <main className="flex flex-1 flex-col pb-16 has-data-[slot=sidebar-wrapper]:pb-0 md:pb-0">
           {children}
