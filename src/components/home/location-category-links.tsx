@@ -24,7 +24,7 @@ export function LocationCategoryLinks({
   categories: Category[];
 }) {
   return (
-    <section className="border-border mx-auto w-full max-w-[1180px] border-t px-5 py-10">
+    <section className="border-border mx-auto w-full max-w-[1240px] border-t px-5 py-10">
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <h2 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">

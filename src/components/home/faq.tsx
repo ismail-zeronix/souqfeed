@@ -33,7 +33,7 @@ const FAQS = [
 
 export function HomeFaq() {
   return (
-    <section className="mx-auto w-full max-w-[1180px] border-t border-[#ebe6ff] px-5 py-10 lg:py-12">
+    <section className="mx-auto w-full max-w-[1240px] border-t border-[#ebe6ff] px-5 py-10 lg:py-12">
       <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <div>
           <Badge

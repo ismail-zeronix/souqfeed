@@ -10,7 +10,7 @@ export function LiveMarketSnapshot({ offers }: { offers: OfferListItem[] }) {
   const preview = offers.slice(0, 9);
 
   return (
-    <section className="mx-auto w-full max-w-[1180px] px-5 py-7 lg:py-8">
+    <section className="mx-auto w-full max-w-[1240px] px-5 py-7 lg:py-8">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <h2 className="text-foreground text-xl font-bold tracking-tight">

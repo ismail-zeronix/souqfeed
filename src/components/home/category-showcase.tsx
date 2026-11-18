@@ -71,7 +71,7 @@ export function categoryIcon(category: { id: string; slug: string }) {
 
 export function CategoryShowcase({ categories }: { categories: Category[] }) {
   return (
-    <section className="mx-auto w-full max-w-[1180px] px-5 py-9">
+    <section className="mx-auto w-full max-w-[1240px] px-5 py-9">
       <div className="flex items-center justify-between">
         <h2 className="text-foreground text-xl font-bold tracking-tight">
           Browse by IT Category

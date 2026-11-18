@@ -26,7 +26,7 @@ const SAMPLE_QUOTES = [
 
 export function SampleFeedback() {
   return (
-    <section className="mx-auto w-full max-w-[1180px] border-t border-[#ebe6ff] px-5 py-10 lg:py-12">
+    <section className="mx-auto w-full max-w-[1240px] border-t border-[#ebe6ff] px-5 py-10 lg:py-12">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">

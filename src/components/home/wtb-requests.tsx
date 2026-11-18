@@ -8,7 +8,7 @@ export function WtbRequests({ requests }: { requests: WtbRequestSnippet[] }) {
   // Nothing to show until want-to-buy requests exist (planned after launch).
   if (requests.length === 0) return null;
   return (
-    <section className="mx-auto w-full max-w-[1180px] px-5 py-7 lg:py-8">
+    <section className="mx-auto w-full max-w-[1240px] px-5 py-7 lg:py-8">
       <div className="flex items-end justify-between gap-4">
         <div>
           <h2 className="text-foreground text-xl font-bold tracking-tight">

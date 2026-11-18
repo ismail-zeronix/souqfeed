@@ -47,7 +47,7 @@ export function HomeStatsStrip({ stats }: { stats: MarketStats }) {
   ] as const;
 
   return (
-    <section className="relative z-10 mx-auto mt-8 grid w-full max-w-[1180px] grid-cols-2 gap-3 px-5 lg:grid-cols-4">
+    <section className="relative z-10 mx-auto mt-8 grid w-full max-w-[1240px] grid-cols-2 gap-3 px-5 lg:grid-cols-4">
       {tiles.map(([icon, value, label, trend]) => (
         <StatTile
           key={label}

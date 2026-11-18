@@ -36,7 +36,7 @@ const STEPS: Array<{
 
 export function HowItWorks() {
   return (
-    <section className="mx-auto w-full max-w-[1180px] border-t border-[#ebe6ff] px-5 py-10 lg:py-12">
+    <section className="mx-auto w-full max-w-[1240px] border-t border-[#ebe6ff] px-5 py-10 lg:py-12">
       <div className="mx-auto max-w-2xl text-center">
         <p className="text-primary text-[11px] font-bold tracking-[0.16em] uppercase">
           From noise to signal
