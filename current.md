@@ -305,15 +305,13 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
 
 ## In Progress
 
-- Nothing currently in flight. Everything since Phase 2 is on
-  `phase2-implementation`, not deployed.
+- Nothing currently in flight. **Deployed to production on 2026-11-18** (souqfeed.com, VPS `/srv/docker/souqfeed`): migrations 0000–0009 applied, brand/category/admin seeds run, worker container added. Pre-deploy database dumps are in `/srv/docker/backups/souqfeed-postgres/`.
 
 ## Next
 
 - Phase 10: supplier public profiles (broadcast history, active offers).
-- **Deploy, with the production follow-up in Known Issues.** Production needs
-  every migration since `0003`, the brand and category seeds, and the admin
-  seed (to make the account `SUPER_ADMIN`).
+- Allow the SouqFeed domain in the Zeronix chat portal so the chat button appears on production.
+- Ship later changes with `bash /srv/docker/souqfeed/deploy.sh` on the server (backs up, pulls main, builds with `--profile tools`, migrates, restarts, health-checks).
 
 ## Decisions
 
@@ -372,10 +370,8 @@ broadcast-parsing,search,deployment,branding,theme}.md`.
 
 ## Known Issues
 
-- **Production may hold self-made admins.** Until the role fix is deployed, any
-  visitor can become `ADMIN`. After deploying, audit `select id, email,
-created_at from "user" where role in ('ADMIN', 'SUPER_ADMIN')` and revoke anything unexpected
-  (also check for accounts that changed role).
+- **Production admins (checked 2026-11-18).** After the deploy the only roles are one `SUPPLIER` account (left as it was) and the new `SUPER_ADMIN` from the admin seed; no self-made admins. Re-check with `select id, email, role, created_at from "user" where role in ('ADMIN', 'SUPER_ADMIN')`.
+- **The old server deploy script silently skipped migrations** (no `--profile tools` on the build, so the migrator image went stale). Fixed in the repo's `deploy.sh`; the old copy is on the server as `deploy.sh.old-2026-11-18` and can be deleted.
 - **Postgres port (fixed 2026-11-18).** `compose.yaml` used to publish
   `5432:5432` on all host interfaces. The production server had that mapping
   removed by hand; the repo now matches, so a deploy keeps it private.
